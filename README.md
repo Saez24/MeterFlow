@@ -19,14 +19,17 @@ MeterFlow ist eine moderne Web-App zur Erfassung und Auswertung von Energiezähl
 
 ## 🛠 Tech Stack
 
-| Bereich        | Technologie                                 |
-| -------------- | ------------------------------------------- |
-| Frontend       | Angular 21 (Standalone Components, Signals) |
-| UI             | Angular Material                            |
-| Charts         | Chart.js                                    |
-| Backend / Auth | Supabase (PostgreSQL)                       |
-| Hosting        | Docker + Nginx                              |
-| CI/CD          | GitHub Actions → GHCR                       |
+| Bereich        | Technologie                                          |
+| -------------- | --------------------------------------------------- |
+| Frontend       | Angular 22 (Standalone Components, Signals, Zoneless)|
+| UI             | Angular Material (M3)                                |
+| Charts         | Chart.js                                             |
+| OCR            | Tesseract.js (Zählerstand per Foto erfassen)        |
+| Export/Import  | jsPDF (PDF) · PapaParse (CSV)                        |
+| Backend / Auth | Supabase (PostgreSQL)                                |
+| Hosting        | Docker + Nginx                                       |
+| CI/CD          | GitHub Actions → GHCR                                |
+| Tests          | Vitest (Unit) · Playwright (E2E)                     |
 
 ---
 
@@ -73,7 +76,6 @@ Die Werte werden beim Build über GitHub Secrets injiziert — kein manuelles Se
 ### Geplant
 
 - [ ] Push-Benachrichtigungen bei Budget-Überschreitung
-- [ ] CSV-Export für alle Ablesungen
 - [ ] Mehrsprachigkeit (DE/EN)
 - [ ] Tarif-Vergleich & Einsparpotenzial
 - [ ] Selbst-gehostetes Supabase (Unraid)
@@ -88,6 +90,9 @@ Die Werte werden beim Build über GitHub Secrets injiziert — kein manuelles Se
 - [x] Dark / Light Mode
 - [x] Docker-Deployment via GitHub Actions
 - [x] Tarif-Historie pro Zähler
+- [x] Zählerstand per Foto erfassen (OCR)
+- [x] PDF-Export der Ablesungen
+- [x] CSV-Import
 
 ---
 
