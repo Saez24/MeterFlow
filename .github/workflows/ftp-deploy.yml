@@ -3,7 +3,7 @@ name: FTP Deployment
 on:
   push:
     branches:
-      - production
+      - webhosting
 
 jobs:
   build-and-deploy:
@@ -32,7 +32,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
-          local-dir: ./dist/Meterflow/browser/
+          local-dir: ./dist/MeterFlow/browser/
           protocol: ftps
           security: strict
           timeout: 60000
@@ -45,7 +45,7 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
-          local-dir: ./dist/Meterflow/browser/
+          local-dir: ./dist/MeterFlow/browser/
           protocol: ftps
           security: strict
           timeout: 60000
