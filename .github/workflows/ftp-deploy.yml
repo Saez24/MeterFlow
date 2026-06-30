@@ -23,6 +23,7 @@ jobs:
         run: npm ci
 
       - name: Build Angular app
+        id: build
         run: npm run build -- --configuration production
 
       - name: Deploy over FTP
@@ -38,7 +39,7 @@ jobs:
           timeout: 60000
 
       - name: Deploy over FTP (retry)
-        if: failure()
+        if: failure() && steps.build.outcome == 'success'
         uses: SamKirkland/FTP-Deploy-Action@8e83cea8672e3fbcbb9fdafff34debf6ae4c5f65 # v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
