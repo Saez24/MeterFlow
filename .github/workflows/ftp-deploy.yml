@@ -48,7 +48,7 @@ jobs:
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
           local-dir: ./dist/MeterFlow/browser/
           protocol: ftps
-          security: strict
+          security: loose
           timeout: 60000
 
       - name: Deploy over FTP (retry)
@@ -61,5 +61,5 @@ jobs:
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
           local-dir: ./dist/MeterFlow/browser/
           protocol: ftps
-          security: strict
+          security: loose
           timeout: 60000
