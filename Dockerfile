@@ -17,9 +17,8 @@ FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 # DE (baseHref: "/") → nginx-Root
-COPY --from=builder /app/dist/MeterFlow/browser/de /usr/share/nginx/html/
-# EN (baseHref: "/en/") → /en/ Unterordner
-COPY --from=builder /app/dist/MeterFlow/browser/en /usr/share/nginx/html/en/
+COPY --from=builder /app/dist/MeterFlow/browser /usr/share/nginx/html/
+
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
