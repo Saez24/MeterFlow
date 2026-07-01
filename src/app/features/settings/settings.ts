@@ -151,10 +151,18 @@ export class Settings {
         },
       })
       .afterClosed()
-      .subscribe((confirmed: boolean) => {
+      .subscribe(async (confirmed: boolean) => {
         if (!confirmed) return;
-        localStorage.clear();
-        window.location.reload();
+        try {
+          await this.supabase.clearAllUserData();
+          window.location.reload();
+        } catch {
+          this.snackBar.open(
+            $localize`:@@settings.deleteAll.error:Fehler beim Löschen der Daten`,
+            'OK',
+            { duration: 4000 },
+          );
+        }
       });
   }
 

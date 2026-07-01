@@ -883,6 +883,10 @@
         <source>Alles löschen</source>
         <target>Delete everything</target>
       </trans-unit>
+      <trans-unit id="settings.deleteAll.error" datatype="html">
+        <source>Fehler beim Löschen der Daten</source>
+        <target>Error deleting data</target>
+      </trans-unit>
       <trans-unit id="tariffForm.updated" datatype="html">
         <source>Tarif aktualisiert</source>
         <target>Tariff updated</target>

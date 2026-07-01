@@ -235,6 +235,44 @@ export class SupabaseService {
     if (error) throw error;
   }
 
+  // ── Alle Nutzdaten löschen (Account bleibt bestehen) ──
+  async clearAllUserData(): Promise<void> {
+    const userId = this.currentUser()?.id;
+    if (!userId) throw new Error('Not authenticated');
+
+    // 1) Foto-Dateien im Storage-Ordner {userId}/ entfernen
+    const { data: files, error: listErr } = await this.client.storage
+      .from('meter-photos')
+      .list(userId);
+    if (listErr) throw listErr;
+    if (files && files.length > 0) {
+      const paths = files.map((f) => `${userId}/${f.name}`);
+      const { error: storageErr } = await this.client.storage
+        .from('meter-photos')
+        .remove(paths);
+      if (storageErr) throw storageErr;
+    }
+
+    // 2) DB-Zeilen löschen (readings zuerst explizit, dann meters + co2_factors)
+    const { error: readingsErr } = await this.client
+      .from('readings')
+      .delete()
+      .eq('user_id', userId);
+    if (readingsErr) throw readingsErr;
+
+    const { error: metersErr } = await this.client
+      .from('meters')
+      .delete()
+      .eq('user_id', userId);
+    if (metersErr) throw metersErr;
+
+    const { error: co2Err } = await this.client
+      .from('co2_factors')
+      .delete()
+      .eq('user_id', userId);
+    if (co2Err) throw co2Err;
+  }
+
   async checkConnection(): Promise<void> {
     this.connectionStatus.set('checking');
     try {
