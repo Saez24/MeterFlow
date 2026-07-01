@@ -32,15 +32,15 @@
 
             <mat-form-field appearance="outline" class="auth-field">
                 <mat-label i18n="@@auth.field.email">E-Mail</mat-label>
-                <input matInput type="email" formControlName="email" placeholder="deine@email.de" autocomplete="email"
-                    i18n-placeholder="@@auth.placeholder.email">
+                <input matInput id="email" type="email" formControlName="email" placeholder="deine@email.de"
+                    autocomplete="email" i18n-placeholder="@@auth.placeholder.email">
                 <mat-icon matPrefix>mail</mat-icon>
                 <mat-error i18n="@@auth.error.email">Gültige E-Mail erforderlich</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="auth-field">
                 <mat-label i18n="@@auth.field.password">Passwort</mat-label>
-                <input matInput [type]="showPassword() ? 'text' : 'password'" formControlName="password"
+                <input matInput id="password" [type]="showPassword() ? 'text' : 'password'" formControlName="password"
                     placeholder="Mindestens 6 Zeichen" autocomplete="current-password"
                     i18n-placeholder="@@auth.placeholder.password">
                 <mat-icon matPrefix>lock</mat-icon>
@@ -54,8 +54,8 @@
             @if (mode() === 'register') {
             <mat-form-field appearance="outline" class="auth-field">
                 <mat-label i18n="@@auth.field.confirmPassword">Passwort bestätigen</mat-label>
-                <input matInput [type]="showPassword() ? 'text' : 'password'" formControlName="confirmPassword"
-                    placeholder="Passwort wiederholen" autocomplete="new-password"
+                <input matInput id="confirmPassword" [type]="showPassword() ? 'text' : 'password'"
+                    formControlName="confirmPassword" placeholder="Passwort wiederholen" autocomplete="new-password"
                     i18n-placeholder="@@auth.placeholder.confirmPassword">
                 <mat-icon matPrefix>lock_outline</mat-icon>
                 <mat-error i18n="@@auth.error.confirmPassword">Passwörter stimmen nicht überein</mat-error>
@@ -76,12 +76,14 @@
                 <span i18n="@@auth.loading">Bitte warten...</span>
                 } @else {
                 <ng-container>
-                    <mat-icon>{{ mode() === 'login' ? 'login' : 'person_add' }}</mat-icon>
-                    @if (mode() === 'login') {
-                    <span i18n="@@auth.submit.login">Anmelden</span>
-                    } @else {
-                    <span i18n="@@auth.submit.register">Registrieren</span>
-                    }
+                    <div class="submit-btn">
+                        <mat-icon>{{ mode() === 'login' ? 'login' : 'person_add' }}</mat-icon>
+                        @if (mode() === 'login') {
+                        <span i18n="@@auth.submit.login">Anmelden</span>
+                        } @else {
+                        <span i18n="@@auth.submit.register">Registrieren</span>
+                        }
+                    </div>
                 </ng-container>
                 }
             </button>
