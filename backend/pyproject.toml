@@ -30,6 +30,7 @@ dev = [
     "pytest-django",
     "pytest-cov",
     "allure-pytest",
+    "email-validator",
     "httpx",
 ]
 
@@ -65,4 +66,9 @@ django_settings_module = "config.settings.dev"
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings.dev"
 python_files = ["test_*.py"]
+testpaths = ["tests"]
 addopts = "--strict-markers"
+markers = [
+    "smoke: fast critical-path checks",
+    "e2e: full end-to-end flows",
+]

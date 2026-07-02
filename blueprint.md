@@ -99,12 +99,18 @@ Empfehlung: **Contract-First** — REST-Endpunkt-Liste zuerst fixieren, dann WS2
       **End-to-End-Smoke-Test grün** (Register→me→Meter-CRUD→Reading mit korrekter Kostenberechnung
       200 kWh→89,30 €→Dashboard→Logout; camelCase-Wire-Format bestätigt; anonym→401). ruff + black clean.
 
+- [x] **Test-Suite** (Ben): pytest-django, **strikt OOP** (BaseTest, API-Service-Klassen mit
+      `@allure.step`, Pydantic-Request/Response-Modelle mit camelCase-Alias, `DataGenerator`,
+      Allure-Metadaten epic/feature/story/severity, AAA-Pattern, kein `sleep`). **30 Tests grün,
+      91 % Coverage** (`apps/`). Deckt Auth-Flow (register/login/refresh/logout/me + Rate-Limit-429),
+      Meter-CRUD + Filter, Reading-Berechnung (electricity **und** gas), CO₂-Upsert/Defaults,
+      Stats/Dashboard/Budget-Alerts und **Ownership-Isolation** (User A ↔ B → 404) ab.
+      ruff + black clean.
+
 Noch offen in WS2 (nächste Iteration):
 - [ ] **Import-Endpunkt** `/api/v1/import` (Bulk, camelCase, §8) — Migrations-Utility, bewusst
       verschoben.
 - [ ] **Foto-Upload** `POST /readings/{id}/photo` (multipart, `django-storages`) — §12.4.
-- [ ] **Test-Suite** (Ben): pytest-django, strikt OOP, Allure, Ownership-/Auth-/Calc-Tests
-      (der Smoke-Test war Wegwerf und wurde entfernt).
 - [ ] **mypy strict** (braucht `django-stubs`/`djangorestframework-stubs`) — noch nicht ausgeführt.
 - [ ] **Stats-Decimals**: Stats-Endpunkte rendern `Decimal` als JSON-Float (rohe Dicts), CRUD als
       Decimal-String → vereinheitlichen (explizite Serializer oder Custom-Encoder).
@@ -173,3 +179,6 @@ Danach **WS3** (Frontend-Datenschicht Supabase→REST) gegen das laufende Backen
 - (WS2) Alle Backend-Deps auf **neueste Versionen** aktualisiert und **Version-Pins entfernt**
   (`pyproject.toml` = bare Paketnamen) — u.a. **Django 6.0.6**, DRF 3.17. Check/Migrate/Smoke/
   ruff/black erneut grün. Projektvorgabe: Pakete nie festschreiben, immer latest installieren.
+- (WS2/Ben) pytest-django-Test-Suite aufgebaut (strikt OOP, Allure, Pydantic-Modelle, DataGenerator,
+  Ownership-/Auth-/Berechnungs-Tests): **30 Tests, 91 % Coverage**, ruff+black clean.
+  Offen: Import-Endpunkt, Foto-Upload, mypy-strict, Stats-Decimal-Format.
