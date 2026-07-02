@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import uuid
+from typing import Any
 
 import allure
 from rest_framework.response import Response
@@ -27,3 +28,7 @@ class ReadingsAPI:
     @allure.step("POST /readings/recalculate/{meter_id}")
     def recalculate(self, meter_id: uuid.UUID) -> Response:
         return self._client.post(f"/readings/recalculate/{meter_id}/")
+
+    @allure.step("POST /readings/{reading_id}/photo")
+    def upload_photo(self, reading_id: uuid.UUID, file_obj: Any) -> Response:
+        return self._client.upload(f"/readings/{reading_id}/photo/", file_obj)

@@ -50,8 +50,9 @@ class TestStats(BaseTest):
         )
         # Act
         body = self.assert_status(auth_api.stats.year(2026), 200)
-        # Assert
-        assert Decimal(str(body["totalCost"])) == Decimal("89.30")
+        # Assert — money is rendered as a decimal string, not a float
+        assert isinstance(body["totalCost"], str)
+        assert Decimal(body["totalCost"]) == Decimal("89.30")
         assert len(body["months"]) == 12
 
     @allure.story("Dashboard")
@@ -69,7 +70,8 @@ class TestStats(BaseTest):
         body = self.assert_status(auth_api.stats.dashboard(), 200)
         # Assert — 200 kWh * 0.40 + 9.00 * 30/30 = 89.00 (Jun 1 -> Jul 1 is 30 days)
         assert "budgetAlerts" in body
-        assert Decimal(str(body["currentYearCost"])) == Decimal("89.00")
+        assert isinstance(body["currentYearCost"], str)
+        assert Decimal(body["currentYearCost"]) == Decimal("89.00")
 
     @allure.story("Budget alerts")
     @allure.severity(allure.severity_level.CRITICAL)

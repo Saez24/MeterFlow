@@ -2,15 +2,20 @@
 
 from __future__ import annotations
 
+import uuid
 from datetime import date as date_cls
+from pathlib import Path
 
+from django.core.files.storage import default_storage
 from django.db.models import QuerySet
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from apps.common.auth import request_user
 from apps.common.permissions import IsOwner
 from apps.meters.models import Meter
 from apps.readings.models import Reading
@@ -19,6 +24,11 @@ from apps.readings.services import compute_reading, recalculate_readings
 
 _DEFAULT_LIMIT = 1000
 _MAX_LIMIT = 10000
+
+# Photo upload constraints (security-standards §3: content-type + size limits).
+_ALLOWED_PHOTO_TYPES = {"image/jpeg", "image/png", "image/webp", "image/heic"}
+_ALLOWED_PHOTO_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".heic"}
+_MAX_PHOTO_BYTES = 10 * 1024 * 1024  # 10 MiB
 
 
 def _clamp_limit(raw: str | None) -> int:
@@ -34,7 +44,9 @@ class ReadingViewSet(viewsets.ModelViewSet[Reading]):
     permission_classes = [IsAuthenticated, IsOwner]
 
     def get_queryset(self) -> QuerySet[Reading]:
-        qs = Reading.objects.filter(user=self.request.user).select_related("meter")
+        qs = Reading.objects.filter(user=request_user(self.request)).select_related(
+            "meter"
+        )
         if self.action != "list":
             return qs
 
@@ -55,6 +67,7 @@ class ReadingViewSet(viewsets.ModelViewSet[Reading]):
         return qs.order_by("-date")[:limit]
 
     def create(self, request: Request, *args: object, **kwargs: object) -> Response:
+        user = request_user(request)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -64,7 +77,7 @@ class ReadingViewSet(viewsets.ModelViewSet[Reading]):
                 {"detail": "meter_id is required"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        meter = Meter.objects.filter(id=meter_id, user=request.user).first()
+        meter = Meter.objects.filter(id=meter_id, user=user).first()
         if meter is None:
             return Response(
                 {"detail": "Meter not found"}, status=status.HTTP_404_NOT_FOUND
@@ -72,9 +85,7 @@ class ReadingViewSet(viewsets.ModelViewSet[Reading]):
 
         data = serializer.validated_data
         prev = (
-            Reading.objects.filter(
-                meter=meter, user=request.user, date__lt=data["date"]
-            )
+            Reading.objects.filter(meter=meter, user=user, date__lt=data["date"])
             .order_by("-date")
             .first()
         )
@@ -86,7 +97,7 @@ class ReadingViewSet(viewsets.ModelViewSet[Reading]):
             previous_date=prev.date if prev else None,
         )
         serializer.save(
-            user=request.user,
+            user=user,
             meter=meter,
             consumption=computed.consumption,
             kwh=computed.kwh,
@@ -102,13 +113,14 @@ class ReadingViewSet(viewsets.ModelViewSet[Reading]):
         url_path="recalculate/(?P<meter_id>[0-9a-fA-F-]+)",
     )
     def recalculate(self, request: Request, meter_id: str) -> Response:
-        meter = Meter.objects.filter(id=meter_id, user=request.user).first()
+        user = request_user(request)
+        meter = Meter.objects.filter(id=meter_id, user=user).first()
         if meter is None:
             return Response(
                 {"detail": "Meter not found"}, status=status.HTTP_404_NOT_FOUND
             )
         readings = list(
-            Reading.objects.filter(meter=meter, user=request.user)[:_MAX_LIMIT]
+            Reading.objects.filter(meter=meter, user=user)[:_MAX_LIMIT]
         )
         updated = recalculate_readings(meter, readings)
         Reading.objects.bulk_update(
@@ -116,3 +128,38 @@ class ReadingViewSet(viewsets.ModelViewSet[Reading]):
             ["consumption", "kwh", "cost", "wastewater_cost", "total_cost"],
         )
         return Response(ReadingSerializer(updated, many=True).data)
+
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path="photo",
+        parser_classes=[MultiPartParser, FormParser],
+    )
+    def photo(self, request: Request, pk: str | None = None) -> Response:
+        # get_object() is scoped to the user -> a foreign reading yields 404.
+        reading = self.get_object()
+        upload = request.FILES.get("file")
+        if upload is None:
+            return Response(
+                {"detail": "No file provided"}, status=status.HTTP_400_BAD_REQUEST
+            )
+        extension = Path(upload.name or "").suffix.lower()
+        if (
+            upload.content_type not in _ALLOWED_PHOTO_TYPES
+            or extension not in _ALLOWED_PHOTO_EXTENSIONS
+        ):
+            return Response(
+                {"detail": "Unsupported image type"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if upload.size > _MAX_PHOTO_BYTES:
+            return Response(
+                {"detail": "Image too large"},
+                status=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            )
+
+        name = f"readings/{reading.id}/{uuid.uuid4().hex}{extension}"
+        saved_name = default_storage.save(name, upload)
+        reading.photo = default_storage.url(saved_name)
+        reading.save(update_fields=["photo"])
+        return Response(self.get_serializer(reading).data)

@@ -7,6 +7,7 @@ import allure
 from tests.api.auth_api import AuthAPI
 from tests.api.client import HttpClient
 from tests.api.co2_api import Co2API
+from tests.api.import_api import ImportAPI
 from tests.api.meters_api import MetersAPI
 from tests.api.readings_api import ReadingsAPI
 from tests.api.stats_api import StatsAPI
@@ -22,6 +23,7 @@ class ApiFacade:
         self.readings = ReadingsAPI(self._client)
         self.co2 = Co2API(self._client)
         self.stats = StatsAPI(self._client)
+        self.imports = ImportAPI(self._client)
 
     @property
     def client(self) -> HttpClient:

@@ -15,6 +15,7 @@ from apps.co2.serializers import (
     Co2FactorSerializer,
     Co2FactorUpsertSerializer,
 )
+from apps.common.auth import request_user
 
 
 class Co2DefaultsView(APIView):
@@ -33,7 +34,7 @@ class Co2DefaultsView(APIView):
             }
             for d in CO2_DEFAULTS
         ]
-        return Response(Co2DefaultSerializer(payload, many=True).data)
+        return Response(Co2DefaultSerializer(payload, many=True).data)  # type: ignore[arg-type]
 
 
 class Co2FactorListUpsertView(APIView):
@@ -42,7 +43,7 @@ class Co2FactorListUpsertView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
-        factors = Co2Factor.objects.filter(user=request.user)
+        factors = Co2Factor.objects.filter(user=request_user(request))
         return Response(Co2FactorSerializer(factors, many=True).data)
 
     def put(self, request: Request) -> Response:
@@ -50,7 +51,7 @@ class Co2FactorListUpsertView(APIView):
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
         factor, _created = Co2Factor.objects.update_or_create(
-            user=request.user,
+            user=request_user(request),
             energy_type=data["energy_type"],
             valid_from=data["valid_from"],
             defaults={
@@ -69,7 +70,9 @@ class Co2FactorDeleteView(APIView):
     permission_classes = [IsAuthenticated]
 
     def delete(self, request: Request, factor_id: str) -> Response:
-        deleted, _ = Co2Factor.objects.filter(id=factor_id, user=request.user).delete()
+        deleted, _ = Co2Factor.objects.filter(
+            id=factor_id, user=request_user(request)
+        ).delete()
         if not deleted:
             return Response(
                 {"detail": "CO2 factor not found"},

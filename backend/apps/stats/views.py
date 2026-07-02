@@ -13,6 +13,7 @@ from rest_framework.views import APIView
 
 from apps.co2.models import Co2Factor
 from apps.co2.services import calculate_co2
+from apps.common.auth import request_user
 from apps.meters.models import Meter
 from apps.readings.models import Reading
 from apps.stats.services import (
@@ -36,8 +37,9 @@ class YearStatsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request, year: int) -> Response:
-        meters = list(Meter.objects.filter(user=request.user))
-        readings = _readings_for_year(request.user.id, year)
+        user = request_user(request)
+        meters = list(Meter.objects.filter(user=user))
+        readings = _readings_for_year(user.id, year)
         return Response(build_year_stats(year, readings, _meter_map(meters)))
 
 

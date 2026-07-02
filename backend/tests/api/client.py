@@ -69,3 +69,11 @@ class HttpClient:
 
     def delete(self, path: str) -> Response:
         return self.request("DELETE", path)
+
+    def upload(self, path: str, file_obj: Any, field: str = "file") -> Response:
+        url = f"{_BASE}{path}"
+        response: Response = self._client.post(
+            url, {field: file_obj}, format="multipart"
+        )
+        self._attach("POST", url, response)
+        return response

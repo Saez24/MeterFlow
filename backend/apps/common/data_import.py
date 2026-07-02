@@ -132,9 +132,10 @@ def _import_meters(
             continue
 
         linked_id = m.get("linked_water_meter_id")
-        if linked_id is not None and not Meter.objects.filter(
-            id=linked_id, user=user
-        ).exists():
+        if (
+            linked_id is not None
+            and not Meter.objects.filter(id=linked_id, user=user).exists()
+        ):
             raise PermissionDenied(
                 "Verlinkter Wasserzähler nicht gefunden oder kein Zugriff"
             )
@@ -166,9 +167,7 @@ def _import_meters(
     return id_map, added, skipped
 
 
-def _resolve_meter_id(
-    user: User, raw: str, id_map: dict[str, uuid.UUID]
-) -> uuid.UUID:
+def _resolve_meter_id(user: User, raw: str, id_map: dict[str, uuid.UUID]) -> uuid.UUID:
     if raw in id_map:
         return id_map[raw]
     try:

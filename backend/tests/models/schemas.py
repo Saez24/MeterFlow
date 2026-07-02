@@ -132,6 +132,7 @@ class ReadingResponse(CamelModel):
     wastewater_cost: Decimal | None = None
     total_cost: Decimal | None = None
     note: str | None = None
+    photo: str | None = None
     created_at: datetime
 
 

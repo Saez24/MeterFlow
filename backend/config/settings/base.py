@@ -142,7 +142,7 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ],
     "DEFAULT_RENDERER_CLASSES": [
-        "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
+        "apps.common.renderers.CamelCaseDecimalRenderer",
     ],
     "DEFAULT_PARSER_CLASSES": [
         "djangorestframework_camel_case.parser.CamelCaseJSONParser",
@@ -174,6 +174,34 @@ STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "media/"
 MEDIA_ROOT = Path(LOCAL_STORAGE_PATH)
+
+# Reading photos: local FS in dev, S3/MinIO in prod. S3 objects are private and
+# served via signed URLs (security-standards §4 — no public PII buckets).
+_STATICFILES_STORAGE = {
+    "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"
+}
+if STORAGE_BACKEND in {"s3", "minio"}:
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+            "OPTIONS": {
+                "bucket_name": _env("S3_BUCKET_NAME"),
+                "endpoint_url": _env("S3_ENDPOINT_URL") or None,
+                "access_key": _env("S3_ACCESS_KEY_ID"),
+                "secret_key": _env("S3_SECRET_ACCESS_KEY"),
+                "region_name": _env("S3_REGION_NAME", "us-east-1"),
+                "default_acl": "private",
+                "querystring_auth": True,
+                "file_overwrite": False,
+            },
+        },
+        "staticfiles": _STATICFILES_STORAGE,
+    }
+else:
+    STORAGES = {
+        "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+        "staticfiles": _STATICFILES_STORAGE,
+    }
 
 # ── Logging ──────────────────────────────────────────────────────────────────
 LOGGING = {

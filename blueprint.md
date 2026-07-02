@@ -107,13 +107,21 @@ Empfehlung: **Contract-First** — REST-Endpunkt-Liste zuerst fixieren, dann WS2
       Stats/Dashboard/Budget-Alerts und **Ownership-Isolation** (User A ↔ B → 404) ab.
       ruff + black clean.
 
+- [x] **Import-Endpunkt** `POST /api/v1/import/` (Bulk, camelCase, §8) — aus FastAPI portiert:
+      ID-Mapping, Idempotenz (skip bei vorhandener eigener id), Ownership (fremde Zeile → 403),
+      Datums-/UUID-Validierung (→ 400), `transaction.atomic`, Rate-Limit 5/min. 4 Tests (Create,
+      Idempotenz, Fremd-Row→403, Auth). **Damit alle 26 Contract-Endpunkte implementiert.**
+
+- [x] **Foto-Upload** `POST /readings/{id}/photo/` (multipart, §12.4): Content-Type-/Extension-/
+      Größen-Validierung (10 MiB), Ownership (→404), speichert via `default_storage`, setzt
+      `reading.photo` = URL. **Storage-Backend** (`STORAGES`) konfiguriert: lokales FS (dev) /
+      **S3-MinIO private + signierte URLs** (prod) je nach `STORAGE_BACKEND`. 4 Tests.
+
+- [x] **Stats-Decimals vereinheitlicht**: Custom-Renderer `CamelCaseDecimalRenderer` rendert
+      `Decimal` global als String → Stats-Endpunkte konsistent mit CRUD (keine Float-Präzisionsverluste).
+
 Noch offen in WS2 (nächste Iteration):
-- [ ] **Import-Endpunkt** `/api/v1/import` (Bulk, camelCase, §8) — Migrations-Utility, bewusst
-      verschoben.
-- [ ] **Foto-Upload** `POST /readings/{id}/photo` (multipart, `django-storages`) — §12.4.
 - [ ] **mypy strict** (braucht `django-stubs`/`djangorestframework-stubs`) — noch nicht ausgeführt.
-- [ ] **Stats-Decimals**: Stats-Endpunkte rendern `Decimal` als JSON-Float (rohe Dicts), CRUD als
-      Decimal-String → vereinheitlichen (explizite Serializer oder Custom-Encoder).
 - [ ] Rate-Limiting nutzt Default-LocMemCache → in Prod auf Redis.
 
 **Contract-First (nach WS1):**
@@ -182,3 +190,6 @@ Danach **WS3** (Frontend-Datenschicht Supabase→REST) gegen das laufende Backen
 - (WS2/Ben) pytest-django-Test-Suite aufgebaut (strikt OOP, Allure, Pydantic-Modelle, DataGenerator,
   Ownership-/Auth-/Berechnungs-Tests): **30 Tests, 91 % Coverage**, ruff+black clean.
   Offen: Import-Endpunkt, Foto-Upload, mypy-strict, Stats-Decimal-Format.
+- (WS2/Sascha) **Import-Endpunkt** `POST /api/v1/import/` aus FastAPI portiert (ID-Mapping,
+  Idempotenz, Ownership→403, atomic, Rate-Limit) + 4 Tests. Suite jetzt **34 Tests, 90 % Coverage**.
+  Alle 26 Contract-Endpunkte implementiert. Offen: Foto-Upload, mypy-strict, Stats-Decimal-Format.
