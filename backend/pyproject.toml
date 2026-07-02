@@ -1,0 +1,68 @@
+[project]
+name = "meterflow-backend"
+version = "0.1.0"
+description = "MeterFlow Django + DRF backend (replaces the FastAPI/Supabase stack)"
+requires-python = ">=3.12"
+dependencies = [
+    "django",
+    "djangorestframework",
+    "djangorestframework-camel-case",
+    "django-cors-headers",
+    "django-ratelimit",
+    "django-storages",
+    "psycopg[binary]",
+    "dj-database-url",
+    "pydantic-settings",
+    "pyjwt",
+    "argon2-cffi",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "black",
+    "mypy",
+    "django-stubs[compatible-mypy]",
+    "djangorestframework-stubs",
+    "bandit",
+    "pip-audit",
+    "pytest",
+    "pytest-django",
+    "pytest-cov",
+    "allure-pytest",
+    "httpx",
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "C4", "DJ", "S", "RUF"]
+ignore = [
+    "S101",    # assert allowed in tests
+    "RUF012",  # DRF idiom: permission_classes/authentication_classes are plain lists
+    "DJ001",   # nullable Text columns are intentional (field parity with the FastAPI/SQLAlchemy schema, contract §10)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"*/migrations/*" = ["E501", "RUF012"]
+"*/tests/*" = ["S105", "S106"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+exclude = ["migrations/"]
+
+[tool.django-stubs]
+django_settings_module = "config.settings.dev"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.dev"
+python_files = ["test_*.py"]
+addopts = "--strict-markers"
