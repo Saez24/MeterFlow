@@ -1,87 +1,103 @@
 <div class="page-container">
-    <div class="page-header">
-        <div>
-            <h1 class="page-title">Kostenvorschau</h1>
-            <p class="page-subtitle">Detaillierte Berechnung der prognostizierten Jahreskosten</p>
-        </div>
-        <div class="page-header__actions">
-            <mat-form-field appearance="outline" class="year-select">
-                <mat-label>Jahr</mat-label>
-                <mat-select [value]="selectedYear()" (selectionChange)="selectedYear.set($event.value)">
-                    @for (y of state.availableYears(); track y) {
-                    <mat-option [value]="y">{{ y }}</mat-option>
-                    }
-                </mat-select>
-            </mat-form-field>
-        </div>
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Kostenvorschau</h1>
+      <p class="page-subtitle">Detaillierte Berechnung der prognostizierten Jahreskosten</p>
     </div>
+    <div class="page-header__actions">
+      <mat-form-field appearance="outline" class="year-select">
+        <mat-label>Jahr</mat-label>
+        <mat-select [value]="selectedYear()" (selectionChange)="selectedYear.set($event.value)">
+          @for (y of state.availableYears(); track y) {
+            <mat-option [value]="y">{{ y }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
 
-    @if (costPreview(); as preview) {
+  @if (costPreview(); as preview) {
     <!-- Gesamtsumme als Card -->
     <mat-card class="total-summary-card">
-        <mat-card-header>
-            <mat-card-title>Prognostizierte Gesamtkosten {{ selectedYear() }}</mat-card-title>
-            <mat-card-subtitle>Basierend auf {{ preview.monthsUsed }} Monaten ({{ preview.prevMonthsUsed }} aus {{
-                selectedYear() - 1 }}, {{ preview.currentMonthsUsed }} aus {{ selectedYear() }})</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-            <div class="total-amount">
-                <mat-icon class="total-icon">euro_symbol</mat-icon>
-                <span class="total-value">{{ preview.projectedCost | currency: 'EUR' : 'symbol' : '1.2-2' }}</span>
-            </div>
-        </mat-card-content>
+      <mat-card-header>
+        <mat-card-title>Prognostizierte Gesamtkosten {{ selectedYear() }}</mat-card-title>
+        <mat-card-subtitle
+          >Basierend auf {{ preview.monthsUsed }} Monaten ({{ preview.prevMonthsUsed }} aus
+          {{ selectedYear() - 1 }}, {{ preview.currentMonthsUsed }} aus
+          {{ selectedYear() }})</mat-card-subtitle
+        >
+      </mat-card-header>
+      <mat-card-content>
+        <div class="total-amount">
+          <mat-icon class="total-icon">euro_symbol</mat-icon>
+          <span class="total-value">{{
+            preview.projectedCost | currency: 'EUR' : 'symbol' : '1.2-2'
+          }}</span>
+        </div>
+      </mat-card-content>
     </mat-card>
 
     <!-- Zähler-Grid darunter -->
     <div class="meters-section">
-        <h3 class="section-title">Kostenvorschau pro Zähler</h3>
-        <div class="meters-grid">
-            @for (meterPreview of preview.meterPreviews; track meterPreview.meter.id) {
-            <mat-card class="meter-preview-card" [style.--meter-color]="meterPreview.meter.color">
-                <mat-card-header>
-                    <div class="meter-header">
-                        <mat-icon [style.color]="meterPreview.meter.color">{{ meterPreview.meter.icon }}</mat-icon>
-                        <div>
-                            <mat-card-title>{{ meterPreview.meter.name }}</mat-card-title>
-                            <mat-card-subtitle>{{ meterPreview.meter.type | titlecase }} · {{ meterPreview.meter.unit
-                                }}</mat-card-subtitle>
-                        </div>
-                    </div>
-                </mat-card-header>
-                <mat-card-content>
-                    <div class="meter-cost-summary">
-                        <div class="cost-main">
-                            <mat-icon class="cost-icon">euro_symbol</mat-icon>
-                            <span class="cost-amount">{{ meterPreview.projectedTotal | currency: 'EUR' : 'symbol' :
-                                '1.2-2' }}</span>
-                        </div>
-                        <div class="cost-details">
-                            <div class="cost-detail">
-                                <mat-icon class="detail-icon">trending_up</mat-icon>
-                                <span class="detail-value">{{ meterPreview.avgMonthlyVariable | currency: 'EUR' :
-                                    'symbol' : '1.2-2' }}/Mon</span>
-                            </div>
-                            <div class="cost-detail" *ngIf="meterPreview.baseChargeYearly > 0">
-                                <mat-icon class="detail-icon">account_balance</mat-icon>
-                                <span class="detail-value">{{ meterPreview.baseChargeYearly | currency: 'EUR' : 'symbol'
-                                    : '1.2-2' }}/Jahr</span>
-                            </div>
-                            <div class="cost-detail">
-                                <mat-icon class="detail-icon">schedule</mat-icon>
-                                <span class="detail-value">{{ meterPreview.monthsUsed }} Monate</span>
-                            </div>
-                        </div>
-                    </div>
-                </mat-card-content>
-            </mat-card>
-            }
-        </div>
+      <h3 class="section-title">Kostenvorschau pro Zähler</h3>
+      <div class="meters-grid">
+        @for (meterPreview of preview.meterPreviews; track meterPreview.meter.id) {
+          <mat-card class="meter-preview-card" [style.--meter-color]="meterPreview.meter.color">
+            <mat-card-header>
+              <div class="meter-header">
+                <mat-icon [style.color]="meterPreview.meter.color">{{
+                  meterPreview.meter.icon
+                }}</mat-icon>
+                <div>
+                  <mat-card-title>{{ meterPreview.meter.name }}</mat-card-title>
+                  <mat-card-subtitle
+                    >{{ meterPreview.meter.type | titlecase }} ·
+                    {{ meterPreview.meter.unit }}</mat-card-subtitle
+                  >
+                </div>
+              </div>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="meter-cost-summary">
+                <div class="cost-main">
+                  <mat-icon class="cost-icon">euro_symbol</mat-icon>
+                  <span class="cost-amount">{{
+                    meterPreview.projectedTotal | currency: 'EUR' : 'symbol' : '1.2-2'
+                  }}</span>
+                </div>
+                <div class="cost-details">
+                  <div class="cost-detail">
+                    <mat-icon class="detail-icon">trending_up</mat-icon>
+                    <span class="detail-value"
+                      >{{
+                        meterPreview.avgMonthlyVariable | currency: 'EUR' : 'symbol' : '1.2-2'
+                      }}/Mon</span
+                    >
+                  </div>
+                  <div class="cost-detail" *ngIf="meterPreview.baseChargeYearly > 0">
+                    <mat-icon class="detail-icon">account_balance</mat-icon>
+                    <span class="detail-value"
+                      >{{
+                        meterPreview.baseChargeYearly | currency: 'EUR' : 'symbol' : '1.2-2'
+                      }}/Jahr</span
+                    >
+                  </div>
+                  <div class="cost-detail">
+                    <mat-icon class="detail-icon">schedule</mat-icon>
+                    <span class="detail-value">{{ meterPreview.monthsUsed }} Monate</span>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
     </div>
-    } @else {
+  } @else {
     <mat-card class="no-data-card">
-        <mat-card-content>
-            <p>Keine Daten verfügbar für die Kostenvorschau.</p>
-        </mat-card-content>
+      <mat-card-content>
+        <p>Keine Daten verfügbar für die Kostenvorschau.</p>
+      </mat-card-content>
     </mat-card>
-    }
+  }
 </div>

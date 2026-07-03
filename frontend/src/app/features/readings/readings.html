@@ -17,22 +17,26 @@
       <mat-select [value]="filterMeterId()" (selectionChange)="filterMeterId.set($event.value)">
         <mat-option value="" i18n="@@readings.filter.all">Alle Zähler</mat-option>
         @for (meter of meters(); track meter.id) {
-        <mat-option [value]="meter.id">{{ meter.name }}</mat-option>
+          <mat-option [value]="meter.id">{{ meter.name }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
   </div>
 
   @if (filteredReadings().length === 0) {
-  <div class="empty-state">
-    <mat-icon>history</mat-icon>
-    <h3 i18n="@@readings.empty.title">Keine Ablesungen gefunden</h3>
-    <p i18n="@@readings.empty.desc">Füge deine erste Ablesung hinzu.</p>
-    <button mat-flat-button color="primary" routerLink="new">
-      <span i18n="@@readings.empty.btn">Ablesung erfassen</span>
-    </button>
-  </div>
+    <div class="empty-state">
+      <mat-icon>history</mat-icon>
+      <h3 i18n="@@readings.empty.title">Keine Ablesungen gefunden</h3>
+      <p i18n="@@readings.empty.desc">Füge deine erste Ablesung hinzu.</p>
+      <button mat-flat-button color="primary" routerLink="new">
+        <span i18n="@@readings.empty.btn">Ablesung erfassen</span>
+      </button>
+    </div>
   }
 
-  <app-readings-list [rows]="filteredReadings()" [showActions]="true" (deleteReading)="deleteReading($event)" />
+  <app-readings-list
+    [rows]="filteredReadings()"
+    [showActions]="true"
+    (deleteReading)="deleteReading($event)"
+  />
 </div>

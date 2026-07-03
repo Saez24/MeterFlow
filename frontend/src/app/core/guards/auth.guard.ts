@@ -10,6 +10,6 @@ export const authGuard: CanActivateFn = () => {
 
   // Erst Session von Supabase laden, dann entscheiden
   return from(supabase.getSession()).pipe(
-    map(user => user ? true : router.createUrlTree(['/auth']))
-  )
+    map((user) => (user ? true : router.createUrlTree(['/auth']))),
+  );
 };

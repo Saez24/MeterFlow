@@ -3,8 +3,8 @@
  * Quelle: Bundesnetzagentur / DVGW
  */
 export const GAS_DEFAULTS = {
-    /** Brennwert (Heizwert) in kWh/m³ */
-    CALORIFIC_VALUE: 10.55,
-    /** Zustandszahl (dimensionslos) */
-    Z_NUMBER: 0.9672,
+  /** Brennwert (Heizwert) in kWh/m³ */
+  CALORIFIC_VALUE: 10.55,
+  /** Zustandszahl (dimensionslos) */
+  Z_NUMBER: 0.9672,
 } as const;

@@ -126,7 +126,7 @@ export class FernwarmeService {
         co2Cost: period.co2Cost,
       });
 
-      totalConsumption += (reading.consumption ?? 0);
+      totalConsumption += reading.consumption ?? 0;
       totalCost += period.totalCost;
       totalBaseCharge += period.basePriceTotal;
     }

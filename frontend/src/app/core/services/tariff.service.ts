@@ -52,7 +52,11 @@ export class TariffService {
     });
   }
 
-  async updateTariff(meterId: string, tariffId: string, changes: Partial<TariffPeriod>): Promise<void> {
+  async updateTariff(
+    meterId: string,
+    tariffId: string,
+    changes: Partial<TariffPeriod>,
+  ): Promise<void> {
     const meter = this.meterService.getMeter(meterId);
     if (!meter || !meter.tariffHistory) return;
 

@@ -27,8 +27,7 @@ export interface TariffPeriod {
   zNumber?: number;
   note?: string;
   emissionPrice?: number;
-  basePricePerKw?: number;       // Fernwärme: Bereitstellungspreis pro kW/Jahr
-
+  basePricePerKw?: number; // Fernwärme: Bereitstellungspreis pro kW/Jahr
 }
 
 export interface BudgetConfig {
@@ -49,12 +48,7 @@ export type UnitByEnergyType = {
 };
 
 export type MaterialIcon =
-  | 'bolt'
-  | 'local_fire_department'
-  | 'water_drop'
-  | 'yard'
-  | 'oil_barrel'
-  | 'wb_sunny';
+  'bolt' | 'local_fire_department' | 'water_drop' | 'yard' | 'oil_barrel' | 'wb_sunny';
 
 // ------------------------
 // Meter Config
@@ -165,13 +159,13 @@ export interface BudgetAlert {
  * Fernwärme:  75,000 kg/MWh  (DE-Fernwärme-Mittel)
  */
 export const CO2_FACTORS: Record<EnergyType, number> = {
-  [EnergyType.Electricity]: 0.380,
-  [EnergyType.Gas]: 2.020,
-  [EnergyType.Water]: 0.000,
-  [EnergyType.GardenWater]: 0.000,
-  [EnergyType.HeatingOil]: 2.680,
-  [EnergyType.Solar]: -0.050,
-  [EnergyType.Fernwärme]: 75.000,
+  [EnergyType.Electricity]: 0.38,
+  [EnergyType.Gas]: 2.02,
+  [EnergyType.Water]: 0.0,
+  [EnergyType.GardenWater]: 0.0,
+  [EnergyType.HeatingOil]: 2.68,
+  [EnergyType.Solar]: -0.05,
+  [EnergyType.Fernwärme]: 75.0,
 };
 
 export const ENERGY_META: Record<
@@ -184,7 +178,12 @@ export const ENERGY_META: Record<
   [EnergyType.GardenWater]: { label: 'Gartenwasser', icon: 'yard', color: '#10B981', unit: 'm³' },
   [EnergyType.HeatingOil]: { label: 'Heizöl', icon: 'oil_barrel', color: '#F97316', unit: 'Liter' },
   [EnergyType.Solar]: { label: 'Solar', icon: 'wb_sunny', color: '#EAB308', unit: 'kWh' },
-  [EnergyType.Fernwärme]: { label: 'Fernwärme', icon: 'local_fire_department', color: '#EAB308', unit: 'MWh' },
+  [EnergyType.Fernwärme]: {
+    label: 'Fernwärme',
+    icon: 'local_fire_department',
+    color: '#EAB308',
+    unit: 'MWh',
+  },
 };
 
 export const MONTH_NAMES = [

@@ -1,12 +1,7 @@
 import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -47,7 +42,6 @@ import { maxDecimalPlaces } from '../../../core/validators/decimal-places.valida
   ],
   templateUrl: './readings-form.html',
   styleUrl: './readings-form.scss',
-
 })
 export class ReadingsForm {
   private readonly meterService = inject(MeterService);
@@ -73,7 +67,7 @@ export class ReadingsForm {
   readonly ocrResult = signal<OcrResult | null>(null);
 
   readonly hasExistingPhoto = computed(
-    () => !!this.existingPhotoPath() && !this.existingPhotoRemoved()
+    () => !!this.existingPhotoPath() && !this.existingPhotoRemoved(),
   );
 
   readonly activeMeters = this.meterService.activeMeters;
@@ -86,10 +80,7 @@ export class ReadingsForm {
 
   form = this.fb.group({
     meterId: ['', Validators.required],
-    value: [
-      null as number | null,
-      [Validators.required, Validators.min(0), maxDecimalPlaces(3)],
-    ],
+    value: [null as number | null, [Validators.required, Validators.min(0), maxDecimalPlaces(3)]],
     date: [new Date(), Validators.required],
     note: [''],
   });
@@ -118,9 +109,10 @@ export class ReadingsForm {
         this.existingPhotoPath.set(this.originalReading.photo);
         const isStoragePath = !this.originalReading.photo.startsWith('http');
         if (isStoragePath) {
-          this.apiService.getSignedPhotoUrl(this.originalReading.photo)
-            .then(url => this.existingPhotoSignedUrl.set(url))
-            .catch(() => { });
+          this.apiService
+            .getSignedPhotoUrl(this.originalReading.photo)
+            .then((url) => this.existingPhotoSignedUrl.set(url))
+            .catch(() => {});
         } else {
           this.existingPhotoSignedUrl.set(this.originalReading.photo);
         }
@@ -141,9 +133,7 @@ export class ReadingsForm {
     const value = this.numericFormValue();
     const max = this.maxValue();
     return (
-      this.form.invalid ||
-      !this.selectedMeter() ||
-      (max !== null && value !== null && value > max)
+      this.form.invalid || !this.selectedMeter() || (max !== null && value !== null && value > max)
     );
   });
 
@@ -275,7 +265,7 @@ export class ReadingsForm {
       this.snackBar.open(
         $localize`:@@readingsForm.ocr.error:Texterkennung fehlgeschlagen – bitte Wert manuell eingeben`,
         'OK',
-        { duration: 5000 }
+        { duration: 5000 },
       );
     } finally {
       this.ocrRunning.set(false);
@@ -306,8 +296,7 @@ export class ReadingsForm {
       return `Wert muss mindestens ${this.minValue()} sein (vorherige Ablesung)`;
     if (this.maxValue() !== null && value !== null && value > this.maxValue()!)
       return `Wert darf maximal ${this.maxValue()} sein (nächste Ablesung)`;
-    if (control?.hasError('maxDecimalPlaces'))
-      return 'Maximal 3 Nachkommastellen erlaubt';
+    if (control?.hasError('maxDecimalPlaces')) return 'Maximal 3 Nachkommastellen erlaubt';
     return '';
   }
 
@@ -319,10 +308,14 @@ export class ReadingsForm {
     const numericValue = this.numericFormValue();
 
     if (numericValue === null) {
-      this.snackBar.open($localize`:@@readingsForm.invalidValue:Ungültiger Wert für Zählerstand.`, 'OK', {
-        duration: 5000,
-        panelClass: 'error-snackbar',
-      });
+      this.snackBar.open(
+        $localize`:@@readingsForm.invalidValue:Ungültiger Wert für Zählerstand.`,
+        'OK',
+        {
+          duration: 5000,
+          panelClass: 'error-snackbar',
+        },
+      );
       return;
     }
 
@@ -361,18 +354,22 @@ export class ReadingsForm {
         }
       }
 
-      this.snackBar.open($localize`:@@readingsForm.saved:Ablesung gespeichert`, 'OK', { duration: 3000 });
+      this.snackBar.open($localize`:@@readingsForm.saved:Ablesung gespeichert`, 'OK', {
+        duration: 3000,
+      });
       this.readingService.goBack();
     } catch (error) {
       console.error('Error saving reading:', error);
-      this.snackBar.open($localize`:@@readingsForm.saveError:Fehler beim Speichern der Ablesung`, 'OK', {
-        duration: 5000,
-        panelClass: 'error-snackbar',
-      });
-    }
-    finally {
+      this.snackBar.open(
+        $localize`:@@readingsForm.saveError:Fehler beim Speichern der Ablesung`,
+        'OK',
+        {
+          duration: 5000,
+          panelClass: 'error-snackbar',
+        },
+      );
+    } finally {
       this.isSaving.set(false);
     }
   }
-
 }

@@ -1,11 +1,6 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { StatsService } from './stats.service';
-import {
-  ENERGY_META,
-  MeterConfig,
-  ReadingRow,
-  TariffPeriod,
-} from '../models/energy.models';
+import { ENERGY_META, MeterConfig, ReadingRow, TariffPeriod } from '../models/energy.models';
 import { MeterService } from './meter.service';
 import { ReadingService } from './reading.service';
 import { TariffService } from './tariff.service';
@@ -22,13 +17,9 @@ export class DashboardStateService {
   readonly activeMeters = this.meterService.activeMeters;
   readonly waterBills = this.statsService.waterBillStats;
 
-  readonly selectedYear = signal(
-    this.availableYears()[0] ?? new Date().getFullYear()
-  );
+  readonly selectedYear = signal(this.availableYears()[0] ?? new Date().getFullYear());
 
-  readonly yearStats = computed(() =>
-    this.statsService.getYearStats(this.selectedYear())
-  );
+  readonly yearStats = computed(() => this.statsService.getYearStats(this.selectedYear()));
 
   readonly activeCount = computed(() => this.activeMeters().length);
 
@@ -39,11 +30,11 @@ export class DashboardStateService {
       .map((reading) => ({
         reading,
         gardenWaterCost: this.readingService.getGardenWaterCost(reading),
-      }))
+      })),
   );
 
   readonly waterBillsForYear = computed(() =>
-    this.waterBills().filter((b) => b.year === this.selectedYear())
+    this.waterBills().filter((b) => b.year === this.selectedYear()),
   );
 
   readonly waterTotals = computed(() => {
@@ -70,9 +61,7 @@ export class DashboardStateService {
         return sum;
       }
 
-      const monthsWithData = stats.months.filter(
-        (m) => m.byMeter[meter.id] !== undefined,
-      );
+      const monthsWithData = stats.months.filter((m) => m.byMeter[meter.id] !== undefined);
 
       const totalBaseChargeForMeter = monthsWithData.reduce((monthlySum, month) => {
         const tariff = this.tariffService.getActiveTariffForDate(
@@ -125,9 +114,7 @@ export class DashboardStateService {
     const meters = this.activeMeters();
     const prevBaseTotal = meters.reduce((sum, meter) => {
       if (meter.type === 'garden_water' && meter.linkedWaterMeterId) return sum;
-      const monthsWithMeterData = prevMonthsUpTo.filter(
-        (m) => m.byMeter[meter.id] !== undefined,
-      );
+      const monthsWithMeterData = prevMonthsUpTo.filter((m) => m.byMeter[meter.id] !== undefined);
       const baseForMeter = monthsWithMeterData.reduce((ms, month) => {
         const tariff = this.tariffService.getActiveTariffForDate(
           meter,
@@ -157,9 +144,7 @@ export class DashboardStateService {
         return sum;
       }
 
-      const monthsWithData = stats.months.filter(
-        (m) => m.byMeter[meter.id] !== undefined,
-      );
+      const monthsWithData = stats.months.filter((m) => m.byMeter[meter.id] !== undefined);
 
       const totalBaseChargeForMeter = monthsWithData.reduce((monthlySum, month) => {
         const tariff = this.tariffService.getActiveTariffForDate(
@@ -181,12 +166,12 @@ export class DashboardStateService {
     const meters = this.activeMeters();
 
     // Monate mit Daten im aktuellen Jahr
-    const currentMonthsWithData = stats.months.filter(m => Object.keys(m.byMeter).length > 0);
+    const currentMonthsWithData = stats.months.filter((m) => Object.keys(m.byMeter).length > 0);
 
     // Daten vom Vorjahr holen
     const prevYear = year - 1;
     const prevStats = this.statsService.getYearStats(prevYear);
-    const prevMonthsWithData = prevStats.months.filter(m => Object.keys(m.byMeter).length > 0);
+    const prevMonthsWithData = prevStats.months.filter((m) => Object.keys(m.byMeter).length > 0);
 
     // Kombinierte Monate für Durchschnittsberechnung
     const allMonthsData = [...prevMonthsWithData, ...currentMonthsWithData];
@@ -194,11 +179,13 @@ export class DashboardStateService {
     if (allMonthsData.length === 0) return null;
 
     // Pro Zähler berechnen (nur Zähler, die nicht verknüpfte Gartenwasserzähler sind)
-    const relevantMeters = meters.filter(meter => !(meter.type === 'garden_water' && meter.linkedWaterMeterId));
-    const meterPreviews = relevantMeters.map(meter => {
+    const relevantMeters = meters.filter(
+      (meter) => !(meter.type === 'garden_water' && meter.linkedWaterMeterId),
+    );
+    const meterPreviews = relevantMeters.map((meter) => {
       // Monate mit Daten für diesen Zähler
-      const currentMeterMonths = currentMonthsWithData.filter(m => m.byMeter[meter.id]);
-      const prevMeterMonths = prevMonthsWithData.filter(m => m.byMeter[meter.id]);
+      const currentMeterMonths = currentMonthsWithData.filter((m) => m.byMeter[meter.id]);
+      const prevMeterMonths = prevMonthsWithData.filter((m) => m.byMeter[meter.id]);
       const allMeterMonths = [...prevMeterMonths, ...currentMeterMonths];
 
       if (allMeterMonths.length === 0) {
@@ -215,14 +202,19 @@ export class DashboardStateService {
       }
 
       // Durchschnittliche variable Kosten pro Monat für diesen Zähler
-      const avgMonthlyVariable = allMeterMonths.reduce((sum, m) => sum + (m.byMeter[meter.id]?.cost ?? 0), 0) / allMeterMonths.length;
+      const avgMonthlyVariable =
+        allMeterMonths.reduce((sum, m) => sum + (m.byMeter[meter.id]?.cost ?? 0), 0) /
+        allMeterMonths.length;
 
       // Prognostizierte variable Kosten für 12 Monate
       const projectedVariableCost = avgMonthlyVariable * 12;
 
       // Grundgebühren für 12 Monate (nur wenn nicht Gartenwasser)
-      const baseChargeYearly = (meter.type === 'garden_water' && meter.linkedWaterMeterId) ? 0 :
-        (this.tariffService.getActiveTariffForDate(meter, new Date(year, 0, 1))?.baseCharge ?? 0) * 12;
+      const baseChargeYearly =
+        meter.type === 'garden_water' && meter.linkedWaterMeterId
+          ? 0
+          : (this.tariffService.getActiveTariffForDate(meter, new Date(year, 0, 1))?.baseCharge ??
+              0) * 12;
 
       // Gesamtprognose für diesen Zähler
       const projectedTotal = projectedVariableCost + baseChargeYearly;
@@ -241,7 +233,10 @@ export class DashboardStateService {
 
     // Gesamtsummen
     const totalProjectedCost = meterPreviews.reduce((sum, mp) => sum + mp.projectedTotal, 0);
-    const totalAvgMonthlyVariable = meterPreviews.reduce((sum, mp) => sum + mp.avgMonthlyVariable, 0);
+    const totalAvgMonthlyVariable = meterPreviews.reduce(
+      (sum, mp) => sum + mp.avgMonthlyVariable,
+      0,
+    );
     const totalBaseCharge = meterPreviews.reduce((sum, mp) => sum + mp.baseChargeYearly, 0);
 
     return {

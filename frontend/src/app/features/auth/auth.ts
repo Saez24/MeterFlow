@@ -14,12 +14,18 @@ type AuthMode = 'login' | 'register';
 
 @Component({
   selector: 'app-auth',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule,
-    MatFormFieldModule, MatInputModule, MatButtonModule,
-    MatIconModule, MatSnackBarModule,],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSnackBarModule,
+  ],
   templateUrl: './auth.html',
   styleUrl: './auth.scss',
-
 })
 export class Auth {
   private readonly supabase = inject(ApiService);
@@ -39,11 +45,11 @@ export class Auth {
   });
 
   protected readonly formValue = toSignal(this.form.valueChanges, {
-    initialValue: this.form.value
+    initialValue: this.form.value,
   });
 
   toggleMode(): void {
-    this.mode.update(m => m === 'login' ? 'register' : 'login');
+    this.mode.update((m) => (m === 'login' ? 'register' : 'login'));
     this.errorMessage.set('');
     this.form.reset();
   }
@@ -53,7 +59,9 @@ export class Auth {
     const { email, password, confirmPassword } = this.form.value;
 
     if (this.mode() === 'register' && password !== confirmPassword) {
-      this.errorMessage.set($localize`:@@auth.error.passwordMismatch:Passwörter stimmen nicht überein`);
+      this.errorMessage.set(
+        $localize`:@@auth.error.passwordMismatch:Passwörter stimmen nicht überein`,
+      );
     }
 
     this.loading.set(true);
@@ -70,7 +78,7 @@ export class Auth {
         this.snackBar.open(
           $localize`:@@auth.accountCreated:Konto erstellt! Bitte bestätige deine E-Mail.`,
           'OK',
-          { duration: 6000 }
+          { duration: 6000 },
         );
         this.mode.set('login');
       }
@@ -82,10 +90,14 @@ export class Auth {
   }
 
   private translateError(msg: string): string {
-    if (msg.includes('Invalid login credentials')) return $localize`:@@auth.error.invalidCredentials:E-Mail oder Passwort falsch`;
-    if (msg.includes('Email not confirmed')) return $localize`:@@auth.error.emailNotConfirmed:Bitte bestätige zuerst deine E-Mail`;
-    if (msg.includes('User already registered')) return $localize`:@@auth.error.alreadyRegistered:Diese E-Mail ist bereits registriert`;
-    if (msg.includes('Password should be')) return $localize`:@@auth.error.passwordTooShort:Passwort muss mindestens 6 Zeichen haben`;
+    if (msg.includes('Invalid login credentials'))
+      return $localize`:@@auth.error.invalidCredentials:E-Mail oder Passwort falsch`;
+    if (msg.includes('Email not confirmed'))
+      return $localize`:@@auth.error.emailNotConfirmed:Bitte bestätige zuerst deine E-Mail`;
+    if (msg.includes('User already registered'))
+      return $localize`:@@auth.error.alreadyRegistered:Diese E-Mail ist bereits registriert`;
+    if (msg.includes('Password should be'))
+      return $localize`:@@auth.error.passwordTooShort:Passwort muss mindestens 6 Zeichen haben`;
     return $localize`:@@auth.error.generic:Ein Fehler ist aufgetreten. Bitte versuche es erneut.`;
   }
 }

@@ -65,7 +65,9 @@ export class ReadingService {
     const allReadings = this.readingsByMeter().get(reading.meterId) ?? [];
     const prev = allReadings[0];
     const consumption = prev ? reading.value - prev.value : 0;
-    let kwh: number | undefined, cost = 0, wastewaterCost = 0;
+    let kwh: number | undefined,
+      cost = 0,
+      wastewaterCost = 0;
 
     const tariff = this.tariffService.getActiveTariffForDate(meter, new Date(reading.date));
     if (tariff) {
@@ -97,14 +99,16 @@ export class ReadingService {
 
     const payload: Omit<MeterReading, 'id'> = {
       ...reading,
-      consumption, kwh, cost,
+      consumption,
+      kwh,
+      cost,
       wastewaterCost: wastewaterCost > 0 ? wastewaterCost : undefined,
       totalCost: cost + wastewaterCost,
       date: new Date(reading.date),
     };
 
     const saved = await this.supabase.addReading(payload);
-    this.readings.update(list => [...list, saved]);
+    this.readings.update((list) => [...list, saved]);
     await this.recalculateAllReadingsForMeter(reading.meterId);
     return saved;
   }
@@ -115,9 +119,7 @@ export class ReadingService {
     const oldReading = this.getReading(id);
     if (!oldReading) return;
 
-    this.readings.update((list) =>
-      list.map((r) => (r.id === id ? { ...r, ...changes } : r)),
-    );
+    this.readings.update((list) => list.map((r) => (r.id === id ? { ...r, ...changes } : r)));
     await this.recalculateAllReadingsForMeter(oldReading.meterId);
     this.goBack();
   }
@@ -157,7 +159,8 @@ export class ReadingService {
       const tariff = this.tariffService.getActiveTariffForDate(meter, current.date);
       if (tariff) {
         if (meter.type === 'gas') {
-          const calorificValue = tariff.calorificValue ?? meter.calorificValue ?? GAS_DEFAULTS.CALORIFIC_VALUE;
+          const calorificValue =
+            tariff.calorificValue ?? meter.calorificValue ?? GAS_DEFAULTS.CALORIFIC_VALUE;
           const zNumber = tariff.zNumber ?? meter.zNumber ?? GAS_DEFAULTS.Z_NUMBER;
           kwh = consumption * calorificValue * zNumber;
           cost = kwh * tariff.pricePerUnit;
@@ -200,17 +203,15 @@ export class ReadingService {
         };
         const { id, ...changes } = updatedReading;
         await this.supabase.updateReading(id, changes);
-        this.readings.update((list) =>
-          list.map((r) => (r.id === id ? updatedReading : r))
-        );
+        this.readings.update((list) => list.map((r) => (r.id === id ? updatedReading : r)));
       }
     }
   }
 
   private getGardenWaterConsumptionForPeriod(mainMeterId: string, from: Date, to: Date): number {
-    const gardenMeters = this.meterService.meters().filter(
-      (m) => m.type === 'garden_water' && m.linkedWaterMeterId === mainMeterId,
-    );
+    const gardenMeters = this.meterService
+      .meters()
+      .filter((m) => m.type === 'garden_water' && m.linkedWaterMeterId === mainMeterId);
     let total = 0;
     for (const gm of gardenMeters) {
       const readings = (this.readingsByMeter().get(gm.id) ?? [])

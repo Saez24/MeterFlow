@@ -2,19 +2,29 @@
   <div class="page-header">
     <div>
       <h1 class="page-title" i18n="@@reports.title">Auswertungen</h1>
-      <p class="page-subtitle" i18n="@@reports.subtitle">Monats- und Jahresübersichten deiner Verbräuche</p>
+      <p class="page-subtitle" i18n="@@reports.subtitle">
+        Monats- und Jahresübersichten deiner Verbräuche
+      </p>
     </div>
     <div class="page-header__actions">
       <mat-form-field appearance="outline" class="year-select">
         <mat-label i18n="@@reports.yearLabel">Jahr</mat-label>
-        <mat-select [value]="state.selectedYear()" (selectionChange)="state.selectedYear.set($event.value)">
+        <mat-select
+          [value]="state.selectedYear()"
+          (selectionChange)="state.selectedYear.set($event.value)"
+        >
           @for (y of state.availableYears(); track y) {
-          <mat-option [value]="y">{{ y }}</mat-option>
+            <mat-option [value]="y">{{ y }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
-      <button mat-flat-button class="pdf-btn" (click)="exportPdf()" aria-label="PDF exportieren"
-        i18n-aria-label="@@reports.pdfBtn.aria">
+      <button
+        mat-flat-button
+        class="pdf-btn"
+        (click)="exportPdf()"
+        aria-label="PDF exportieren"
+        i18n-aria-label="@@reports.pdfBtn.aria"
+      >
         <mat-icon>picture_as_pdf</mat-icon>
         <span i18n="@@reports.pdfBtn">PDF exportieren</span>
       </button>
@@ -25,74 +35,87 @@
   <section class="kpi-section">
     <div class="kpi-grid">
       @if (state.costPreview(); as preview) {
-      <div class="kpi-card kpi-card--preview">
-        <div class="kpi-icon"><mat-icon>timeline</mat-icon></div>
-        <div class="kpi-info">
-          <span class="kpi-label" i18n="@@reports.costPreview">Kostenvorschau {{ state.selectedYear() }}</span>
-          <span class="kpi-value">{{ preview.projectedCost | currency: 'EUR' : 'symbol' : '1.2-2' }}</span>
-          <span class="kpi-sub">Basierend auf {{ preview.monthsUsed }} Monaten</span>
+        <div class="kpi-card kpi-card--preview">
+          <div class="kpi-icon"><mat-icon>timeline</mat-icon></div>
+          <div class="kpi-info">
+            <span class="kpi-label" i18n="@@reports.costPreview"
+              >Kostenvorschau {{ state.selectedYear() }}</span
+            >
+            <span class="kpi-value">{{
+              preview.projectedCost | currency: 'EUR' : 'symbol' : '1.2-2'
+            }}</span>
+            <span class="kpi-sub">Basierend auf {{ preview.monthsUsed }} Monaten</span>
+          </div>
         </div>
-      </div>
       }
       <div class="kpi-card kpi-card--total">
         <div class="kpi-icon"><mat-icon>euro</mat-icon></div>
         <div class="kpi-info">
-          <span class="kpi-label" i18n="@@reports.totalCosts">Gesamtkosten {{ state.selectedYear() }}</span>
+          <span class="kpi-label" i18n="@@reports.totalCosts"
+            >Gesamtkosten {{ state.selectedYear() }}</span
+          >
           <span class="kpi-value">{{
             state.totalYearCostWithBase() | currency: 'EUR' : 'symbol' : '1.2-2'
-            }}</span>
+          }}</span>
         </div>
       </div>
       <div class="kpi-card kpi-card--co2">
         <div class="kpi-icon kpi-icon--co2"><mat-icon>eco</mat-icon></div>
         <div class="kpi-info">
-          <span class="kpi-label" i18n="@@reports.totalCo2">CO₂-Emissionen {{ state.selectedYear() }}</span>
+          <span class="kpi-label" i18n="@@reports.totalCo2"
+            >CO₂-Emissionen {{ state.selectedYear() }}</span
+          >
           <span class="kpi-value kpi-value--co2">
             @if (state.totalYearCo2Kg() >= 1000) {
-            {{ state.totalYearCo2Kg() / 1000 | number: '1.1-2' }} t
+              {{ state.totalYearCo2Kg() / 1000 | number: '1.1-2' }} t
             } @else {
-            {{ state.totalYearCo2Kg() | number: '1.0-1' }} kg
+              {{ state.totalYearCo2Kg() | number: '1.0-1' }} kg
             }
           </span>
           <!-- <span class="kpi-sub" i18n="@@reports.co2Note">Basis: DE-Emissionsfaktoren (UBA 2024)</span> -->
         </div>
       </div>
       @for (meter of state.activeMeters(); track meter.id) {
-      @if (state.statsService.getMeterSummary(meter.id, state.selectedYear()); as summary) {
-      <div class="kpi-card" [style.--kpi-color]="meter.color">
-        <div class="kpi-block">
-          <div class="kpi-icon" [style.background]="meter.color + '22'">
-            <mat-icon [style.color]="meter.color">{{ meter.icon }}</mat-icon>
-
+        @if (state.statsService.getMeterSummary(meter.id, state.selectedYear()); as summary) {
+          <div class="kpi-card" [style.--kpi-color]="meter.color">
+            <div class="kpi-block">
+              <div class="kpi-icon" [style.background]="meter.color + '22'">
+                <mat-icon [style.color]="meter.color">{{ meter.icon }}</mat-icon>
+              </div>
+              <div>
+                @if (summary.co2Kg !== 0) {
+                  <span class="kpi-co2">
+                    <mat-icon class="kpi-co2__icon">eco</mat-icon>
+                    @if (summary.co2Kg >= 1000) {
+                      {{ summary.co2Kg / 1000 | number: '1.1-2' }} t CO₂
+                    } @else {
+                      {{ summary.co2Kg | number: '1.0-1' }} kg CO₂
+                    }
+                  </span>
+                }
+              </div>
+            </div>
+            <div class="kpi-info">
+              <span class="kpi-label">{{ meter.name }}</span>
+              <span class="kpi-value">{{
+                summary.cost | currency: 'EUR' : 'symbol' : '1.2-2'
+              }}</span>
+              <span class="kpi-sub">
+                @if (summary.consumptionKwh !== undefined) {
+                  {{ summary.consumptionKwh | number: '1.0-0' }} kWh ({{
+                    summary.consumption | number: (meter.type === 'fernwarme' ? '1.3-3' : '1.0-2')
+                  }}
+                  {{ summary.unit }})
+                } @else {
+                  {{
+                    summary.consumption | number: (meter.type === 'fernwarme' ? '1.3-3' : '1.0-2')
+                  }}
+                  {{ summary.unit }}
+                }
+              </span>
+            </div>
           </div>
-          <div>
-            @if (summary.co2Kg !== 0) {
-            <span class="kpi-co2">
-              <mat-icon class="kpi-co2__icon">eco</mat-icon>
-              @if (summary.co2Kg >= 1000) {
-              {{ summary.co2Kg / 1000 | number: '1.1-2' }} t CO₂
-              } @else {
-              {{ summary.co2Kg | number: '1.0-1' }} kg CO₂
-              }
-            </span>
-            }
-          </div>
-        </div>
-        <div class="kpi-info">
-          <span class="kpi-label">{{ meter.name }}</span>
-          <span class="kpi-value">{{ summary.cost | currency: 'EUR' : 'symbol' : '1.2-2' }}</span>
-          <span class="kpi-sub">
-            @if (summary.consumptionKwh !== undefined) {
-            {{ summary.consumptionKwh | number: '1.0-0' }} kWh
-            ({{ summary.consumption | number: (meter.type === 'fernwarme' ? '1.3-3' : '1.0-2') }} {{ summary.unit }})
-            } @else {
-            {{ summary.consumption | number: (meter.type === 'fernwarme' ? '1.3-3' : '1.0-2') }} {{ summary.unit }}
-            }
-          </span>
-
-        </div>
-      </div>
-      }
+        }
       }
     </div>
   </section>
@@ -103,10 +126,10 @@
       <h2 i18n="@@reports.monthlyCosts">Monatliche Kosten {{ state.selectedYear() }}</h2>
       <div class="chart-legend">
         @for (meter of state.activeMeters(); track meter.id) {
-        <div class="legend-item">
-          <span class="legend-dot" [style.background]="meter.color"></span>
-          <span>{{ meter.name }}</span>
-        </div>
+          <div class="legend-item">
+            <span class="legend-dot" [style.background]="meter.color"></span>
+            <span>{{ meter.name }}</span>
+          </div>
         }
       </div>
     </div>
@@ -121,11 +144,15 @@
       <h2 i18n="@@reports.monthlyConsumption">Monatlicher Verbrauch</h2>
       <div class="meter-toggle">
         @for (meter of state.activeMeters(); track meter.id) {
-        <button class="toggle-btn" [class.toggle-btn--active]="selectedMeterChart() === meter.id"
-          [style.--btn-color]="meter.color" (click)="selectedMeterChart.set(meter.id)">
-          <mat-icon [style.color]="meter.color">{{ meter.icon }}</mat-icon>
-          {{ meter.name }}
-        </button>
+          <button
+            class="toggle-btn"
+            [class.toggle-btn--active]="selectedMeterChart() === meter.id"
+            [style.--btn-color]="meter.color"
+            (click)="selectedMeterChart.set(meter.id)"
+          >
+            <mat-icon [style.color]="meter.color">{{ meter.icon }}</mat-icon>
+            {{ meter.name }}
+          </button>
         }
       </div>
     </div>
@@ -136,61 +163,78 @@
 
   <!-- Wasser-Spezialauswertung -->
   @if (state.waterBills().length > 0) {
-  <section class="water-section">
-    <h2 class="section-title">
-      <mat-icon style="color: #06b6d4">water_drop</mat-icon>
-      <span i18n="@@reports.waterBilling">Wasserabrechnung</span> {{ state.selectedYear() }}
-    </h2>
-    <p class="water-desc" i18n="@@reports.waterBillingDesc">
-      Abwasserkosten werden automatisch um den Gartenwasserverbrauch reduziert.
-    </p>
-    <div class="water-table">
-      <div class="water-table-header">
-        <span i18n="@@reports.water.month">Monat</span>
-        <span i18n="@@reports.water.totalM3">Gesamt m³</span>
-        <span i18n="@@reports.water.billable">Abw.-pflichtig</span>
-        <span i18n="@@reports.water.freshwater">Frischwasser</span>
-        <span i18n="@@reports.water.wastewater">Abwasser</span>
-        <span i18n="@@reports.water.baseCharge">Grundgebühr</span>
-        <span i18n="@@reports.water.total">Gesamt</span>
+    <section class="water-section">
+      <h2 class="section-title">
+        <mat-icon style="color: #06b6d4">water_drop</mat-icon>
+        <span i18n="@@reports.waterBilling">Wasserabrechnung</span> {{ state.selectedYear() }}
+      </h2>
+      <p class="water-desc" i18n="@@reports.waterBillingDesc">
+        Abwasserkosten werden automatisch um den Gartenwasserverbrauch reduziert.
+      </p>
+      <div class="water-table">
+        <div class="water-table-header">
+          <span i18n="@@reports.water.month">Monat</span>
+          <span i18n="@@reports.water.totalM3">Gesamt m³</span>
+          <span i18n="@@reports.water.billable">Abw.-pflichtig</span>
+          <span i18n="@@reports.water.freshwater">Frischwasser</span>
+          <span i18n="@@reports.water.wastewater">Abwasser</span>
+          <span i18n="@@reports.water.baseCharge">Grundgebühr</span>
+          <span i18n="@@reports.water.total">Gesamt</span>
+        </div>
+        @for (bill of state.waterBillsForYear(); track bill.month) {
+          <div
+            class="water-table-row"
+            [class.water-table-row--has-garden]="bill.gardenConsumption > 0"
+          >
+            <span class="month-label" data-label="Monat">{{ MONTH_NAMES[bill.month - 1] }}</span>
+            <span data-label="Gesamt m³">{{ bill.totalConsumption | number: '1.0-2' }} m³</span>
+            <span data-label="Abw.-pflichtig"
+              >{{ bill.billableWastewater | number: '1.0-2' }} m³</span
+            >
+            <span data-label="Frischwasser">{{
+              bill.freshwaterCost | currency: 'EUR' : 'symbol' : '1.2-2'
+            }}</span>
+            <span data-label="Abwasser">{{
+              bill.wastewaterCost | currency: 'EUR' : 'symbol' : '1.2-2'
+            }}</span>
+            <span data-label="Grundgebühr">{{
+              bill.baseCharge | currency: 'EUR' : 'symbol' : '1.2-2'
+            }}</span>
+            <span class="total-col" data-label="Gesamt">{{
+              bill.totalCost | currency: 'EUR' : 'symbol' : '1.2-2'
+            }}</span>
+          </div>
+        }
+        <div class="water-table-footer">
+          <span data-label="Jahresgesamt" i18n="@@reports.water.yearTotal">Jahresgesamt</span>
+          <span data-label="Gesamt m³">{{ state.waterTotals().totalM3 | number: '1.0-2' }} m³</span>
+          <span data-label="Abw.-pflichtig"
+            >{{ state.waterTotals().billableM3 | number: '1.0-2' }} m³</span
+          >
+          <span data-label="Frischwasser">{{
+            state.waterTotals().freshCost | currency: 'EUR' : 'symbol' : '1.2-2'
+          }}</span>
+          <span data-label="Abwasser">{{
+            state.waterTotals().wasteCost | currency: 'EUR' : 'symbol' : '1.2-2'
+          }}</span>
+          <span data-label="Grundgebühr">{{
+            state.waterTotals().baseCharge | currency: 'EUR' : 'symbol' : '1.2-2'
+          }}</span>
+          <span class="total-col" data-label="Gesamt">{{
+            state.waterTotals().total | currency: 'EUR' : 'symbol' : '1.2-2'
+          }}</span>
+        </div>
       </div>
-      @for (bill of state.waterBillsForYear(); track bill.month) {
-      <div class="water-table-row" [class.water-table-row--has-garden]="bill.gardenConsumption > 0">
-        <span class="month-label" data-label="Monat">{{ MONTH_NAMES[bill.month - 1] }}</span>
-        <span data-label="Gesamt m³">{{ bill.totalConsumption | number: '1.0-2' }} m³</span>
-        <span data-label="Abw.-pflichtig">{{ bill.billableWastewater | number: '1.0-2' }} m³</span>
-        <span data-label="Frischwasser">{{ bill.freshwaterCost | currency: 'EUR' : 'symbol' : '1.2-2' }}</span>
-        <span data-label="Abwasser">{{ bill.wastewaterCost | currency: 'EUR' : 'symbol' : '1.2-2' }}</span>
-        <span data-label="Grundgebühr">{{ bill.baseCharge | currency: 'EUR' : 'symbol' : '1.2-2' }}</span>
-        <span class="total-col" data-label="Gesamt">{{
-          bill.totalCost | currency: 'EUR' : 'symbol' : '1.2-2'
-          }}</span>
-      </div>
-      }
-      <div class="water-table-footer">
-        <span data-label="Jahresgesamt" i18n="@@reports.water.yearTotal">Jahresgesamt</span>
-        <span data-label="Gesamt m³">{{ state.waterTotals().totalM3 | number: '1.0-2' }} m³</span>
-        <span data-label="Abw.-pflichtig">{{ state.waterTotals().billableM3 | number: '1.0-2' }} m³</span>
-        <span data-label="Frischwasser">{{ state.waterTotals().freshCost | currency: 'EUR' : 'symbol' : '1.2-2'
-          }}</span>
-        <span data-label="Abwasser">{{ state.waterTotals().wasteCost | currency: 'EUR' : 'symbol' : '1.2-2' }}</span>
-        <span data-label="Grundgebühr">{{ state.waterTotals().baseCharge | currency: 'EUR' : 'symbol' : '1.2-2'
-          }}</span>
-        <span class="total-col" data-label="Gesamt">{{
-          state.waterTotals().total | currency: 'EUR' : 'symbol' : '1.2-2'
-          }}</span>
-      </div>
-    </div>
-  </section>
+    </section>
   }
 
   <!-- Jahresvergleich -->
   @if (state.availableYears().length > 1) {
-  <section class="chart-section">
-    <h2 i18n="@@reports.yearlyComparison">Jahresvergleich Gesamtkosten</h2>
-    <div class="chart-wrapper chart-wrapper--small">
-      <canvas #yearChart></canvas>
-    </div>
-  </section>
+    <section class="chart-section">
+      <h2 i18n="@@reports.yearlyComparison">Jahresvergleich Gesamtkosten</h2>
+      <div class="chart-wrapper chart-wrapper--small">
+        <canvas #yearChart></canvas>
+      </div>
+    </section>
   }
 </div>

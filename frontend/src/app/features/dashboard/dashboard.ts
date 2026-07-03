@@ -19,18 +19,27 @@ import { ReadingsList } from '../../shared/components/readings-list/readings-lis
     MatIconModule,
     MatChipsModule,
     MatRippleModule,
-    ReadingsList
+    ReadingsList,
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
-
 })
 export class Dashboard {
   readonly state = inject(DashboardStateService);
 
   readonly MONTH_SHORT = [
-    'Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez',
+    'Jan',
+    'Feb',
+    'Mär',
+    'Apr',
+    'Mai',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Okt',
+    'Nov',
+    'Dez',
   ];
 
   monthShort(month: number): string {

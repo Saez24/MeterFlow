@@ -11,11 +11,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { firstValueFrom } from 'rxjs';
-import {
-  ENERGY_META,
-  MeterConfig,
-  TariffPeriod,
-} from '../../core/models/energy.models';
+import { ENERGY_META, MeterConfig, TariffPeriod } from '../../core/models/energy.models';
 import { MeterService } from '../../core/services/meter.service';
 import { ReadingService } from '../../core/services/reading.service';
 import { TariffService } from '../../core/services/tariff.service';
@@ -37,7 +33,6 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
   ],
   templateUrl: './meters.html',
   styleUrl: './meters.scss',
-
 })
 export class Meters {
   private readonly router = inject(Router);

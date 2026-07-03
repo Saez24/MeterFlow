@@ -7,7 +7,6 @@ import {
   ViewChild,
   ElementRef,
   effect,
-
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,16 +24,9 @@ Chart.register(...registerables);
 
 @Component({
   selector: 'app-reports',
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSelectModule,
-    MatFormFieldModule,
-  ],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatSelectModule, MatFormFieldModule],
   templateUrl: './reports.html',
   styleUrl: './reports.scss',
-
 })
 export class Reports implements AfterViewInit, OnDestroy {
   readonly state = inject(DashboardStateService);
@@ -49,9 +41,7 @@ export class Reports implements AfterViewInit, OnDestroy {
   readonly ENERGY_META = ENERGY_META;
   readonly MONTH_NAMES = MONTH_NAMES;
 
-  readonly selectedMeterChart = signal<string>(
-    this.state.activeMeters()[0]?.id ?? ''
-  );
+  readonly selectedMeterChart = signal<string>(this.state.activeMeters()[0]?.id ?? '');
 
   private costChartInstance: Chart | null = null;
   private consumptionChartInstance: Chart | null = null;
@@ -167,14 +157,16 @@ export class Reports implements AfterViewInit, OnDestroy {
       type: 'bar',
       data: {
         labels: months.map((m) => m.label),
-        datasets: [{
-          label: meter.name,
-          data,
-          backgroundColor: meter.color + 'AA',
-          borderColor: meter.color,
-          borderWidth: 2,
-          borderRadius: 8,
-        }],
+        datasets: [
+          {
+            label: meter.name,
+            data,
+            backgroundColor: meter.color + 'AA',
+            borderColor: meter.color,
+            borderWidth: 2,
+            borderRadius: 8,
+          },
+        ],
       },
       options: {
         responsive: true,
@@ -212,18 +204,18 @@ export class Reports implements AfterViewInit, OnDestroy {
       type: 'bar',
       data: {
         labels: years.map(String),
-        datasets: [{
-          label: 'Gesamtkosten',
-          data,
-          backgroundColor: years.map((y) =>
-            y === this.state.selectedYear()
-              ? blueColor
-              : blueColor + '66' // 40% Transparenz als Hex
-          ),
-          borderColor: blueColor,
-          borderWidth: 2,
-          borderRadius: 10,
-        }],
+        datasets: [
+          {
+            label: 'Gesamtkosten',
+            data,
+            backgroundColor: years.map(
+              (y) => (y === this.state.selectedYear() ? blueColor : blueColor + '66'), // 40% Transparenz als Hex
+            ),
+            borderColor: blueColor,
+            borderWidth: 2,
+            borderRadius: 10,
+          },
+        ],
       },
       options: {
         responsive: true,

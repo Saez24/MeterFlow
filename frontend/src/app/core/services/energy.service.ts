@@ -23,16 +23,13 @@ export class EnergyService {
     });
 
     effect(() => {
-        this.loading.set(this.meterService.loading() || this.readingService.loading());
-    })
+      this.loading.set(this.meterService.loading() || this.readingService.loading());
+    });
   }
 
   private async loadAll(): Promise<void> {
     this.loading.set(true);
-    await Promise.all([
-        this.meterService.loadMeters(),
-        this.readingService.loadReadings()
-    ]);
+    await Promise.all([this.meterService.loadMeters(), this.readingService.loadReadings()]);
     this.loading.set(false);
   }
 }

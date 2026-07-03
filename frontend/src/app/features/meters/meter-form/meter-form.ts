@@ -43,7 +43,6 @@ import { GAS_DEFAULTS } from '../../../core/constants/gas.constants';
   ],
   templateUrl: './meter-form.html',
   styleUrls: ['./meter-form.scss'],
-
 })
 export class MeterForm {
   private readonly meterService = inject(MeterService);
@@ -147,7 +146,9 @@ export class MeterForm {
 
     // 🔐 Type-Guard: Sicherstellen, dass type definiert und gültig ist
     if (!value.type || !Object.values(EnergyType).includes(value.type)) {
-      this.snackBar.open($localize`:@@meterForm.invalidType:Ungültiger Zählertyp`, 'OK', { duration: 3000 });
+      this.snackBar.open($localize`:@@meterForm.invalidType:Ungültiger Zählertyp`, 'OK', {
+        duration: 3000,
+      });
       return;
     }
 
@@ -174,7 +175,9 @@ export class MeterForm {
 
     if (this.isEdit() && this.editId()) {
       this.meterService.updateMeter(this.editId()!, meterData);
-      this.snackBar.open($localize`:@@meterForm.saved:Zähler gespeichert`, 'OK', { duration: 3000 });
+      this.snackBar.open($localize`:@@meterForm.saved:Zähler gespeichert`, 'OK', {
+        duration: 3000,
+      });
     } else {
       this.meterService.addMeter(meterData);
       this.snackBar.open($localize`:@@meterForm.created:Zähler angelegt`, 'OK', { duration: 3000 });

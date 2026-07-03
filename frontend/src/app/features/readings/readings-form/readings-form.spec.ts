@@ -12,7 +12,12 @@ import { ReadingService } from '../../../core/services/reading.service';
 import { TariffService } from '../../../core/services/tariff.service';
 import { ApiService } from '../../../core/services/api.service';
 import { apiServiceMock } from '../../../core/services/api.service.mock';
-import { MeterConfig, MeterReading, EnergyType, TariffPeriod } from '../../../core/models/energy.models';
+import {
+  MeterConfig,
+  MeterReading,
+  EnergyType,
+  TariffPeriod,
+} from '../../../core/models/energy.models';
 import { vi } from 'vitest';
 
 // ── Fixtures ──────────────────────────────────────────────────────────────────
@@ -26,7 +31,7 @@ const ELEC_METER: MeterConfig = {
   active: true,
   createdAt: new Date('2024-01-01'),
   tariffHistory: [
-    { id: 't1', validFrom: new Date('2024-01-01'), pricePerUnit: 0.30, baseCharge: 5 },
+    { id: 't1', validFrom: new Date('2024-01-01'), pricePerUnit: 0.3, baseCharge: 5 },
   ],
 };
 
@@ -263,4 +268,3 @@ describe('ReadingsForm', () => {
     });
   });
 });
-

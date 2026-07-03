@@ -14,7 +14,9 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.serializers import BaseSerializer
 
+from apps.common.audit import record_audit
 from apps.common.auth import request_user
 from apps.common.permissions import IsOwner
 from apps.meters.models import Meter
@@ -96,7 +98,7 @@ class ReadingViewSet(viewsets.ModelViewSet[Reading]):
             new_date=data["date"],
             previous_date=prev.date if prev else None,
         )
-        serializer.save(
+        reading = serializer.save(
             user=user,
             meter=meter,
             consumption=computed.consumption,
@@ -105,7 +107,32 @@ class ReadingViewSet(viewsets.ModelViewSet[Reading]):
             wastewater_cost=computed.wastewater_cost,
             total_cost=computed.total_cost,
         )
+        record_audit(
+            action="reading.create",
+            resource_type="reading",
+            request=request,
+            resource_id=reading.id,
+        )
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def perform_update(self, serializer: BaseSerializer[Reading]) -> None:
+        reading = serializer.save()
+        record_audit(
+            action="reading.update",
+            resource_type="reading",
+            request=self.request,
+            resource_id=reading.id,
+        )
+
+    def perform_destroy(self, instance: Reading) -> None:
+        reading_id = instance.id
+        instance.delete()
+        record_audit(
+            action="reading.delete",
+            resource_type="reading",
+            request=self.request,
+            resource_id=reading_id,
+        )
 
     @action(
         detail=False,

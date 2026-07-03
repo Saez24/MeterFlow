@@ -28,7 +28,6 @@ interface NavItem {
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
-
 })
 export class App {
   protected readonly title = signal('MeterFlow');
@@ -46,10 +45,10 @@ export class App {
 
   readonly isAuthPage = toSignal(
     this.router.events.pipe(
-      filter(e => e instanceof NavigationEnd),
-      map(e => (e as NavigationEnd).urlAfterRedirects.startsWith('/auth'))
+      filter((e) => e instanceof NavigationEnd),
+      map((e) => (e as NavigationEnd).urlAfterRedirects.startsWith('/auth')),
     ),
-    { initialValue: this.router.url.startsWith('/auth') }
+    { initialValue: this.router.url.startsWith('/auth') },
   );
 
   readonly navItems: NavItem[] = [
@@ -57,27 +56,35 @@ export class App {
     { path: '/meters', icon: 'speed', label: $localize`:@@nav.meters:Zähler` },
     { path: '/readings', icon: 'history', label: $localize`:@@nav.readings:Ablesungen` },
     { path: '/reports', icon: 'bar_chart', label: $localize`:@@nav.reports:Auswertungen` },
-    { path: '/cost-preview', icon: 'timeline', label: $localize`:@@nav.costPreview:Kostenvorschau` },
+    {
+      path: '/cost-preview',
+      icon: 'timeline',
+      label: $localize`:@@nav.costPreview:Kostenvorschau`,
+    },
     { path: '/settings', icon: 'settings', label: $localize`:@@nav.settings:Einstellungen` },
   ];
 
-  readonly toggleBtnLeft = computed(() =>
-    this.sidebarCollapsed() ? '62px' : '228px'
-  );
+  readonly toggleBtnLeft = computed(() => (this.sidebarCollapsed() ? '62px' : '228px'));
 
   readonly connectionColor = computed(() => {
     switch (this.supabaseService.connectionStatus()) {
-      case 'connected': return 'var(--apple-blue)';
-      case 'error': return '#EF4444';
-      case 'checking': return '#F59E0B';
+      case 'connected':
+        return 'var(--apple-blue)';
+      case 'error':
+        return '#EF4444';
+      case 'checking':
+        return '#F59E0B';
     }
   });
 
   readonly connectionTooltip = computed(() => {
     switch (this.supabaseService.connectionStatus()) {
-      case 'connected': return $localize`:@@connection.connected:Verbunden`;
-      case 'error': return $localize`:@@connection.error:Keine Verbindung`;
-      case 'checking': return $localize`:@@connection.checking:Verbinde...`;
+      case 'connected':
+        return $localize`:@@connection.connected:Verbunden`;
+      case 'error':
+        return $localize`:@@connection.error:Keine Verbindung`;
+      case 'checking':
+        return $localize`:@@connection.checking:Verbinde...`;
     }
   });
 

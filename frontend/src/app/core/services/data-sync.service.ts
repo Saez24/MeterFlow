@@ -17,7 +17,7 @@ export class DataSyncService {
         exportedAt: new Date().toISOString(),
       },
       null,
-      2
+      2,
     );
   }
 
@@ -39,14 +39,13 @@ export class DataSyncService {
     }
     if (Array.isArray(data['readings'])) {
       for (const r of data['readings'] as Record<string, unknown>[]) {
-        const reading = r as Omit<Parameters<typeof this.supabase.addReading>[0], 'date'> & { date: unknown };
+        const reading = r as Omit<Parameters<typeof this.supabase.addReading>[0], 'date'> & {
+          date: unknown;
+        };
         await this.supabase.addReading({ ...reading, date: new Date(reading.date as string) });
       }
     }
     // Reload all data after import
-    await Promise.all([
-      this.meterService.loadMeters(),
-      this.readingService.loadReadings()
-    ]);
+    await Promise.all([this.meterService.loadMeters(), this.readingService.loadReadings()]);
   }
 }

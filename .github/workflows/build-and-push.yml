@@ -1,0 +1,69 @@
+# Builds the three deploy images, scans each with Trivy (blocks on HIGH/CRITICAL,
+# security-standards §10/§11), and only then pushes to GHCR.
+#
+# SECURITY (security-standards §11): pin every `uses:` action to a commit SHA
+# before production (WS5/Elena hardening task). Registry auth uses the built-in
+# GITHUB_TOKEN — no plaintext credentials.
+name: build-and-push
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: build-and-push-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [fullstack, backend, frontend]
+    steps:
+      - uses: actions/checkout@v4 # TODO(§11): pin by SHA
+
+      - uses: docker/setup-buildx-action@v3 # TODO(§11): pin by SHA
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3 # TODO(§11): pin by SHA
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute image name (lowercase)
+        id: img
+        run: echo "ref=ghcr.io/${GITHUB_REPOSITORY,,}/${{ matrix.image }}" >> "$GITHUB_OUTPUT"
+
+      - name: Build image (load locally, no push yet)
+        uses: docker/build-push-action@v6 # TODO(§11): pin by SHA
+        with:
+          context: .
+          file: deploy/Dockerfile.${{ matrix.image }}
+          load: true
+          push: false
+          tags: ${{ steps.img.outputs.ref }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Trivy scan (block on HIGH/CRITICAL)
+        uses: aquasecurity/trivy-action@0.24.0 # TODO(§11): pin by SHA
+        with:
+          image-ref: ${{ steps.img.outputs.ref }}:${{ github.sha }}
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          exit-code: "1"
+
+      - name: Push (SHA tag + latest)
+        run: |
+          docker push "${{ steps.img.outputs.ref }}:${{ github.sha }}"
+          docker tag "${{ steps.img.outputs.ref }}:${{ github.sha }}" "${{ steps.img.outputs.ref }}:latest"
+          docker push "${{ steps.img.outputs.ref }}:latest"

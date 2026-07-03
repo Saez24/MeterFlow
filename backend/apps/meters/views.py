@@ -7,6 +7,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.serializers import BaseSerializer
 
+from apps.common.audit import record_audit
 from apps.common.auth import request_user
 from apps.common.permissions import IsOwner
 from apps.meters.models import Meter
@@ -29,4 +30,29 @@ class MeterViewSet(viewsets.ModelViewSet[Meter]):
         return qs
 
     def perform_create(self, serializer: BaseSerializer[Meter]) -> None:
-        serializer.save(user=request_user(self.request))
+        meter = serializer.save(user=request_user(self.request))
+        record_audit(
+            action="meter.create",
+            resource_type="meter",
+            request=self.request,
+            resource_id=meter.id,
+        )
+
+    def perform_update(self, serializer: BaseSerializer[Meter]) -> None:
+        meter = serializer.save()
+        record_audit(
+            action="meter.update",
+            resource_type="meter",
+            request=self.request,
+            resource_id=meter.id,
+        )
+
+    def perform_destroy(self, instance: Meter) -> None:
+        meter_id = instance.id
+        instance.delete()
+        record_audit(
+            action="meter.delete",
+            resource_type="meter",
+            request=self.request,
+            resource_id=meter_id,
+        )

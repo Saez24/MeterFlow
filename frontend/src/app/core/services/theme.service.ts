@@ -13,7 +13,7 @@ export class ThemeService {
   }
 
   readonly mode = signal<ThemeMode>(
-    this.isBrowser ? ((localStorage.getItem('theme') as ThemeMode) ?? 'system') : 'light'
+    this.isBrowser ? ((localStorage.getItem('theme') as ThemeMode) ?? 'system') : 'light',
   );
 
   readonly isDark = signal<boolean>(this.resolveIsDark());

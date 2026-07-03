@@ -77,7 +77,25 @@ Empfehlung: **Contract-First** — REST-Endpunkt-Liste zuerst fixieren, dann WS2
 
 ## 6. Aktueller Stand
 
-**WS4 (Deploy) — Docker-Artefakte stehen.** 🟡 · **WS3 (Datenschicht)** ✅ · **WS3b (Design)** 🟢 · **WS2 (Backend)** ✅ · **Contract-First** ✅ · **WS1** ✅
+**WS5 (Security-Gate) — bestanden.** ✅ · **WS4 (Deploy)** ✅ · **WS3 (Datenschicht)** ✅ · **WS3b (Design)** 🟢 · **WS2 (Backend)** ✅ · **Contract-First** ✅ · **WS1** ✅
+
+**WS5 — Security-Gate & Doku (Elena/Lukas):**
+- [x] Vollständiger `security-standards.md`-Durchlauf → **[docs/SECURITY_REVIEW.md](docs/SECURITY_REVIEW.md)**
+      (OWASP-Top-10-Tabelle, Findings + Severity, §12-Blocking-Checkliste). **Verdict: PASS** (keine
+      offenen §12-Blocker im Code).
+- [x] **Blockierende §5-Lücke geschlossen: Audit-Logging (SOX).** `AuditLog`-Modell (immutable,
+      Admin read-only) + `record_audit()`-Helper, verdrahtet in Auth (register/login/login_failed/
+      logout) + Meter/Reading/CO₂-Mutationen. 2 Tests. Migration erstellt.
+- [x] Automatisierte Scans: **keine Secrets** im Source, **kein `.env`** committed, **keine Tokens/PII
+      in localStorage** (Auth = nur Cookies), **kein innerHTML/eval**. `check --deploy` = 0, pip-audit/
+      npm-audit = 0. Cookie-Flags/CORS/CSP/Rate-Limiting/Ownership bestätigt.
+- [x] Voller Backend-Gate grün: ruff · black · mypy (87) · bandit 0 · **40 Tests**.
+
+Deploy-Zeit-Follow-ups (vor Produktion, in SECURITY_REVIEW dokumentiert):
+- [ ] **Actions per SHA pinnen** (§11) — `# TODO(§11)` in Workflows.
+- [ ] **Prod-Media** via S3 signierte URLs (`STORAGE_BACKEND=s3`) oder authentifizierter Media-Endpoint
+      (Finding 2, §4 — mitigiert durch unrätselbare UUID-Pfade).
+- [ ] Realer `docker compose up`-E2E-Durchlauf (kein Docker in dieser Umgebung).
 
 **WS4 — Deployment (Schritt 1: Docker/Compose):**
 - [x] **3 Dockerfiles** in `deploy/`: `Dockerfile.fullstack` (Angular-Build + Django/gunicorn + nginx +
@@ -95,10 +113,15 @@ Empfehlung: **Contract-First** — REST-Endpunkt-Liste zuerst fixieren, dann WS2
       (kein Clash mit SPA), `prod.py` SSL-Redirect/Secure-Cookie env-überschreibbar. check/collectstatic/
       mypy/ruff/black/38 Tests grün.
 
-Noch offen in WS4 (Schritt 2):
-- [ ] **GitHub Actions** (`.github/workflows/`): `test-backend` (ruff/black/mypy/bandit/pip-audit/pytest),
-      `test-frontend` (vitest, npm audit), `build-and-push` (3 Images → GHCR, **Trivy**-Scan, SHA-gepinnte
-      Actions).
+- [x] **GitHub Actions** (`.github/workflows/`): **`test-backend`** (ruff/black/mypy/bandit/pip-audit/
+      pytest+cov), **`test-frontend`** (prettier/build/vitest/npm-audit), **`build-and-push`** (Matrix
+      3 Images → **Trivy blockt HIGH/CRITICAL vor Push** → GHCR, `GITHUB_TOKEN`, `packages: write`).
+      Alle CI-Backend-Kommandos lokal verifiziert grün. **Frontend-Codebasis einmal prettier-formatiert**
+      (76 Dateien) → `test-frontend` prettier-check grün; Build + 60 Vitest weiter grün.
+
+Noch offen in WS4:
+- [ ] **Actions per SHA pinnen** (security-standards §11) — im Repo als `# TODO(§11)` markiert; WS5/Elena
+      mit `pin-github-action`/Dependabot (braucht Netz/Tooling).
 - [ ] Docker-Build/`compose up` real testen (in dieser Umgebung kein Docker verfügbar).
 
 **WS3 — Frontend-Datenschicht Supabase → REST (Schritt A: Fundament):**
@@ -232,13 +255,17 @@ Noch **nicht** gemacht (bewusst, für spätere Workstreams):
 
 ## 7. Nächster Schritt
 
-**WS4 Schritt 1 (Docker/Compose) steht** — 3 Dockerfiles, nginx, supervisor, entrypoints, 2 Compose-
-Files, Backend deploy-ready (gunicorn/whitenoise/redis). In dieser Umgebung kein Docker → Builds nicht
-real getestet.
+**Alle Workstreams (WS1–WS5) im Code abgeschlossen.** Das Django-Monorepo ersetzt Supabase+FastAPI
+vollständig: Backend (26 Endpunkte, Audit-Logging), Frontend (REST, Material-DataForge-Style, CDN-frei),
+Deployment (3 Images + Compose), CI/CD (Trivy-Gate), Security-Gate bestanden.
 
-**WS4 Schritt 2**: **GitHub Actions** CI/CD (`test-backend`, `test-frontend`, `build-and-push` → 3 GHCR-
-Images + Trivy, Actions SHA-gepinnt). Danach **WS5** Security-Gate (Elena, OWASP/Cookie/CSP/Secrets/
-Trivy). Optional: `docker compose up` real durchklicken, sobald Docker verfügbar.
+**Verbleibend (Deploy-Zeit, brauchen Netz/Docker — nicht in dieser Umgebung machbar):**
+1. GitHub Actions per **SHA pinnen** (§11).
+2. **Realer Docker-Build + `docker compose up`** E2E-Durchklick (Registrierung→Zähler→Ablesung+Foto→
+   Dashboard→CSV/PDF), Images bauen/Trivy-scannen.
+3. **Prod-Storage** auf S3/MinIO (signierte URLs) umstellen.
+4. WS3b: optische Light/Dark-Sichtung pro Feature-Modul im Browser.
+5. Optional: erster **git commit** (bisher bewusst keiner — auf Freigabe warten).
 
 ## 8. Referenz-Quellen (aus den Altprojekten)
 
@@ -297,3 +324,10 @@ Trivy). Optional: `docker compose up` real durchklicken, sobald Docker verfügba
   (CSP-Nonce, Rate-Limits) + supervisor + entrypoints + 2 Compose-Files (Postgres/Redis) + `.dockerignore`.
   Backend deploy-ready: gunicorn/whitenoise/redis, Redis-Cache, `pip install .`-fähig. check/mypy/lint/38
   Tests grün. Docker in dieser Umgebung nicht verfügbar → Builds noch nicht real getestet. CI = Schritt 2.
+- (WS4/Niko, Schritt 2) **CI/CD**: 3 GitHub-Actions-Workflows (test-backend, test-frontend, build-and-push
+  mit Trivy-Gate → GHCR). CI-Backend-Kommandos lokal grün; Frontend einmal komplett prettier-formatiert
+  (Build+60 Vitest grün). Offen: Actions per SHA pinnen (§11, WS5). **WS4 done.**
+- (WS5/Elena+Lukas) **Security-Gate bestanden**: `docs/SECURITY_REVIEW.md` (OWASP-Tabelle, §12-Checkliste),
+  **Audit-Logging (SOX §5) implementiert** (AuditLog + record_audit, Auth/Meter/Reading/CO₂, 2 Tests),
+  Scans clean (Secrets/`.env`/localStorage/CVEs/Deploy-Check). Backend-Gate grün (ruff/black/mypy/bandit/
+  40 Tests). Follow-ups (Deploy-Zeit): SHA-Pinning, S3-Media, realer Docker-E2E. **WS5 done.**

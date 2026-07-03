@@ -19,7 +19,6 @@ import { CommonModule } from '@angular/common';
   ],
   templateUrl: './cost-preview.html',
   styleUrl: './cost-preview.scss',
-
 })
 export class CostPreview {
   meter = input.required<MeterConfig>();
@@ -51,7 +50,7 @@ export class CostPreview {
     const yearEnd = new Date(year, 11, 31);
 
     const sortedTariffs = [...meter.tariffHistory].sort(
-      (a, b) => new Date(a.validFrom).getTime() - new Date(b.validFrom).getTime()
+      (a, b) => new Date(a.validFrom).getTime() - new Date(b.validFrom).getTime(),
     );
 
     const calculationPeriods = [];
@@ -103,10 +102,10 @@ export class CostPreview {
         consumption: periodConsumption,
         pricePerUnit: tariff.pricePerUnit,
         baseCharge: periodBaseCharge,
-        cost: totalCost
+        cost: totalCost,
       });
 
-      lastDate = new Date(endDate.getTime() + (1000 * 3600 * 24));
+      lastDate = new Date(endDate.getTime() + 1000 * 3600 * 24);
       if (lastDate > yearEnd) break;
     }
 

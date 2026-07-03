@@ -27,6 +27,7 @@ from apps.accounts.tokens import (
     revoke_refresh_token,
     rotate_refresh_token,
 )
+from apps.common.audit import record_audit
 from apps.common.auth import request_user
 
 logger = logging.getLogger(__name__)
@@ -66,6 +67,13 @@ class RegisterView(APIView):
             )
         response = Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
         _issue_tokens(user, response)
+        record_audit(
+            action="user.register",
+            resource_type="user",
+            request=request,
+            actor=user,
+            resource_id=user.id,
+        )
         logger.info("auth.register.success user_id=%s", user.id)
         return response
 
@@ -87,12 +95,22 @@ class LoginView(APIView):
         user = User.objects.filter(email=data["email"]).first()
         if user is None or not user.check_password(data["password"]):
             logger.warning("auth.login.failed email=%s", data["email"])
+            record_audit(
+                action="user.login_failed", resource_type="user", request=request
+            )
             return Response(
                 {"detail": "Invalid credentials"},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
         response = Response(UserSerializer(user).data)
         _issue_tokens(user, response)
+        record_audit(
+            action="user.login",
+            resource_type="user",
+            request=request,
+            actor=user,
+            resource_id=user.id,
+        )
         logger.info("auth.login.success user_id=%s", user.id)
         return response
 
@@ -128,6 +146,7 @@ class LogoutView(APIView):
         raw = request.COOKIES.get(settings.AUTH_COOKIE_REFRESH)
         if raw:
             revoke_refresh_token(raw)
+        record_audit(action="user.logout", resource_type="user", request=request)
         response = Response(status=status.HTTP_204_NO_CONTENT)
         clear_auth_cookies(response)
         return response

@@ -7,7 +7,7 @@ const REMINDER_INTERVAL_DAYS = 28;
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
   readonly permission = signal<NotificationPermission>(
-    typeof Notification !== 'undefined' ? Notification.permission : 'denied'
+    typeof Notification !== 'undefined' ? Notification.permission : 'denied',
   );
 
   readonly enabled = signal(localStorage.getItem(STORAGE_KEY_ENABLED) === 'true');

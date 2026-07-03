@@ -15,6 +15,7 @@ from apps.co2.serializers import (
     Co2FactorSerializer,
     Co2FactorUpsertSerializer,
 )
+from apps.common.audit import record_audit
 from apps.common.auth import request_user
 
 
@@ -61,6 +62,12 @@ class Co2FactorListUpsertView(APIView):
                 "source_url": data.get("source_url"),
             },
         )
+        record_audit(
+            action="co2_factor.upsert",
+            resource_type="co2_factor",
+            request=request,
+            resource_id=factor.id,
+        )
         return Response(Co2FactorSerializer(factor).data, status=status.HTTP_200_OK)
 
 
@@ -78,4 +85,10 @@ class Co2FactorDeleteView(APIView):
                 {"detail": "CO2 factor not found"},
                 status=status.HTTP_404_NOT_FOUND,
             )
+        record_audit(
+            action="co2_factor.delete",
+            resource_type="co2_factor",
+            request=request,
+            resource_id=factor_id,
+        )
         return Response(status=status.HTTP_204_NO_CONTENT)

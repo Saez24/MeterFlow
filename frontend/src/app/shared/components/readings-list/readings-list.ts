@@ -11,7 +11,6 @@ import { MeterService } from '../../../core/services/meter.service';
   imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule],
   templateUrl: './readings-list.html',
   styleUrl: './readings-list.scss',
-
 })
 export class ReadingsList {
   private readonly meterService = inject(MeterService);

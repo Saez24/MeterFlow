@@ -13,7 +13,9 @@ describe('ReadingsList', () => {
     await TestBed.configureTestingModule({
       imports: [ReadingsList],
       providers: [
-        { provide: ApiService, useValue: apiServiceMock() },provideZonelessChangeDetection()],
+        { provide: ApiService, useValue: apiServiceMock() },
+        provideZonelessChangeDetection(),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ReadingsList);

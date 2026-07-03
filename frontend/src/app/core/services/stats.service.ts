@@ -44,7 +44,8 @@ export class StatsService {
         cost = recent[0].totalCost ?? 0;
         if (readings.length >= 4) {
           const prevConsumption = readings[2].consumption ?? 0;
-          trend = prevConsumption > 0 ? ((consumption - prevConsumption) / prevConsumption) * 100 : 0;
+          trend =
+            prevConsumption > 0 ? ((consumption - prevConsumption) / prevConsumption) * 100 : 0;
         }
       }
       stats[meter.id] = { consumption, cost, unit: ENERGY_META[meter.type].unit, trend };
@@ -123,9 +124,9 @@ export class StatsService {
     const waterMeters = this.meterService.activeMeters().filter((m) => m.type === 'water');
 
     for (const mainMeter of waterMeters) {
-      const gardenMeters = this.meterService.activeMeters().filter(
-        (m) => m.type === 'garden_water' && m.linkedWaterMeterId === mainMeter.id,
-      );
+      const gardenMeters = this.meterService
+        .activeMeters()
+        .filter((m) => m.type === 'garden_water' && m.linkedWaterMeterId === mainMeter.id);
 
       const mainReadings = this.readingService.readingsByMeter().get(mainMeter.id) ?? [];
       if (mainReadings.length < 2) continue;
@@ -153,7 +154,7 @@ export class StatsService {
         const tariff = this.tariffService.getActiveTariffForDate(mainMeter, r.date);
         const billableWastewater = Math.max(0, consumption - gardenConsumption);
         const freshwaterCost = consumption * (tariff ? tariff.pricePerUnit : 0);
-        const wastewaterCost = billableWastewater * (tariff ? tariff.wastewaterPrice ?? 0 : 0);
+        const wastewaterCost = billableWastewater * (tariff ? (tariff.wastewaterPrice ?? 0) : 0);
         const baseCharge = tariff?.baseCharge ?? 0;
         const totalCost = freshwaterCost + wastewaterCost + baseCharge;
 
@@ -205,16 +206,14 @@ export class StatsService {
           const monthConsumption = monthReadings.reduce((sum, reading) => {
             const index = allReadings.findIndex((r) => r.id === reading.id);
             const prev = index > 0 ? allReadings[index - 1] : undefined;
-            const consumption =
-              reading.consumption ?? (prev ? reading.value - prev.value : 0);
+            const consumption = reading.consumption ?? (prev ? reading.value - prev.value : 0);
             return sum + consumption;
           }, 0);
 
           const monthCost = monthReadings.reduce((sum, reading) => {
             const index = allReadings.findIndex((r) => r.id === reading.id);
             const prev = index > 0 ? allReadings[index - 1] : undefined;
-            const consumption =
-              reading.consumption ?? (prev ? reading.value - prev.value : 0);
+            const consumption = reading.consumption ?? (prev ? reading.value - prev.value : 0);
             const cost = reading.totalCost ?? this.calcCost(meter, consumption, reading.date);
             return sum + cost;
           }, 0);
@@ -258,9 +257,7 @@ export class StatsService {
     const meter = this.meterService.getMeter(meterId);
     if (!meter) return null;
 
-    const monthsWithData = yearStats.months.filter(
-      (m) => m.byMeter[meterId] !== undefined
-    );
+    const monthsWithData = yearStats.months.filter((m) => m.byMeter[meterId] !== undefined);
 
     const baseChargeCost = monthsWithData.reduce((sum, month) => {
       const tariff = this.tariffService.getActiveTariffForDate(
@@ -298,7 +295,8 @@ export class StatsService {
     if (!tariff) return 0;
 
     if (meter.type === 'gas') {
-      const calorificValue = tariff.calorificValue ?? meter.calorificValue ?? GAS_DEFAULTS.CALORIFIC_VALUE;
+      const calorificValue =
+        tariff.calorificValue ?? meter.calorificValue ?? GAS_DEFAULTS.CALORIFIC_VALUE;
       const zNumber = tariff.zNumber ?? meter.zNumber ?? GAS_DEFAULTS.Z_NUMBER;
       const kwh = consumption * calorificValue * zNumber;
       return kwh * tariff.pricePerUnit;

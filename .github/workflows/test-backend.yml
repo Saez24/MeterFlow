@@ -1,0 +1,56 @@
+# SECURITY (security-standards §11): before production, pin every `uses:` action
+# to a commit SHA (keep the tag as a comment). Tracked as a WS5/Elena hardening
+# task — done with a tool (pin-github-action / Dependabot), not by hand.
+name: test-backend
+
+on:
+  push:
+    paths:
+      - "backend/**"
+      - ".github/workflows/test-backend.yml"
+  pull_request:
+    paths:
+      - "backend/**"
+      - ".github/workflows/test-backend.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-backend-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4 # TODO(§11): pin by SHA
+
+      - uses: actions/setup-python@v5 # TODO(§11): pin by SHA
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install (runtime + dev deps)
+        run: pip install ".[dev]"
+
+      - name: Ruff (lint)
+        run: ruff check .
+
+      - name: Black (format check)
+        run: black --check .
+
+      - name: Mypy (strict)
+        run: mypy apps config tests
+
+      - name: Bandit (security lint)
+        run: bandit -q -r apps config
+
+      - name: pip-audit (dependency CVEs)
+        run: pip-audit
+
+      - name: Pytest (+ coverage)
+        run: pytest --cov=apps --cov-report=term-missing --alluredir=allure-results

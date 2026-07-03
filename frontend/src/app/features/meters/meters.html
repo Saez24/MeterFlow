@@ -11,103 +11,126 @@
   </div>
 
   @if (meters().length === 0) {
-  <div class="empty-state">
-    <div class="empty-icon">
-      <mat-icon>speed</mat-icon>
+    <div class="empty-state">
+      <div class="empty-icon">
+        <mat-icon>speed</mat-icon>
+      </div>
+      <h3 i18n="@@meters.empty.title">Noch keine Zähler</h3>
+      <p i18n="@@meters.empty.desc">Füge deinen ersten Zähler hinzu, um Ablesungen zu erfassen.</p>
+      <button mat-flat-button color="primary" routerLink="new">
+        <span i18n="@@meters.empty.btn">Ersten Zähler hinzufügen</span>
+      </button>
     </div>
-    <h3 i18n="@@meters.empty.title">Noch keine Zähler</h3>
-    <p i18n="@@meters.empty.desc">Füge deinen ersten Zähler hinzu, um Ablesungen zu erfassen.</p>
-    <button mat-flat-button color="primary" routerLink="new"><span i18n="@@meters.empty.btn">Ersten Zähler
-        hinzufügen</span></button>
-  </div>
   }
 
   <div class="meters-list">
     @for (meter of meters(); track meter.id) {
-    <div class="meter-row" [class.meter-row--inactive]="!meter.active"
-      (click)="navigateToMeter(meter.id)"
-      role="link" tabindex="0" (keydown.enter)="navigateToMeter(meter.id)"
-      [attr.aria-label]="meter.name + ' – Details anzeigen'">
-      <div class="meter-row__icon" [style.background]="meter.color + '22'">
-        <mat-icon [style.color]="meter.color">{{ meter.icon }}</mat-icon>
-      </div>
+      <div
+        class="meter-row"
+        [class.meter-row--inactive]="!meter.active"
+        (click)="navigateToMeter(meter.id)"
+        role="link"
+        tabindex="0"
+        (keydown.enter)="navigateToMeter(meter.id)"
+        [attr.aria-label]="meter.name + ' – Details anzeigen'"
+      >
+        <div class="meter-row__icon" [style.background]="meter.color + '22'">
+          <mat-icon [style.color]="meter.color">{{ meter.icon }}</mat-icon>
+        </div>
 
-      <div class="meter-row__info">
-        <div class="meter-row__name">{{ meter.name }}</div>
-        <div class="meter-row__meta">
-          <span class="meta-chip">{{ getMeta(meter.type).label }}</span>
-          @if (meter.provider) {
-          <span class="meta-text">{{ meter.provider }}</span>
+        <div class="meter-row__info">
+          <div class="meter-row__name">{{ meter.name }}</div>
+          <div class="meter-row__meta">
+            <span class="meta-chip">{{ getMeta(meter.type).label }}</span>
+            @if (meter.provider) {
+              <span class="meta-text">{{ meter.provider }}</span>
+            }
+            @if (meter.meterNumber) {
+              <span class="meta-text">Nr. {{ meter.meterNumber }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="meter-row__tariff">
+          @if (latestReading(meter.id); as reading) {
+            <div>
+              <span class="reading-current__value">
+                {{ reading.value | number: '1.0-3' }} {{ meter.unit }}
+              </span>
+            </div>
           }
-          @if (meter.meterNumber) {
-          <span class="meta-text">Nr. {{ meter.meterNumber }}</span>
+          @if (getActiveTariff(meter); as tariff) {
+            <div class="tariff-price">
+              {{ tariff.pricePerUnit | currency: 'EUR' : 'symbol' : '1.4-4' }}/{{ meter.unit }}
+            </div>
+            <div class="tariff-base">
+              {{ tariff.baseCharge | currency: 'EUR' : 'symbol' : '1.2-2' }}/Monat
+            </div>
+            @if (meter.type === 'gas') {
+              <div class="tariff-gas">
+                H={{ tariff.calorificValue ?? meter.calorificValue }} · Z={{
+                  tariff.zNumber ?? meter.zNumber
+                }}
+              </div>
+            }
+          } @else {
+            <div class="tariff-price">-</div>
+            <div class="tariff-base">-</div>
           }
+        </div>
 
+        <div class="meter-row__readings">
+          @if (readingCount(meter.id) > 0) {
+            <span class="readings-count" i18n="@@meters.readingCount"
+              >{{ readingCount(meter.id) }} Ablesungen</span
+            >
+          } @else {
+            <span class="readings-none" i18n="@@meters.noReadings">Keine Ablesungen</span>
+          }
+        </div>
+
+        <div class="meter-row__actions" (click)="$event.stopPropagation()">
+          <mat-slide-toggle
+            [checked]="meter.active"
+            (change)="toggleActive(meter)"
+            color="primary"
+            class="active-toggle"
+          ></mat-slide-toggle>
+
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="meterMenu"
+            class="menu-btn"
+            (click)="$event.stopPropagation()"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+
+          <mat-menu #meterMenu="matMenu">
+            <button mat-menu-item [routerLink]="[meter.id]">
+              <mat-icon>bar_chart</mat-icon>
+              <span i18n="@@meters.menu.details">Details &amp; Verlauf</span>
+            </button>
+            <button mat-menu-item [routerLink]="[meter.id, 'edit']">
+              <mat-icon>edit</mat-icon>
+              <span i18n="@@meters.menu.edit">Bearbeiten</span>
+            </button>
+            <button
+              mat-menu-item
+              [routerLink]="['/readings/new']"
+              [queryParams]="{ meterId: meter.id }"
+            >
+              <mat-icon>add_circle</mat-icon>
+              <span i18n="@@meters.menu.addReading">Ablesung hinzufügen</span>
+            </button>
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="deleteMeter(meter)" class="delete-item">
+              <mat-icon color="warn">delete</mat-icon>
+              <span i18n="@@meters.menu.delete">Löschen</span>
+            </button>
+          </mat-menu>
         </div>
       </div>
-
-      <div class="meter-row__tariff">
-        @if (latestReading(meter.id); as reading) {
-        <div>
-          <span class=" reading-current__value">
-            {{ reading.value | number: '1.0-3' }} {{ meter.unit }}
-          </span>
-        </div>
-        } @if(getActiveTariff(meter); as tariff) {
-        <div class="tariff-price">
-          {{ tariff.pricePerUnit | currency: 'EUR' : 'symbol' : '1.4-4' }}/{{ meter.unit }}
-        </div>
-        <div class="tariff-base">
-          {{ tariff.baseCharge | currency: 'EUR' : 'symbol' : '1.2-2' }}/Monat
-        </div>
-        @if (meter.type === 'gas') {
-        <div class="tariff-gas">
-          H={{ tariff.calorificValue ?? meter.calorificValue }} · Z={{ tariff.zNumber ?? meter.zNumber }}
-        </div>
-        } } @else {
-        <div class="tariff-price">-</div>
-        <div class="tariff-base">-</div>
-        }
-      </div>
-
-      <div class="meter-row__readings">
-        @if (readingCount(meter.id) > 0) {
-        <span class="readings-count" i18n="@@meters.readingCount">{{ readingCount(meter.id) }} Ablesungen</span>
-        } @else {
-        <span class="readings-none" i18n="@@meters.noReadings">Keine Ablesungen</span>
-        }
-      </div>
-
-      <div class="meter-row__actions" (click)="$event.stopPropagation()">
-        <mat-slide-toggle [checked]="meter.active" (change)="toggleActive(meter)" color="primary"
-          class="active-toggle"></mat-slide-toggle>
-
-        <button mat-icon-button [matMenuTriggerFor]="meterMenu" class="menu-btn"
-                (click)="$event.stopPropagation()">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-
-        <mat-menu #meterMenu="matMenu">
-          <button mat-menu-item [routerLink]="[meter.id]">
-            <mat-icon>bar_chart</mat-icon>
-            <span i18n="@@meters.menu.details">Details &amp; Verlauf</span>
-          </button>
-          <button mat-menu-item [routerLink]="[meter.id, 'edit']">
-            <mat-icon>edit</mat-icon>
-            <span i18n="@@meters.menu.edit">Bearbeiten</span>
-          </button>
-          <button mat-menu-item [routerLink]="['/readings/new']" [queryParams]="{ meterId: meter.id }">
-            <mat-icon>add_circle</mat-icon>
-            <span i18n="@@meters.menu.addReading">Ablesung hinzufügen</span>
-          </button>
-          <mat-divider></mat-divider>
-          <button mat-menu-item (click)="deleteMeter(meter)" class="delete-item">
-            <mat-icon color="warn">delete</mat-icon>
-            <span i18n="@@meters.menu.delete">Löschen</span>
-          </button>
-        </mat-menu>
-      </div>
-    </div>
     }
   </div>
 </div>

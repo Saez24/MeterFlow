@@ -9,63 +9,63 @@
 <form [formGroup]="form" (ngSubmit)="save()" class="tariff-form">
   <div class="dialog-content">
     @if (isDistrictHeating()) {
-    <mat-form-field appearance="outline" class="form-field--full">
-      <mat-label>Arbeitspreis pro {{ meter().unit }}</mat-label>
-      <input matInput type="number" formControlName="pricePerUnit" placeholder="0.30" />
-      <span matSuffix>€</span>
-      <mat-error>
-        @if (form.get('pricePerUnit')?.hasError('required')) {
-        Preis ist ein Pflichtfeld.
-        }
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="form-field--full">
-      <mat-label>Emissionspreis / CO₂-Bepreisung pro {{ meter().unit }}</mat-label>
-      <input matInput type="number" formControlName="emissionPrice" placeholder="0.005" />
-      <span matSuffix>€</span>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="form-field--full">
-      <mat-label>Bereitstellungspreis (Grundgebühr) pro kW/Jahr</mat-label>
-      <input matInput type="number" formControlName="basePricePerKw" placeholder="51.54" />
-      <span matSuffix>€</span>
-    </mat-form-field>
-    <mat-form-field appearance="outline" class="form-field--full">
-      <mat-label>Anschlussleistung</mat-label>
-      <input matInput type="number" formControlName="connectedLoadKw" placeholder="10" />
-      <span matSuffix>kW</span>
-    </mat-form-field>
-    } @else {
-    <div class="form-row form-row--2">
-      <mat-form-field appearance="outline">
-        <mat-label>Preis pro {{ meter().unit }}</mat-label>
+      <mat-form-field appearance="outline" class="form-field--full">
+        <mat-label>Arbeitspreis pro {{ meter().unit }}</mat-label>
         <input matInput type="number" formControlName="pricePerUnit" placeholder="0.30" />
         <span matSuffix>€</span>
         <mat-error>
           @if (form.get('pricePerUnit')?.hasError('required')) {
-          Preis ist ein Pflichtfeld.
+            Preis ist ein Pflichtfeld.
           }
         </mat-error>
       </mat-form-field>
-      @if (!isLinkedGardenWater()) {
-      <mat-form-field appearance="outline">
-        <mat-label>Grundgebühr pro Monat</mat-label>
-        <input matInput type="number" formControlName="baseCharge" placeholder="12.50" />
+      <mat-form-field appearance="outline" class="form-field--full">
+        <mat-label>Emissionspreis / CO₂-Bepreisung pro {{ meter().unit }}</mat-label>
+        <input matInput type="number" formControlName="emissionPrice" placeholder="0.005" />
         <span matSuffix>€</span>
-        <mat-error>
-          @if (form.get('baseCharge')?.hasError('required')) {
-          Grundgebühr ist ein Pflichtfeld.
-          }
-        </mat-error>
       </mat-form-field>
+      <mat-form-field appearance="outline" class="form-field--full">
+        <mat-label>Bereitstellungspreis (Grundgebühr) pro kW/Jahr</mat-label>
+        <input matInput type="number" formControlName="basePricePerKw" placeholder="51.54" />
+        <span matSuffix>€</span>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="form-field--full">
+        <mat-label>Anschlussleistung</mat-label>
+        <input matInput type="number" formControlName="connectedLoadKw" placeholder="10" />
+        <span matSuffix>kW</span>
+      </mat-form-field>
+    } @else {
+      <div class="form-row form-row--2">
+        <mat-form-field appearance="outline">
+          <mat-label>Preis pro {{ meter().unit }}</mat-label>
+          <input matInput type="number" formControlName="pricePerUnit" placeholder="0.30" />
+          <span matSuffix>€</span>
+          <mat-error>
+            @if (form.get('pricePerUnit')?.hasError('required')) {
+              Preis ist ein Pflichtfeld.
+            }
+          </mat-error>
+        </mat-form-field>
+        @if (!isLinkedGardenWater()) {
+          <mat-form-field appearance="outline">
+            <mat-label>Grundgebühr pro Monat</mat-label>
+            <input matInput type="number" formControlName="baseCharge" placeholder="12.50" />
+            <span matSuffix>€</span>
+            <mat-error>
+              @if (form.get('baseCharge')?.hasError('required')) {
+                Grundgebühr ist ein Pflichtfeld.
+              }
+            </mat-error>
+          </mat-form-field>
+        }
+      </div>
+      @if (isWater()) {
+        <mat-form-field appearance="outline" class="form-field--full">
+          <mat-label>Abwassergebühr pro m³</mat-label>
+          <input matInput type="number" formControlName="wastewaterPrice" placeholder="2.50" />
+          <span matSuffix>€</span>
+        </mat-form-field>
       }
-    </div>
-    @if (isWater()) {
-    <mat-form-field appearance="outline" class="form-field--full">
-      <mat-label>Abwassergebühr pro m³</mat-label>
-      <input matInput type="number" formControlName="wastewaterPrice" placeholder="2.50" />
-      <span matSuffix>€</span>
-    </mat-form-field>
-    }
     }
 
     <mat-form-field appearance="outline" class="form-field--full">
@@ -75,30 +75,34 @@
       <mat-datepicker #picker></mat-datepicker>
       <mat-error>
         @if (form.get('validFrom')?.hasError('required')) {
-        Datum ist ein Pflichtfeld.
+          Datum ist ein Pflichtfeld.
         }
       </mat-error>
     </mat-form-field>
 
     @if (isGas()) {
-    <mat-divider class="section-divider"></mat-divider>
-    <h3 class="section-title">Gas Umrechnung</h3>
-    <div class="form-row form-row--2">
-      <mat-form-field appearance="outline">
-        <mat-label>Brennwert</mat-label>
-        <input matInput type="number" formControlName="calorificValue" placeholder="10.55" />
-        <span matSuffix>kWh/m³</span>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Zustandszahl</mat-label>
-        <input matInput type="number" formControlName="zNumber" placeholder="0.9672" />
-      </mat-form-field>
-    </div>
+      <mat-divider class="section-divider"></mat-divider>
+      <h3 class="section-title">Gas Umrechnung</h3>
+      <div class="form-row form-row--2">
+        <mat-form-field appearance="outline">
+          <mat-label>Brennwert</mat-label>
+          <input matInput type="number" formControlName="calorificValue" placeholder="10.55" />
+          <span matSuffix>kWh/m³</span>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Zustandszahl</mat-label>
+          <input matInput type="number" formControlName="zNumber" placeholder="0.9672" />
+        </mat-form-field>
+      </div>
     }
 
     <mat-form-field appearance="outline" class="form-field--full">
       <mat-label>Notiz (optional)</mat-label>
-      <textarea matInput formControlName="note" placeholder="z.B. Preisanpassung zum Jahreswechsel"></textarea>
+      <textarea
+        matInput
+        formControlName="note"
+        placeholder="z.B. Preisanpassung zum Jahreswechsel"
+      ></textarea>
     </mat-form-field>
   </div>
 

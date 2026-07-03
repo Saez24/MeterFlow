@@ -26,7 +26,6 @@ export interface ConfirmDialogData {
       </button>
     </mat-dialog-actions>
   `,
-
 })
 export class ConfirmDialogComponent {
   readonly data = inject<ConfirmDialogData>(MAT_DIALOG_DATA);

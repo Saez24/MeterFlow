@@ -11,7 +11,6 @@ import { MeterConfig } from '../../../../../core/models/energy.models';
   imports: [CommonModule, MatIconModule],
   templateUrl: './meter-chart.html',
   styleUrl: './meter-chart.scss',
-
 })
 export class MeterChart {
   private readonly state = inject(MeterDetailStateService);
@@ -23,11 +22,11 @@ export class MeterChart {
 
   readonly availableYears = computed(() => {
     const allReadings = this.state.readings();
-    const years = new Set(allReadings.map(r => new Date(r.date).getFullYear()));
+    const years = new Set(allReadings.map((r) => new Date(r.date).getFullYear()));
     return [...years]
-      .filter(year => {
-        const yearReadings = allReadings.filter(r => new Date(r.date).getFullYear() === year);
-        const hasPrev = allReadings.some(r => new Date(r.date).getFullYear() < year);
+      .filter((year) => {
+        const yearReadings = allReadings.filter((r) => new Date(r.date).getFullYear() === year);
+        const hasPrev = allReadings.some((r) => new Date(r.date).getFullYear() < year);
         return yearReadings.length >= 2 || (yearReadings.length === 1 && hasPrev);
       })
       .sort((a, b) => b - a);
@@ -39,12 +38,12 @@ export class MeterChart {
     const allReadings = this.state.readings();
     const year = this.selectedYear();
     const yearReadings = allReadings
-      .filter(r => new Date(r.date).getFullYear() === year)
+      .filter((r) => new Date(r.date).getFullYear() === year)
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     if (yearReadings.length < 2) {
       const prevYearLast = allReadings
-        .filter(r => new Date(r.date).getFullYear() < year)
+        .filter((r) => new Date(r.date).getFullYear() < year)
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
       if (prevYearLast) return [...yearReadings, prevYearLast];
     }
@@ -98,7 +97,7 @@ export class MeterChart {
     const textColor = dark ? '#98989D' : '#6E6E73';
     const rs = [...this.readings()].reverse();
     const labels = rs.map((r) =>
-      new Date(r.date).toLocaleDateString('de-DE', { day: '2-digit', month: 'short' })
+      new Date(r.date).toLocaleDateString('de-DE', { day: '2-digit', month: 'short' }),
     );
     let data: number[], unit: string, label: string;
     if (this.chartMode() === 'kwh') {

@@ -14,15 +14,15 @@ export class MeterDetailStateService {
   private readonly tariffService = inject(TariffService);
   private readonly route = inject(ActivatedRoute);
 
-  private readonly meterId = toSignal(
-    this.route.params.pipe(map(params => params['id'])),
-    { initialValue: this.route.snapshot.paramMap.get('id') ?? '' }
-  );
+  private readonly meterId = toSignal(this.route.params.pipe(map((params) => params['id'])), {
+    initialValue: this.route.snapshot.paramMap.get('id') ?? '',
+  });
 
   readonly meter = computed(() => this.meterService.getMeter(this.meterId()));
 
   readonly readings = computed(() => {
-    return this.readingService.getReadingsForMeter(this.meterId())
+    return this.readingService
+      .getReadingsForMeter(this.meterId())
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   });
 

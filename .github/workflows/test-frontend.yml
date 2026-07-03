@@ -1,0 +1,50 @@
+# SECURITY (security-standards §11): pin every `uses:` action to a commit SHA
+# before production (WS5/Elena hardening task).
+name: test-frontend
+
+on:
+  push:
+    paths:
+      - "frontend/**"
+      - ".github/workflows/test-frontend.yml"
+  pull_request:
+    paths:
+      - "frontend/**"
+      - ".github/workflows/test-frontend.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-frontend-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4 # TODO(§11): pin by SHA
+
+      - uses: actions/setup-node@v4 # TODO(§11): pin by SHA
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Prettier (format check)
+        run: npx prettier --check "src/**/*.{ts,scss,html}"
+
+      - name: Build (production)
+        run: npm run build -- --configuration=production
+
+      - name: Unit tests (Vitest)
+        run: npx ng test --watch=false
+
+      - name: npm audit (prod deps, block on high)
+        run: npm audit --omit=dev --audit-level=high

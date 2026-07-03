@@ -24,11 +24,20 @@ import { EnergyType, ENERGY_META } from '../../core/models/energy.models';
 
 @Component({
   selector: 'app-settings',
-  imports: [CommonModule, FormsModule, MatButtonModule, MatIconModule, MatCardModule,
-    MatSnackBarModule, MatDialogModule, MatSlideToggleModule, MatFormFieldModule, MatInputModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatSnackBarModule,
+    MatDialogModule,
+    MatSlideToggleModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
-
 })
 export class Settings {
   private readonly themeService = inject(ThemeService);
@@ -78,16 +87,22 @@ export class Settings {
       source_url: this.editSourceUrl || null,
       valid_from: today,
     });
-    this.snackBar.open($localize`:@@settings.co2Factors.saved:CO₂-Faktor gespeichert`, 'OK', { duration: 3000 });
+    this.snackBar.open($localize`:@@settings.co2Factors.saved:CO₂-Faktor gespeichert`, 'OK', {
+      duration: 3000,
+    });
     this.editingType.set(null);
   }
 
   async resetToDefault(type: EnergyType): Promise<void> {
     const rows = this.co2FactorService.factors.value() ?? [];
-    const row = rows.find(r => r.energy_type === type);
+    const row = rows.find((r) => r.energy_type === type);
     if (row) {
       await this.co2FactorService.remove(row.id);
-      this.snackBar.open($localize`:@@settings.co2Factors.reset.done:Standardwert wiederhergestellt`, 'OK', { duration: 3000 });
+      this.snackBar.open(
+        $localize`:@@settings.co2Factors.reset.done:Standardwert wiederhergestellt`,
+        'OK',
+        { duration: 3000 },
+      );
     }
     this.editingType.set(null);
   }
@@ -99,7 +114,9 @@ export class Settings {
   async installPwa(): Promise<void> {
     const outcome = await this.pwaInstall.promptInstall();
     if (outcome === 'accepted') {
-      this.snackBar.open($localize`:@@settings.pwa.installed:App wurde installiert`, 'OK', { duration: 3000 });
+      this.snackBar.open($localize`:@@settings.pwa.installed:App wurde installiert`, 'OK', {
+        duration: 3000,
+      });
     }
   }
 
@@ -133,9 +150,13 @@ export class Settings {
     reader.onload = (e) => {
       try {
         this.dataSyncService.importData(e.target?.result as string);
-        this.snackBar.open($localize`:@@settings.imported:Daten importiert`, 'OK', { duration: 3000 });
+        this.snackBar.open($localize`:@@settings.imported:Daten importiert`, 'OK', {
+          duration: 3000,
+        });
       } catch {
-        this.snackBar.open($localize`:@@settings.importError:Fehler beim Import`, 'OK', { duration: 3000 });
+        this.snackBar.open($localize`:@@settings.importError:Fehler beim Import`, 'OK', {
+          duration: 3000,
+        });
       }
     };
     reader.readAsText(file);

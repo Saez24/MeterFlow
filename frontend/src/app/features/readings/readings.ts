@@ -14,7 +14,6 @@ import { ReadingService } from '../../core/services/reading.service';
 import { ReadingsList } from '../../shared/components/readings-list/readings-list';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog';
 
-
 @Component({
   selector: 'app-readings',
   imports: [
@@ -26,11 +25,10 @@ import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/c
     MatFormFieldModule,
     MatSnackBarModule,
     FormsModule,
-    ReadingsList
+    ReadingsList,
   ],
   templateUrl: './readings.html',
   styleUrl: './readings.scss',
-
 })
 export class Readings {
   private readonly meterService = inject(MeterService);
@@ -76,7 +74,9 @@ export class Readings {
       .subscribe((confirmed: boolean) => {
         if (!confirmed) return;
         this.readingService.deleteReading(id);
-        this.snackBar.open($localize`:@@readings.deleted:Ablesung gelöscht`, 'OK', { duration: 3000 });
+        this.snackBar.open($localize`:@@readings.deleted:Ablesung gelöscht`, 'OK', {
+          duration: 3000,
+        });
       });
   }
 }

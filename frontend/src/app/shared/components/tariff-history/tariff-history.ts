@@ -1,4 +1,12 @@
-import { Component, inject, input, computed, signal, output, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  inject,
+  input,
+  computed,
+  signal,
+  output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -29,7 +37,6 @@ import { MeterConfig, TariffPeriod } from '../../../core/models/energy.models';
   ],
   templateUrl: './tariff-history.html',
   styleUrl: './tariff-history.scss',
-
 })
 export class TariffHistory {
   private readonly snackBar = inject(MatSnackBar);

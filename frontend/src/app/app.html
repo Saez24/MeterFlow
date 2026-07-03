@@ -1,71 +1,105 @@
 <div class="app-shell">
-
   @if (!isAuthPage()) {
-  <button class="sidebar-toggle" [style.left]="toggleBtnLeft()" mat-icon-button
-    (click)="sidebarCollapsed.set(!sidebarCollapsed())"
-    [attr.aria-label]="sidebarCollapsed() ? 'Seitenleiste aufklappen' : 'Seitenleiste einklappen'"
-    [matTooltip]="sidebarCollapsed() ? 'Aufklappen' : 'Einklappen'" matTooltipPosition="right">
-    <mat-icon>{{ sidebarCollapsed() ? 'chevron_right' : 'chevron_left' }}</mat-icon>
-  </button>
+    <button
+      class="sidebar-toggle"
+      [style.left]="toggleBtnLeft()"
+      mat-icon-button
+      (click)="sidebarCollapsed.set(!sidebarCollapsed())"
+      [attr.aria-label]="sidebarCollapsed() ? 'Seitenleiste aufklappen' : 'Seitenleiste einklappen'"
+      [matTooltip]="sidebarCollapsed() ? 'Aufklappen' : 'Einklappen'"
+      matTooltipPosition="right"
+    >
+      <mat-icon>{{ sidebarCollapsed() ? 'chevron_right' : 'chevron_left' }}</mat-icon>
+    </button>
 
-  <nav class="sidebar frosted-glass" [class.sidebar--collapsed]="sidebarCollapsed()" aria-label="Hauptnavigation">
-    <div class="sidebar__top">
-      <div class="sidebar__logo">
-        <div class="logo-icon" [style.background]="connectionColor()" [matTooltip]="connectionTooltip()"
-          matTooltipPosition="right">
-          <mat-icon>electric_bolt</mat-icon>
+    <nav
+      class="sidebar frosted-glass"
+      [class.sidebar--collapsed]="sidebarCollapsed()"
+      aria-label="Hauptnavigation"
+    >
+      <div class="sidebar__top">
+        <div class="sidebar__logo">
+          <div
+            class="logo-icon"
+            [style.background]="connectionColor()"
+            [matTooltip]="connectionTooltip()"
+            matTooltipPosition="right"
+          >
+            <mat-icon>electric_bolt</mat-icon>
+          </div>
+          @if (!sidebarCollapsed()) {
+            <span class="logo-text">MeterFlow</span>
+          }
         </div>
-        @if (!sidebarCollapsed()) {
-        <span class="logo-text">MeterFlow</span>
+      </div>
+
+      <div class="sidebar__nav">
+        @for (item of navItems; track item.path) {
+          <a
+            class="nav-item"
+            [routerLink]="item.path"
+            routerLinkActive="nav-item--active"
+            [routerLinkActiveOptions]="{ exact: item.path === '/' }"
+            [matTooltip]="sidebarCollapsed() ? item.label : ''"
+            matTooltipPosition="right"
+            [attr.aria-label]="item.label"
+          >
+            <mat-icon>{{ item.icon }}</mat-icon>
+            @if (!sidebarCollapsed()) {
+              <span>{{ item.label }}</span>
+            }
+          </a>
         }
       </div>
-    </div>
 
-    <div class="sidebar__nav">
-      @for (item of navItems; track item.path) {
-      <a class="nav-item" [routerLink]="item.path" routerLinkActive="nav-item--active"
-        [routerLinkActiveOptions]="{ exact: item.path === '/' }" [matTooltip]="sidebarCollapsed() ? item.label : ''"
-        matTooltipPosition="right" [attr.aria-label]="item.label">
-        <mat-icon>{{ item.icon }}</mat-icon>
-        @if (!sidebarCollapsed()) {
-        <span>{{ item.label }}</span>
-        }
-      </a>
-      }
-    </div>
-
-    <div class="sidebar__footer">
-      <button mat-stroked-button color="warn" (click)="logout()" class="logout-btn" aria-label="Abmelden"
-        [matTooltip]="sidebarCollapsed() ? 'Abmelden' : ''" matTooltipPosition="right">
-        <mat-icon>logout</mat-icon>
-        @if (!sidebarCollapsed()) {
-        <span>Abmelden</span>
-        }
-      </button>
-    </div>
-  </nav>
+      <div class="sidebar__footer">
+        <button
+          mat-stroked-button
+          color="warn"
+          (click)="logout()"
+          class="logout-btn"
+          aria-label="Abmelden"
+          [matTooltip]="sidebarCollapsed() ? 'Abmelden' : ''"
+          matTooltipPosition="right"
+        >
+          <mat-icon>logout</mat-icon>
+          @if (!sidebarCollapsed()) {
+            <span>Abmelden</span>
+          }
+        </button>
+      </div>
+    </nav>
   }
 
   <main class="main-content" [class.main-content--auth]="isAuthPage()">
     @if (!isAuthPage()) {
-    <header class="mobile-header frosted-glass">
-      <div class="mobile-logo">
-        <div class="logo-icon" [style.background]="connectionColor()" [matTooltip]="connectionTooltip()"
-          matTooltipPosition="below">
-          <mat-icon>electric_bolt</mat-icon>
+      <header class="mobile-header frosted-glass">
+        <div class="mobile-logo">
+          <div
+            class="logo-icon"
+            [style.background]="connectionColor()"
+            [matTooltip]="connectionTooltip()"
+            matTooltipPosition="below"
+          >
+            <mat-icon>electric_bolt</mat-icon>
+          </div>
+          <span>MeterFlow</span>
         </div>
-        <span>MeterFlow</span>
-      </div>
-      <div class="mobile-header__actions">
-        <button mat-icon-button (click)="themeService.toggle()"
-          [attr.aria-label]="themeService.isDark() ? 'Helles Design aktivieren' : 'Dunkles Design aktivieren'">
-          <mat-icon>{{ themeService.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" (click)="logout()" aria-label="Abmelden">
-          <mat-icon>logout</mat-icon>
-        </button>
-      </div>
-    </header>
+        <div class="mobile-header__actions">
+          <button
+            mat-icon-button
+            (click)="themeService.toggle()"
+            [attr.aria-label]="
+              themeService.isDark() ? 'Helles Design aktivieren' : 'Dunkles Design aktivieren'
+            "
+          >
+            <mat-icon>{{ themeService.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="logout()" aria-label="Abmelden">
+            <mat-icon>logout</mat-icon>
+          </button>
+        </div>
+      </header>
     }
 
     <div class="content-area">
@@ -74,15 +108,19 @@
   </main>
 
   @if (!isAuthPage()) {
-  <nav class="bottom-nav frosted-glass" aria-label="Mobile Navigation">
-    @for (item of navItems; track item.path) {
-    <a class="bottom-nav-item" [routerLink]="item.path" routerLinkActive="bottom-nav-item--active"
-      [routerLinkActiveOptions]="{ exact: item.path === '/' }" [attr.aria-label]="item.label">
-      <mat-icon>{{ item.icon }}</mat-icon>
-      <span>{{ item.label }}</span>
-    </a>
-    }
-  </nav>
+    <nav class="bottom-nav frosted-glass" aria-label="Mobile Navigation">
+      @for (item of navItems; track item.path) {
+        <a
+          class="bottom-nav-item"
+          [routerLink]="item.path"
+          routerLinkActive="bottom-nav-item--active"
+          [routerLinkActiveOptions]="{ exact: item.path === '/' }"
+          [attr.aria-label]="item.label"
+        >
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
   }
-
 </div>

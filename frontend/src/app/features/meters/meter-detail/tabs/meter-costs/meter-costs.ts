@@ -8,7 +8,6 @@ import { CostPreview } from '../../../cost-preview/cost-preview';
   imports: [CommonModule, CostPreview],
   templateUrl: './meter-costs.html',
   styleUrl: './meter-costs.scss',
-
 })
 export class MeterCosts {
   private readonly state = inject(MeterDetailStateService);

@@ -26,7 +26,7 @@ describe('TariffHistory', () => {
   beforeEach(async () => {
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
-      value: vi.fn().mockImplementation(query => ({
+      value: vi.fn().mockImplementation((query) => ({
         matches: false,
         media: query,
         onchange: null,
@@ -41,7 +41,9 @@ describe('TariffHistory', () => {
     await TestBed.configureTestingModule({
       imports: [TariffHistory, NoopAnimationsModule],
       providers: [
-        { provide: ApiService, useValue: apiServiceMock() },provideZonelessChangeDetection()],
+        { provide: ApiService, useValue: apiServiceMock() },
+        provideZonelessChangeDetection(),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TariffHistory);

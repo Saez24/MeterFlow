@@ -15,7 +15,6 @@ import { ConfirmDialogComponent } from '../../../../../shared/components/confirm
   imports: [CommonModule, MatDialogModule, MatSnackBarModule, TariffHistory],
   templateUrl: './meter-tariffs.html',
   styleUrl: './meter-tariffs.scss',
-
 })
 export class MeterTariffs {
   private readonly tariffService = inject(TariffService);
@@ -37,7 +36,7 @@ export class MeterTariffs {
       },
       panelClass: 'frosted-glass',
     });
-  };
+  }
 
   async deleteTariff(periodId: string): Promise<void> {
     const meter = this.meter();

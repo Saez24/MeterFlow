@@ -1,28 +1,27 @@
 <div class="page-container">
   @if (isSaving()) {
-  <div class="saving-overlay">
-    <mat-spinner diameter="48"></mat-spinner>
-    <span i18n="@@readingsForm.saving">Wird gespeichert…</span>
-  </div>
+    <div class="saving-overlay">
+      <mat-spinner diameter="48"></mat-spinner>
+      <span i18n="@@readingsForm.saving">Wird gespeichert…</span>
+    </div>
   }
   <button class="back-btn" mat-icon-button (click)="this.readingService.goBack()">
     <mat-icon>arrow_back</mat-icon>
   </button>
   <div class="page-header">
-
     <div>
       <h1 class="page-title">
         @if (isEditMode) {
-        <span i18n="@@readingsForm.title.edit">Ablesung bearbeiten</span>
+          <span i18n="@@readingsForm.title.edit">Ablesung bearbeiten</span>
         } @else {
-        <span i18n="@@readingsForm.title.new">Ablesung erfassen</span>
+          <span i18n="@@readingsForm.title.new">Ablesung erfassen</span>
         }
       </h1>
       <p class="page-subtitle">
         @if (isEditMode) {
-        <span i18n="@@readingsForm.subtitle.edit">Zählerstand korrigieren</span>
+          <span i18n="@@readingsForm.subtitle.edit">Zählerstand korrigieren</span>
         } @else {
-        <span i18n="@@readingsForm.subtitle.new">Aktuellen Zählerstand eintragen</span>
+          <span i18n="@@readingsForm.subtitle.new">Aktuellen Zählerstand eintragen</span>
         }
       </p>
     </div>
@@ -31,217 +30,306 @@
   <form [formGroup]="form" (ngSubmit)="save()" class="reading-form">
     <!-- Meter Selection -->
     @if (!isEditMode) {
-    <div class="form-section">
-      <h3 class="section-title" i18n="@@readingsForm.selectMeter">Zähler wählen</h3>
-      <div class="meter-selector">
-        @for (meter of activeMeters(); track meter.id) {
-        <button type="button" class="meter-select-btn"
-          [class.meter-select-btn--active]="form.get('meterId')?.value === meter.id" [style.--meter-color]="meter.color"
-          (click)="selectMeter(meter.id)">
-          <div class="meter-select-icon" [style.background]="meter.color + '22'">
-            <mat-icon [style.color]="meter.color">{{ meter.icon }}</mat-icon>
-          </div>
-          <div class="meter-select-info">
-            <span class="meter-select-name">{{ meter.name }}</span>
-            <span class="meter-select-type">{{ getMeta(meter.type).label }}</span>
-          </div>
-          @if (form.get('meterId')?.value === meter.id) {
-          <mat-icon class="selected-check">check_circle</mat-icon>
+      <div class="form-section">
+        <h3 class="section-title" i18n="@@readingsForm.selectMeter">Zähler wählen</h3>
+        <div class="meter-selector">
+          @for (meter of activeMeters(); track meter.id) {
+            <button
+              type="button"
+              class="meter-select-btn"
+              [class.meter-select-btn--active]="form.get('meterId')?.value === meter.id"
+              [style.--meter-color]="meter.color"
+              (click)="selectMeter(meter.id)"
+            >
+              <div class="meter-select-icon" [style.background]="meter.color + '22'">
+                <mat-icon [style.color]="meter.color">{{ meter.icon }}</mat-icon>
+              </div>
+              <div class="meter-select-info">
+                <span class="meter-select-name">{{ meter.name }}</span>
+                <span class="meter-select-type">{{ getMeta(meter.type).label }}</span>
+              </div>
+              @if (form.get('meterId')?.value === meter.id) {
+                <mat-icon class="selected-check">check_circle</mat-icon>
+              }
+            </button>
           }
-        </button>
-        }
+        </div>
       </div>
-    </div>
     }
 
     @if (selectedMeter(); as meter) {
-    <mat-divider class="section-divider"></mat-divider>
+      <mat-divider class="section-divider"></mat-divider>
 
-    <!-- Reading Value -->
-    <div class="form-section">
-      <h3 class="section-title" i18n="@@readingsForm.readingValue">Zählerstand</h3>
+      <!-- Reading Value -->
+      <div class="form-section">
+        <h3 class="section-title" i18n="@@readingsForm.readingValue">Zählerstand</h3>
 
-      <div class="current-meter-info">
-        <div class="meter-badge-large" [style.background]="meter.color + '22'">
-          <mat-icon [style.color]="meter.color">{{ meter.icon }}</mat-icon>
-        </div>
-        <div>
-          <div class="current-meter-name">{{ meter.name }}</div>
-          @if (previousReading(); as lr) {
-          <div class="last-reading-info" i18n="@@readingsForm.previousReading">
-            Vorheriger Stand: <strong>{{ lr.value | number: '1.0-3' }} {{ meter.unit }}</strong> am
-            {{ lr.date | date: 'dd.MM.yyyy' }}
+        <div class="current-meter-info">
+          <div class="meter-badge-large" [style.background]="meter.color + '22'">
+            <mat-icon [style.color]="meter.color">{{ meter.icon }}</mat-icon>
           </div>
-          } @else {
-          <div class="last-reading-info" i18n="@@readingsForm.firstReading">Erste Ablesung für diesen Zeitraum</div>
-          }
-        </div>
-      </div>
-
-      <div class="form-row form-row--2">
-        <mat-form-field appearance="outline" class="form-field value-field">
-          <mat-label i18n="@@readingsForm.field.value">Zählerstand</mat-label>
-          <input matInput type="text" inputmode="decimal" formControlName="value" placeholder="0.000"
-            class="reading-input" />
-          <span matSuffix class="unit-suffix">{{ meter.unit }}</span>
-          <mat-error>{{ getValueError() }}</mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label i18n="@@readingsForm.field.date">Datum</mat-label>
-          <input matInput [matDatepicker]="datePicker" formControlName="date" />
-          <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
-          <mat-datepicker #datePicker></mat-datepicker>
-        </mat-form-field>
-      </div>
-
-      <!-- Live Preview -->
-      @if (consumptionPreview(); as preview) {
-      <div class="consumption-preview">
-        <div class="preview-item">
-          <span class="preview-label" i18n="@@readingsForm.preview.consumption">Verbrauch</span>
-          <span class="preview-value">{{ preview.consumption | number: '1.0-3' }} {{ meter.unit }}</span>
-        </div>
-        @if (meter.type === 'gas') {
-        <div class="preview-item">
-          <span class="preview-label" i18n="@@readingsForm.preview.kwh">Kilowattstunden</span>
-          <span class="preview-value highlight">{{ preview.kwh | number: '1.0-2' }} kWh</span>
-        </div>
-        }
-        <div class="preview-item">
-          <span class="preview-label" i18n="@@readingsForm.preview.cost">Kosten (ca.)</span>
-          <span class="preview-value cost">{{
-            preview.cost | currency: 'EUR' : 'symbol' : '1.2-2'
-            }}</span>
-        </div>
-      </div>
-      }
-
-      <!-- Gas info -->
-      @if (meter.type === 'gas') {
-      <div class="gas-info-box">
-        <mat-icon>info</mat-icon>
-        <span i18n="@@readingsForm.gasInfo">
-          Brennwert: <strong>{{ meter.calorificValue }} kWh/m³</strong> · Z-Zahl:
-          <strong>{{ meter.zNumber }}</strong>
-        </span>
-      </div>
-      }
-    </div>
-
-    <mat-divider class="section-divider"></mat-divider>
-
-    <!-- Note -->
-    <div class="form-section">
-      <h3 class="section-title" i18n="@@readingsForm.note.title">Notiz (optional)</h3>
-      <mat-form-field appearance="outline" class="form-field form-field--full">
-        <mat-label i18n="@@readingsForm.note.label">Anmerkung zur Ablesung</mat-label>
-        <textarea matInput formControlName="note" rows="2" placeholder="z.B. Zähler abgelesen nach Urlaub..."
-          i18n-placeholder="@@readingsForm.note.placeholder"></textarea>
-        <mat-icon matSuffix>notes</mat-icon>
-      </mat-form-field>
-    </div>
-    <mat-divider class="section-divider"></mat-divider>
-
-    <!-- Foto -->
-    <div class="form-section">
-      <h3 class="section-title" i18n="@@readingsForm.photo.title">Foto (optional)</h3>
-
-      @if (hasExistingPhoto() && existingPhotoSignedUrl()) {
-      <!-- Bestehendes Foto im Edit-Modus -->
-      <div class="photo-preview">
-        <img [src]="existingPhotoSignedUrl()!" class="photo-thumbnail" alt="Bestehendes Zählerfoto"
-          i18n-alt="@@readingsForm.photo.existingAlt" />
-        <button type="button" mat-button color="warn" (click)="removeExistingPhoto()" class="photo-remove-btn"
-          i18n="@@readingsForm.photo.remove">
-          <mat-icon>delete_outline</mat-icon> Foto entfernen
-        </button>
-      </div>
-      } @else if (photoPreviewUrl()) {
-      <!-- Neu gewähltes Foto -->
-      <div class="photo-preview">
-        <img [src]="photoPreviewUrl()!" class="photo-thumbnail" alt="Vorschau"
-          i18n-alt="@@readingsForm.photo.previewAlt" />
-        <div class="photo-preview-actions">
-          <button type="button" mat-stroked-button class="ocr-btn" [class.ocr-btn--running]="ocrRunning()"
-            [disabled]="ocrRunning()" (click)="runOcr()" i18n-aria-label="@@readingsForm.ocr.btnAria"
-            aria-label="Zählerstand aus Foto erkennen">
-            @if (ocrRunning()) {
-            <span class="ocr-spinner"></span>
+          <div>
+            <div class="current-meter-name">{{ meter.name }}</div>
+            @if (previousReading(); as lr) {
+              <div class="last-reading-info" i18n="@@readingsForm.previousReading">
+                Vorheriger Stand:
+                <strong>{{ lr.value | number: '1.0-3' }} {{ meter.unit }}</strong> am
+                {{ lr.date | date: 'dd.MM.yyyy' }}
+              </div>
             } @else {
-            <mat-icon>document_scanner</mat-icon>
+              <div class="last-reading-info" i18n="@@readingsForm.firstReading">
+                Erste Ablesung für diesen Zeitraum
+              </div>
             }
-            <span i18n="@@readingsForm.ocr.btn">Zählerstand erkennen</span>
-          </button>
-          <button type="button" mat-button color="warn" (click)="clearPhoto()" class="photo-remove-btn"
-            i18n="@@readingsForm.photo.clear">
-            <mat-icon>close</mat-icon> Auswahl aufheben
-          </button>
+          </div>
         </div>
 
-        <!-- OCR-Ergebnis -->
-        @if (ocrResult(); as result) {
-        <div class="ocr-result" [class.ocr-result--no-value]="result.value === null">
-          @if (result.value !== null) {
-          <div class="ocr-result-main">
-            <mat-icon class="ocr-result-icon">auto_fix_high</mat-icon>
-            <div class="ocr-result-body">
-              <span class="ocr-result-label" i18n="@@readingsForm.ocr.detected">Erkannter Wert</span>
-              <span class="ocr-result-value">{{ result.value | number: '1.0-3':'de' }}</span>
-              <span class="ocr-result-confidence">
-                <span i18n="@@readingsForm.ocr.confidence">Konfidenz</span>: {{ result.confidence }} %
-              </span>
+        <div class="form-row form-row--2">
+          <mat-form-field appearance="outline" class="form-field value-field">
+            <mat-label i18n="@@readingsForm.field.value">Zählerstand</mat-label>
+            <input
+              matInput
+              type="text"
+              inputmode="decimal"
+              formControlName="value"
+              placeholder="0.000"
+              class="reading-input"
+            />
+            <span matSuffix class="unit-suffix">{{ meter.unit }}</span>
+            <mat-error>{{ getValueError() }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label i18n="@@readingsForm.field.date">Datum</mat-label>
+            <input matInput [matDatepicker]="datePicker" formControlName="date" />
+            <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+            <mat-datepicker #datePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <!-- Live Preview -->
+        @if (consumptionPreview(); as preview) {
+          <div class="consumption-preview">
+            <div class="preview-item">
+              <span class="preview-label" i18n="@@readingsForm.preview.consumption">Verbrauch</span>
+              <span class="preview-value"
+                >{{ preview.consumption | number: '1.0-3' }} {{ meter.unit }}</span
+              >
             </div>
-            <div class="ocr-result-actions">
-              <button type="button" mat-flat-button class="ocr-apply-btn" (click)="applyOcrValue()"
-                i18n="@@readingsForm.ocr.apply">
-                Übernehmen
-              </button>
-              <button type="button" mat-icon-button (click)="dismissOcr()" i18n-aria-label="@@readingsForm.ocr.dismiss"
-                aria-label="Ergebnis verwerfen">
-                <mat-icon>close</mat-icon>
-              </button>
+            @if (meter.type === 'gas') {
+              <div class="preview-item">
+                <span class="preview-label" i18n="@@readingsForm.preview.kwh">Kilowattstunden</span>
+                <span class="preview-value highlight">{{ preview.kwh | number: '1.0-2' }} kWh</span>
+              </div>
+            }
+            <div class="preview-item">
+              <span class="preview-label" i18n="@@readingsForm.preview.cost">Kosten (ca.)</span>
+              <span class="preview-value cost">{{
+                preview.cost | currency: 'EUR' : 'symbol' : '1.2-2'
+              }}</span>
             </div>
           </div>
-          } @else {
-          <div class="ocr-result-main">
-            <mat-icon class="ocr-result-icon ocr-result-icon--warn">search_off</mat-icon>
-            <div class="ocr-result-body">
-              <span class="ocr-result-label" i18n="@@readingsForm.ocr.noValue">Kein Zählerstand erkannt</span>
-              <span class="ocr-result-confidence" i18n="@@readingsForm.ocr.noValueHint">Bitte Wert manuell
-                eingeben</span>
-            </div>
-            <button type="button" mat-icon-button (click)="dismissOcr()" i18n-aria-label="@@readingsForm.ocr.dismiss"
-              aria-label="Ergebnis verwerfen">
-              <mat-icon>close</mat-icon>
+        }
+
+        <!-- Gas info -->
+        @if (meter.type === 'gas') {
+          <div class="gas-info-box">
+            <mat-icon>info</mat-icon>
+            <span i18n="@@readingsForm.gasInfo">
+              Brennwert: <strong>{{ meter.calorificValue }} kWh/m³</strong> · Z-Zahl:
+              <strong>{{ meter.zNumber }}</strong>
+            </span>
+          </div>
+        }
+      </div>
+
+      <mat-divider class="section-divider"></mat-divider>
+
+      <!-- Note -->
+      <div class="form-section">
+        <h3 class="section-title" i18n="@@readingsForm.note.title">Notiz (optional)</h3>
+        <mat-form-field appearance="outline" class="form-field form-field--full">
+          <mat-label i18n="@@readingsForm.note.label">Anmerkung zur Ablesung</mat-label>
+          <textarea
+            matInput
+            formControlName="note"
+            rows="2"
+            placeholder="z.B. Zähler abgelesen nach Urlaub..."
+            i18n-placeholder="@@readingsForm.note.placeholder"
+          ></textarea>
+          <mat-icon matSuffix>notes</mat-icon>
+        </mat-form-field>
+      </div>
+      <mat-divider class="section-divider"></mat-divider>
+
+      <!-- Foto -->
+      <div class="form-section">
+        <h3 class="section-title" i18n="@@readingsForm.photo.title">Foto (optional)</h3>
+
+        @if (hasExistingPhoto() && existingPhotoSignedUrl()) {
+          <!-- Bestehendes Foto im Edit-Modus -->
+          <div class="photo-preview">
+            <img
+              [src]="existingPhotoSignedUrl()!"
+              class="photo-thumbnail"
+              alt="Bestehendes Zählerfoto"
+              i18n-alt="@@readingsForm.photo.existingAlt"
+            />
+            <button
+              type="button"
+              mat-button
+              color="warn"
+              (click)="removeExistingPhoto()"
+              class="photo-remove-btn"
+              i18n="@@readingsForm.photo.remove"
+            >
+              <mat-icon>delete_outline</mat-icon> Foto entfernen
             </button>
           </div>
-          }
-        </div>
+        } @else if (photoPreviewUrl()) {
+          <!-- Neu gewähltes Foto -->
+          <div class="photo-preview">
+            <img
+              [src]="photoPreviewUrl()!"
+              class="photo-thumbnail"
+              alt="Vorschau"
+              i18n-alt="@@readingsForm.photo.previewAlt"
+            />
+            <div class="photo-preview-actions">
+              <button
+                type="button"
+                mat-stroked-button
+                class="ocr-btn"
+                [class.ocr-btn--running]="ocrRunning()"
+                [disabled]="ocrRunning()"
+                (click)="runOcr()"
+                i18n-aria-label="@@readingsForm.ocr.btnAria"
+                aria-label="Zählerstand aus Foto erkennen"
+              >
+                @if (ocrRunning()) {
+                  <span class="ocr-spinner"></span>
+                } @else {
+                  <mat-icon>document_scanner</mat-icon>
+                }
+                <span i18n="@@readingsForm.ocr.btn">Zählerstand erkennen</span>
+              </button>
+              <button
+                type="button"
+                mat-button
+                color="warn"
+                (click)="clearPhoto()"
+                class="photo-remove-btn"
+                i18n="@@readingsForm.photo.clear"
+              >
+                <mat-icon>close</mat-icon> Auswahl aufheben
+              </button>
+            </div>
+
+            <!-- OCR-Ergebnis -->
+            @if (ocrResult(); as result) {
+              <div class="ocr-result" [class.ocr-result--no-value]="result.value === null">
+                @if (result.value !== null) {
+                  <div class="ocr-result-main">
+                    <mat-icon class="ocr-result-icon">auto_fix_high</mat-icon>
+                    <div class="ocr-result-body">
+                      <span class="ocr-result-label" i18n="@@readingsForm.ocr.detected"
+                        >Erkannter Wert</span
+                      >
+                      <span class="ocr-result-value">{{
+                        result.value | number: '1.0-3' : 'de'
+                      }}</span>
+                      <span class="ocr-result-confidence">
+                        <span i18n="@@readingsForm.ocr.confidence">Konfidenz</span>:
+                        {{ result.confidence }} %
+                      </span>
+                    </div>
+                    <div class="ocr-result-actions">
+                      <button
+                        type="button"
+                        mat-flat-button
+                        class="ocr-apply-btn"
+                        (click)="applyOcrValue()"
+                        i18n="@@readingsForm.ocr.apply"
+                      >
+                        Übernehmen
+                      </button>
+                      <button
+                        type="button"
+                        mat-icon-button
+                        (click)="dismissOcr()"
+                        i18n-aria-label="@@readingsForm.ocr.dismiss"
+                        aria-label="Ergebnis verwerfen"
+                      >
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                } @else {
+                  <div class="ocr-result-main">
+                    <mat-icon class="ocr-result-icon ocr-result-icon--warn">search_off</mat-icon>
+                    <div class="ocr-result-body">
+                      <span class="ocr-result-label" i18n="@@readingsForm.ocr.noValue"
+                        >Kein Zählerstand erkannt</span
+                      >
+                      <span class="ocr-result-confidence" i18n="@@readingsForm.ocr.noValueHint"
+                        >Bitte Wert manuell eingeben</span
+                      >
+                    </div>
+                    <button
+                      type="button"
+                      mat-icon-button
+                      (click)="dismissOcr()"
+                      i18n-aria-label="@@readingsForm.ocr.dismiss"
+                      aria-label="Ergebnis verwerfen"
+                    >
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <!-- Datei-Auswahl -->
+          <label class="photo-upload-label" [class.photo-upload-label--uploading]="isUploading()">
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
+              hidden
+              (change)="onPhotoSelected($event)"
+              aria-label="Foto hochladen"
+              i18n-aria-label="@@readingsForm.photo.inputLabel"
+            />
+            <mat-icon>add_a_photo</mat-icon>
+            <span i18n="@@readingsForm.photo.upload">Foto hinzufügen</span>
+          </label>
+        }
+
+        @if (isUploading()) {
+          <p class="photo-uploading-hint" i18n="@@readingsForm.photo.uploading">
+            Foto wird hochgeladen…
+          </p>
         }
       </div>
-      } @else {
-      <!-- Datei-Auswahl -->
-      <label class="photo-upload-label" [class.photo-upload-label--uploading]="isUploading()">
-        <input type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" hidden
-          (change)="onPhotoSelected($event)" aria-label="Foto hochladen"
-          i18n-aria-label="@@readingsForm.photo.inputLabel" />
-        <mat-icon>add_a_photo</mat-icon>
-        <span i18n="@@readingsForm.photo.upload">Foto hinzufügen</span>
-      </label>
-      }
-
-      @if (isUploading()) {
-      <p class="photo-uploading-hint" i18n="@@readingsForm.photo.uploading">Foto wird hochgeladen…</p>
-      }
-    </div>
     }
 
     <!-- Actions -->
     <div class="form-actions">
-      <button type="button" mat-button (click)="this.readingService.goBack()"
-        i18n="@@readingsForm.cancel">Abbrechen</button>
-      <button type="submit" mat-flat-button color="primary" [disabled]="isSaveDisabled()" class="save-btn">
+      <button
+        type="button"
+        mat-button
+        (click)="this.readingService.goBack()"
+        i18n="@@readingsForm.cancel"
+      >
+        Abbrechen
+      </button>
+      <button
+        type="submit"
+        mat-flat-button
+        color="primary"
+        [disabled]="isSaveDisabled()"
+        class="save-btn"
+      >
         <mat-icon>check</mat-icon>
         <span i18n="@@readingsForm.save">Ablesung speichern</span>
       </button>

@@ -42,7 +42,6 @@ export interface TariffFormData {
   ],
   templateUrl: './tariff-form.html',
   styleUrls: ['./tariff-form.scss'],
-
 })
 export class TariffFormComponent {
   private readonly fb = inject(FormBuilder);
@@ -55,7 +54,9 @@ export class TariffFormComponent {
 
   readonly meter = signal(this.data.meter);
   readonly isEdit = computed(() => !!this.data.tariffId);
-  private originalTariff = this.isEdit() ? this.tariffService.getTariff(this.meter().id, this.data.tariffId!) : null;
+  private originalTariff = this.isEdit()
+    ? this.tariffService.getTariff(this.meter().id, this.data.tariffId!)
+    : null;
 
   form: FormGroup = this.fb.group({
     pricePerUnit: [0, [Validators.required, Validators.min(0)]],
@@ -63,7 +64,10 @@ export class TariffFormComponent {
     validFrom: [new Date(), Validators.required],
     emissionPrice: [undefined as number | undefined],
     basePricePerKw: [undefined as number | undefined],
-    connectedLoadKw: [this.data.meter.connectedLoadKw ?? undefined as number | undefined, [Validators.min(0)]],
+    connectedLoadKw: [
+      this.data.meter.connectedLoadKw ?? (undefined as number | undefined),
+      [Validators.min(0)],
+    ],
     wastewaterPrice: [undefined as number | undefined],
     calorificValue: [undefined as number | undefined],
     zNumber: [undefined as number | undefined],
@@ -72,7 +76,9 @@ export class TariffFormComponent {
 
   readonly isGas = computed(() => this.meter().type === 'gas');
   readonly isWater = computed(() => this.meter().type === 'water');
-  readonly isLinkedGardenWater = computed(() => this.meter().type === 'garden_water' && !!this.meter().linkedWaterMeterId);
+  readonly isLinkedGardenWater = computed(
+    () => this.meter().type === 'garden_water' && !!this.meter().linkedWaterMeterId,
+  );
   readonly isDistrictHeating = computed(() => this.meter().type === 'fernwarme');
   readonly isElectricity = computed(() => this.meter().type === 'electricity');
   readonly isSolar = computed(() => this.meter().type === 'solar');
@@ -117,7 +123,7 @@ export class TariffFormComponent {
     const formValue = this.form.getRawValue();
     const tariffData: Partial<TariffPeriod> = {
       pricePerUnit: formValue.pricePerUnit,
-      baseCharge: (this.isLinkedGardenWater() || this.isDistrictHeating()) ? 0 : formValue.baseCharge,
+      baseCharge: this.isLinkedGardenWater() || this.isDistrictHeating() ? 0 : formValue.baseCharge,
       validFrom: formValue.validFrom,
       note: formValue.note,
     };
@@ -142,10 +148,14 @@ export class TariffFormComponent {
 
     if (this.isEdit()) {
       await this.tariffService.updateTariff(this.meter().id, this.data.tariffId!, tariffData);
-      this.snackBar.open($localize`:@@tariffForm.updated:Tarif aktualisiert`, 'OK', { duration: 3000 });
+      this.snackBar.open($localize`:@@tariffForm.updated:Tarif aktualisiert`, 'OK', {
+        duration: 3000,
+      });
     } else {
       await this.tariffService.addTariff(this.meter().id, tariffData as Omit<TariffPeriod, 'id'>);
-      this.snackBar.open($localize`:@@tariffForm.added:Neuer Tarif hinzugefügt`, 'OK', { duration: 3000 });
+      this.snackBar.open($localize`:@@tariffForm.added:Neuer Tarif hinzugefügt`, 'OK', {
+        duration: 3000,
+      });
     }
 
     await this.readingService.recalculateAllReadingsForMeter(this.meter().id);

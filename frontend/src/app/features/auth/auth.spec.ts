@@ -13,7 +13,9 @@ describe('Auth', () => {
     await TestBed.configureTestingModule({
       imports: [Auth],
       providers: [
-        { provide: ApiService, useValue: apiServiceMock() },provideZonelessChangeDetection()],
+        { provide: ApiService, useValue: apiServiceMock() },
+        provideZonelessChangeDetection(),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Auth);

@@ -273,7 +273,9 @@ describe('StatsService', () => {
       };
       metersSignal.set([meter]);
       // 95 € of 100 € = 95 %
-      readingsSignal.set([makeReading('r1', 'meter-1', `${Y}-${M}-15`, 200, { consumption: 100, totalCost: 95 })]);
+      readingsSignal.set([
+        makeReading('r1', 'meter-1', `${Y}-${M}-15`, 200, { consumption: 100, totalCost: 95 }),
+      ]);
       const alerts = service.budgetAlerts();
       const alert = alerts.find((a) => a.type === 'monthly_cost');
       expect(alert).toBeDefined();
@@ -288,7 +290,9 @@ describe('StatsService', () => {
       };
       metersSignal.set([meter]);
       // 60 € of 50 € = 120 %
-      readingsSignal.set([makeReading('r1', 'meter-1', `${Y}-${M}-10`, 200, { consumption: 100, totalCost: 60 })]);
+      readingsSignal.set([
+        makeReading('r1', 'meter-1', `${Y}-${M}-10`, 200, { consumption: 100, totalCost: 60 }),
+      ]);
       const alert = service.budgetAlerts().find((a) => a.type === 'monthly_cost');
       expect(alert!.critical).toBe(true);
     });
@@ -300,17 +304,27 @@ describe('StatsService', () => {
       };
       metersSignal.set([meter]);
       // 50 € of 200 € = 25 % → below threshold
-      readingsSignal.set([makeReading('r1', 'meter-1', `${Y}-${M}-10`, 200, { consumption: 100, totalCost: 50 })]);
+      readingsSignal.set([
+        makeReading('r1', 'meter-1', `${Y}-${M}-10`, 200, { consumption: 100, totalCost: 50 }),
+      ]);
       expect(service.budgetAlerts()).toEqual([]);
     });
 
     it('sorts alerts by percent descending', () => {
-      const meterA: MeterConfig = { ...ELEC_METER, id: 'a', budget: { monthlyLimit: 100, alertAt: 50 } };
-      const meterB: MeterConfig = { ...ELEC_METER, id: 'b', budget: { monthlyLimit: 100, alertAt: 50 } };
+      const meterA: MeterConfig = {
+        ...ELEC_METER,
+        id: 'a',
+        budget: { monthlyLimit: 100, alertAt: 50 },
+      };
+      const meterB: MeterConfig = {
+        ...ELEC_METER,
+        id: 'b',
+        budget: { monthlyLimit: 100, alertAt: 50 },
+      };
       metersSignal.set([meterA, meterB]);
       readingsSignal.set([
-        makeReading('r1', 'a', `${Y}-${M}-10`, 100, { consumption: 60, totalCost: 60 }),  // 60 %
-        makeReading('r2', 'b', `${Y}-${M}-10`, 100, { consumption: 90, totalCost: 90 }),  // 90 %
+        makeReading('r1', 'a', `${Y}-${M}-10`, 100, { consumption: 60, totalCost: 60 }), // 60 %
+        makeReading('r2', 'b', `${Y}-${M}-10`, 100, { consumption: 90, totalCost: 90 }), // 90 %
       ]);
       const alerts = service.budgetAlerts();
       expect(alerts[0].percent).toBeGreaterThan(alerts[1].percent);
