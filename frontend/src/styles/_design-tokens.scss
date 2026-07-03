@@ -37,11 +37,9 @@
   --danger: #ff453a;
   --on-accent: #ffffff;
 
-  // Typography (self-hosted / system — no CDN)
-  --font:
-    -apple-system, blinkmacsystemfont, 'SF Pro Text', 'Segoe UI', roboto, 'Helvetica Neue',
-    sans-serif;
-  --mono: 'SF Mono', ui-monospace, 'DM Mono', menlo, monospace;
+  // Typography — self-hosted DM Sans / DM Mono (see _fonts.scss), system fallback
+  --font: 'DM Sans', -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, sans-serif;
+  --mono: 'DM Mono', 'SF Mono', ui-monospace, menlo, monospace;
 
   // Effects
   --blur: blur(24px) saturate(180%);

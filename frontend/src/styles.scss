@@ -5,9 +5,9 @@
 // 1. Core Imports
 @use '@angular/material' as mat;
 
-// Canonical Apple-style design tokens + Material-free base components (.df-*).
-// These are the foundation of the design-system migration (Material is being
-// removed module by module; tokens/components below coexist during that work).
+// Self-hosted fonts (no CDN), canonical Apple-style tokens, and the token-based
+// `.df-*` base components. Material stays and is themed on top (DataForge-style).
+@use './styles/fonts';
 @use './styles/design-tokens';
 @use './styles/ui-components';
 
@@ -166,8 +166,8 @@ a {
 // tighter, more refined feel. Custom .df-* components + tokens layer on top.
 @include mat.core();
 
-// No CDN: use the local Apple system stack (swap for 'DM Sans' once self-hosted).
-$app-font: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif';
+// Self-hosted DM Sans (see _fonts.scss) with a system fallback — no CDN.
+$app-font: 'DM Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
 
 $light-theme: mat.define-theme(
   (
@@ -214,40 +214,142 @@ $dark-theme: mat.define-theme(
   @include mat.all-component-colors($dark-theme);
 }
 
-// 10. Angular Material Component Overrides
-.mat-mdc-unelevated-button.mat-primary {
-  --mdc-unelevated-button-container-color: var(--apple-blue);
-  --mdc-unelevated-button-label-text-color: white;
-  border-radius: 12px;
+// 10. Angular Material Component Overrides — Apple feinschliff, token-driven.
+// Rounded corners, token surfaces/borders, accent focus, frosted overlays.
+
+// ── Buttons ───────────────────────────────────────────────────────────────
+.mat-mdc-unelevated-button,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button {
+  --mdc-filled-button-container-shape: var(--r-sm);
+  --mdc-outlined-button-container-shape: var(--r-sm);
+  border-radius: var(--r-sm);
   height: 44px;
-  padding: 0 24px;
+  letter-spacing: normal;
   box-shadow: none;
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    transform var(--dur) var(--ease),
+    filter var(--dur) var(--ease);
 
-  &:hover {
-    transform: scale(1.02);
+  &:hover:not(:disabled) {
+    filter: brightness(1.05);
   }
-
-  &:active {
+  &:active:not(:disabled) {
     transform: scale(0.98);
   }
 }
 
-.mat-mdc-dialog-container .mdc-dialog__surface {
-  border-radius: 20px !important;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2) !important;
-  background: var(--bg-surface) !important;
+.mat-mdc-unelevated-button.mat-primary {
+  --mdc-filled-button-container-color: var(--accent);
+  --mdc-filled-button-label-text-color: var(--on-accent);
 }
 
-.mat-mdc-form-field-flex {
-  border-radius: 12px !important;
+.mat-mdc-outlined-button {
+  --mdc-outlined-button-outline-color: var(--border-strong);
+  --mdc-outlined-button-label-text-color: var(--text-1);
+}
+
+.mat-mdc-icon-button {
+  border-radius: 50%;
+  transition: background var(--dur) var(--ease);
+  &:hover {
+    background: var(--accent-glow);
+  }
+}
+
+// ── Cards ─────────────────────────────────────────────────────────────────
+.mat-mdc-card {
+  --mdc-elevated-card-container-color: var(--bg-card);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+// ── Form fields / inputs ────────────────────────────────────────────────────
+.mat-mdc-form-field {
+  width: 100%;
+  --mdc-filled-text-field-container-color: var(--bg-card);
+  --mdc-filled-text-field-focus-active-indicator-color: var(--accent);
+  --mdc-filled-text-field-focus-label-text-color: var(--accent);
+  --mat-form-field-container-text-color: var(--text-1);
+}
+
+.mat-mdc-text-field-wrapper {
+  border-radius: var(--r-sm) !important;
 }
 
 .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {
   padding-right: 12px !important;
 }
 
-// Mat Tabs – Mobile Scroll Fix
+// ── Overlays: select / menu / autocomplete panels ──────────────────────────
+.mat-mdc-select-panel,
+.mat-mdc-menu-panel,
+.mat-mdc-autocomplete-panel {
+  border-radius: var(--r-md) !important;
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md) !important;
+}
+
+.mat-mdc-option:hover:not(.mdc-list-item--disabled) {
+  background: var(--accent-glow) !important;
+}
+
+// ── Dialog + backdrop ──────────────────────────────────────────────────────
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: var(--r-lg) !important;
+  background: var(--bg-card) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.cdk-overlay-dark-backdrop,
+.blur-backdrop {
+  background: rgba(0, 0, 0, 0.32) !important;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+// ── Slide toggle / divider / progress ──────────────────────────────────────
+.mat-mdc-slide-toggle {
+  --mdc-switch-selected-track-color: var(--accent);
+  --mdc-switch-selected-handle-color: var(--on-accent);
+  --mdc-switch-selected-hover-track-color: var(--accent);
+  --mdc-switch-selected-focus-track-color: var(--accent);
+}
+
+.mat-divider {
+  border-top-color: var(--border) !important;
+}
+
+.mat-mdc-progress-bar,
+.mat-mdc-progress-spinner {
+  --mdc-linear-progress-active-indicator-color: var(--accent);
+  --mdc-circular-progress-active-indicator-color: var(--accent);
+}
+
+// ── Snackbar / toast ───────────────────────────────────────────────────────
+.mat-mdc-snack-bar-container {
+  .mdc-snackbar__surface {
+    border-radius: var(--r-md) !important;
+    background: var(--bg-card) !important;
+    box-shadow: var(--shadow-md) !important;
+  }
+  .mdc-snackbar__label {
+    color: var(--text-1);
+  }
+  &.toast-success .mdc-snackbar__surface {
+    border-left: 3px solid var(--green);
+  }
+  &.toast-error .mdc-snackbar__surface {
+    border-left: 3px solid var(--danger);
+  }
+  &.toast-info .mdc-snackbar__surface {
+    border-left: 3px solid var(--accent);
+  }
+}
+
+// ── Tabs (mobile scroll fix, retained) ─────────────────────────────────────
 .mat-mdc-tab-header {
   overflow-x: auto !important;
   scrollbar-width: none;
@@ -258,25 +360,17 @@ $dark-theme: mat.define-theme(
 
 .mat-mdc-tab-list {
   flex-shrink: 0 !important;
-  transform: none !important; // verhindert dass Angular die Scroll-Position per transform setzt
+  transform: none !important;
 }
 
 .mat-mdc-tab {
   flex-shrink: 0 !important;
   min-width: 80px;
 
-  @media (max-width: 768px) {
-  }
-
   @media (max-width: 480px) {
     min-width: 60px;
     padding: 0 10px;
   }
-}
-
-.blur-backdrop {
-  backdrop-filter: blur(6px);
-  background: rgba(0, 0, 0, 0.3) !important;
 }
 
 .submit-btn {

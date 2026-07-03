@@ -98,10 +98,18 @@ Empfehlung: **Contract-First** — REST-Endpunkt-Liste zuerst fixieren, dann WS2
       light/dark mit azure/**green**-Palette, System-Font-Typografie (`plain/brand-family`), **Density -1**;
       Tokens + `.df-*`/`app-*` liegen obendrauf. Build grün. Keine Material-Entfernung mehr nötig.
 
+- [x] **Material-Component-Overrides ausgebaut** (`styles.scss` §10, token-getrieben): Buttons
+      (flat/outlined/icon — Radius, Accent, Hover-Scale), Cards, Form-Fields/Inputs (Accent-Fokus),
+      Select-/Menu-/Autocomplete-Panels, Dialog + Frosted-Backdrop, Slide-Toggle/Divider/Progress
+      (Accent), Snackbar/Toast (success/error/info), Tabs-Mobile-Fix. Alles über Tokens.
+- [x] **Fonts self-hosted → CDN entfernt** (Kein-CDN-Regel §3): DM Sans/DM Mono/Material-Icons WOFF2
+      nach `frontend/public/fonts/` (aus DataForge), `_fonts.scss` mit `@font-face` + `.material-icons`/
+      `mat-icon`-Regel. Google-Fonts-Links (Inter + Material Icons) aus `index.html` gelöscht.
+      `--font`/`--mono` + Material-Typo auf DM Sans/Mono. Build lädt Fonts aus `/fonts/`; grep über
+      `src/` findet **keine** externen Font/CDN-Referenzen mehr.
+
 Noch offen in WS3b (nächste Schritte):
-- [ ] Material-Component-Overrides ausbauen (Button/Dialog/Form-Field/Tabs/Select) für konsistenten
-      Apple-Look über alle Feature-Module — DataForge-`.df-*`-Overrides als Vorlage.
-- [ ] Optional self-hosted DM Sans/DM Mono WOFF2 (`public/fonts/`) statt System-Stack.
+- [ ] Feinschliff pro Feature-Modul im Browser sichten (Light/Dark-Durchklick), Randfälle nachziehen.
 
 **WS2 — Django-Backend (fertig):**
 - [x] `backend/.venv` + Deps installiert (Django 5.2→6.0, DRF, `djangorestframework-camel-case`,
@@ -180,15 +188,14 @@ Noch **nicht** gemacht (bewusst, für spätere Workstreams):
 
 ## 7. Nächster Schritt
 
-**Fundament + Material-Theming stehen** (App im Monorepo, Tokens, DataForge-artiges Material-Theme,
-Basis-Komponenten, Build+Tests grün).
+**WS3b weitgehend fertig**: App im Monorepo, DataForge-artiges Material-Theme, token-getriebene
+Overrides, self-hosted Fonts (CDN-frei), Basis-Komponenten — Build + Vitest grün. Rest = optische
+Sichtung pro Modul (Light/Dark durchklicken).
 
-Weiter in **WS3b — Apple-Feinschliff auf Material**: Component-Overrides ausbauen (Buttons/Dialoge/
-Form-Fields/Tabs runde Ecken, Token-Farben, Frosted-Glass) über alle Feature-Module, `.df-*`/`app-*`
-gezielt dort einsetzen, wo Material zu schwer ist. Danach optional self-hosted Fonts.
-
-Parallel möglich: **WS3** (Datenschicht Supabase→REST gegen das laufende Backend) und **WS4**
-(Docker/CI inkl. Redis).
+Empfohlen als nächster großer Strang: **WS3 — Frontend-Datenschicht Supabase → REST** gegen das
+laufende Django-Backend (`ApiService` statt `supabase.service.ts`, Cookie-Interceptor, `httpResource`
+für Lesezugriffe, Signal Forms, `apiUrl`-Environments, `proxy.conf.json`). Parallel **WS4** (Docker/CI
+inkl. Redis) möglich.
 
 ## 8. Referenz-Quellen (aus den Altprojekten)
 
@@ -233,3 +240,7 @@ Parallel möglich: **WS3** (Datenschicht Supabase→REST gegen das laufende Back
   Standalone-Komponenten `app-button`/`app-icon` (Angular-22-Signal-Inputs, Inline-SVG), 5 Vitest grün.
 - (WS3b, Regeländerung) **Material bleibt, DataForge-artig gethemt** statt raus: `define-theme`
   azure/green + System-Typo + Density -1. Build grün. Entscheidung #6 im Blueprint aktualisiert.
+- (WS3b/Isabel) **Apple-Feinschliff**: token-getriebene Material-Overrides (Buttons/Cards/Form-Fields/
+  Selects/Dialog/Snackbar/Toggle/Tabs) + **Fonts self-hosted** (DM Sans/Mono/Material-Icons WOFF2),
+  **CDN-Font-Links aus index.html entfernt** (Kein-CDN-Regel). Build grün, 5 Vitest grün, kein
+  externer Font/CDN-Ref mehr in `src/`.
