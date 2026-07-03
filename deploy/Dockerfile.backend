@@ -1,0 +1,36 @@
+# Deploy mode B — headless Django API (gunicorn). CORS allows the frontend origin.
+# Build context = repo root:  docker build -f deploy/Dockerfile.backend .
+# 3.13 is verified against our deps; bump to 3.14-slim once all wheels ship.
+FROM python:3.13-slim
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN groupadd --system appuser && \
+    useradd --system --gid appuser --create-home --home-dir /home/appuser appuser
+
+WORKDIR /app
+
+COPY backend/pyproject.toml ./
+RUN pip install --no-cache-dir .
+
+COPY backend/ ./
+
+ENV DJANGO_SETTINGS_MODULE=config.settings.prod
+ENV DJANGO_SECRET_KEY=build-time-only-not-used-at-runtime
+RUN DATABASE_URL=sqlite:///tmp/build.sqlite3 python manage.py collectstatic --noinput
+
+RUN mkdir -p /app/media && chown -R appuser:appuser /app
+
+COPY deploy/entrypoint.backend.sh /entrypoint.backend.sh
+RUN chmod +x /entrypoint.backend.sh
+
+ENV GUNICORN_WORKERS=3
+USER appuser
+
+EXPOSE 8000
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+ENTRYPOINT ["/entrypoint.backend.sh"]

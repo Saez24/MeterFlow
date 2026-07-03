@@ -77,7 +77,29 @@ Empfehlung: **Contract-First** — REST-Endpunkt-Liste zuerst fixieren, dann WS2
 
 ## 6. Aktueller Stand
 
-**WS3 (Datenschicht Supabase→REST) — fertig.** ✅ · **WS3b (Design)** 🟢 · **WS2 (Backend)** ✅ · **Contract-First** ✅ · **WS1** ✅
+**WS4 (Deploy) — Docker-Artefakte stehen.** 🟡 · **WS3 (Datenschicht)** ✅ · **WS3b (Design)** 🟢 · **WS2 (Backend)** ✅ · **Contract-First** ✅ · **WS1** ✅
+
+**WS4 — Deployment (Schritt 1: Docker/Compose):**
+- [x] **3 Dockerfiles** in `deploy/`: `Dockerfile.fullstack` (Angular-Build + Django/gunicorn + nginx +
+      supervisor, mode C), `Dockerfile.backend` (headless gunicorn, mode B), `Dockerfile.frontend`
+      (nginx + SPA, `/api`→externes Backend via `envsubst`, mode A). Non-root `appuser`, Healthchecks.
+- [x] **nginx**: `nginx.fullstack.conf` (CSP-Nonce via `sub_filter`, Rate-Limits auth/api, Security-
+      Header, `/api`+`/health`+`/admin`+`/django-static`+`/media`-Routing) + `nginx.frontend.conf.template`
+      (envsubst `${BACKEND_URL}`, `NGINX_ENVSUBST_FILTER` schützt nginx-Vars). `supervisord.conf`,
+      `entrypoint.sh` (sub_module-Guard → `manage.py migrate` → supervisord), `entrypoint.backend.sh`.
+- [x] **Compose**: `docker-compose.yml` (Postgres17 + Redis7 + backend + frontend, App :8080) +
+      `docker-compose.fullstack.yml` (Postgres + Redis + Single-Container). `.dockerignore`.
+- [x] **Backend deploy-ready**: `pyproject` `[build-system]` (setuptools, `py-modules=[]` → `pip install .`
+      zieht nur Deps) + `gunicorn`/`whitenoise`/`redis`; Settings: **Redis-Cache** (Rate-Limit, REDIS_URL),
+      whitenoise-Middleware + `CompressedManifestStaticFilesStorage`, `STATIC_URL=/django-static/`
+      (kein Clash mit SPA), `prod.py` SSL-Redirect/Secure-Cookie env-überschreibbar. check/collectstatic/
+      mypy/ruff/black/38 Tests grün.
+
+Noch offen in WS4 (Schritt 2):
+- [ ] **GitHub Actions** (`.github/workflows/`): `test-backend` (ruff/black/mypy/bandit/pip-audit/pytest),
+      `test-frontend` (vitest, npm audit), `build-and-push` (3 Images → GHCR, **Trivy**-Scan, SHA-gepinnte
+      Actions).
+- [ ] Docker-Build/`compose up` real testen (in dieser Umgebung kein Docker verfügbar).
 
 **WS3 — Frontend-Datenschicht Supabase → REST (Schritt A: Fundament):**
 - [x] **`ApiService`** (`core/services/api.service.ts`) — REST-Client gegen das Django-Backend,
@@ -210,13 +232,13 @@ Noch **nicht** gemacht (bewusst, für spätere Workstreams):
 
 ## 7. Nächster Schritt
 
-**WS3 komplett** — Supabase vollständig durch die REST-/Django-Datenschicht ersetzt, Build + 60 Vitest grün.
+**WS4 Schritt 1 (Docker/Compose) steht** — 3 Dockerfiles, nginx, supervisor, entrypoints, 2 Compose-
+Files, Backend deploy-ready (gunicorn/whitenoise/redis). In dieser Umgebung kein Docker → Builds nicht
+real getestet.
 
-Nächster großer Strang: **WS4 — Deployment & CI** (Niko): 3 Dockerfiles (frontend/backend/fullstack) +
-nginx-Configs (CSP `default-src 'self'` jetzt möglich, da CDN-frei), `docker-compose` (Postgres +
-**Redis** fürs Rate-Limiting) + GH-Actions (test-backend/-frontend, build-and-push, Trivy). Danach
-**WS5** Security-Gate (Elena). Optional vorab: lokaler End-to-End-Durchklick (docker compose up,
-Registrierung→Zähler→Ablesung+Foto→Dashboard).
+**WS4 Schritt 2**: **GitHub Actions** CI/CD (`test-backend`, `test-frontend`, `build-and-push` → 3 GHCR-
+Images + Trivy, Actions SHA-gepinnt). Danach **WS5** Security-Gate (Elena, OWASP/Cookie/CSP/Secrets/
+Trivy). Optional: `docker compose up` real durchklicken, sobald Docker verfügbar.
 
 ## 8. Referenz-Quellen (aus den Altprojekten)
 
@@ -271,3 +293,7 @@ Registrierung→Zähler→Ablesung+Foto→Dashboard).
 - (WS3/Kilian, Schritt B) **Supabase → REST vollzogen**: 11 Konsumenten umgestellt, Foto-Flow invertiert
   (`readingId`), CO₂-camelCase-Mapping, Loader-Fehler abgefangen, `supabase.service`+`@supabase/supabase-js`
   +Env-Felder entfernt, Component-Specs gemockt. **WS3 done — Build + 60 Vitest grün, keine Supabase/CDN-Refs.**
+- (WS4/Niko, Schritt 1) **Deployment-Artefakte**: 3 Dockerfiles (fullstack/backend/frontend) + nginx
+  (CSP-Nonce, Rate-Limits) + supervisor + entrypoints + 2 Compose-Files (Postgres/Redis) + `.dockerignore`.
+  Backend deploy-ready: gunicorn/whitenoise/redis, Redis-Cache, `pip install .`-fähig. check/mypy/lint/38
+  Tests grün. Docker in dieser Umgebung nicht verfügbar → Builds noch nicht real getestet. CI = Schritt 2.

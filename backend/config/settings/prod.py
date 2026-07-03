@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 
 from .base import *  # noqa: F403
+from .base import _env_bool
 
 DEBUG = False
 
@@ -15,7 +16,8 @@ if os.environ.get("DJANGO_SECRET_KEY") in {None, "", "insecure-dev-key-change-me
 
 # HTTPS is terminated by the reverse proxy; trust its forwarded scheme.
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-SECURE_SSL_REDIRECT = True
+# Hardened by default; may be disabled for a local plain-HTTP fullstack demo.
+SECURE_SSL_REDIRECT = _env_bool("SECURE_SSL_REDIRECT", default=True)
 SECURE_HSTS_SECONDS = 31_536_000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
@@ -30,5 +32,5 @@ CSRF_COOKIE_SECURE = True
 X_FRAME_OPTIONS = "DENY"
 
 # Auth cookies must be Secure behind the HTTPS proxy.
-AUTH_COOKIE_SECURE = True
+AUTH_COOKIE_SECURE = _env_bool("AUTH_COOKIE_SECURE", default=True)
 AUTH_COOKIE_SAMESITE = "Strict"

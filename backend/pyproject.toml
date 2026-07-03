@@ -1,3 +1,12 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+# The Django project is copied into the image and run via manage.py — it is not
+# packaged. `pip install .` then only resolves the runtime dependencies below.
+[tool.setuptools]
+py-modules = []
+
 [project]
 name = "meterflow-backend"
 version = "0.1.0"
@@ -15,6 +24,9 @@ dependencies = [
     "pydantic-settings",
     "pyjwt",
     "argon2-cffi",
+    "gunicorn",
+    "whitenoise",
+    "redis",
 ]
 
 [project.optional-dependencies]

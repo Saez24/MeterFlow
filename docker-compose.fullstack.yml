@@ -1,0 +1,54 @@
+# Deploy mode C — single-container app + Postgres + Redis.
+# App on http://localhost:8080.  `docker compose -f docker-compose.fullstack.yml up --build`
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-meterflow}
+      POSTGRES_USER: ${POSTGRES_USER:-meterflow}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-meterflow}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.fullstack
+    environment:
+      DJANGO_ENV: production
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-local-fullstack-secret-change-me-0123456789abcdef}
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      DATABASE_URL: postgres://${POSTGRES_USER:-meterflow}:${POSTGRES_PASSWORD:-changeme}@postgres:5432/${POSTGRES_DB:-meterflow}
+      REDIS_URL: redis://redis:6379/0
+      # Behind nginx on plain http locally → don't force Secure cookies/redirect.
+      AUTH_COOKIE_SECURE: "0"
+      SECURE_SSL_REDIRECT: "0"
+      STORAGE_BACKEND: local
+      LOCAL_STORAGE_PATH: /app/media
+      GUNICORN_WORKERS: "3"
+    volumes:
+      - media:/app/media
+    ports:
+      - "8080:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  media:

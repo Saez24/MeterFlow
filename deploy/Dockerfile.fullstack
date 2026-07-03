@@ -1,0 +1,54 @@
+# Deploy mode C — single container: nginx + supervisor + Django (gunicorn).
+# Build context = repo root:  docker build -f deploy/Dockerfile.fullstack .
+
+# ── Stage 1: Angular build ────────────────────────────────────────────────────
+FROM node:24-alpine AS frontend-builder
+WORKDIR /app
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci --prefer-offline --no-audit
+COPY frontend/ .
+# environment.ts already targets apiUrl '/api/v1' (same-origin) for production.
+RUN npm run build -- --configuration=production
+
+# ── Stage 2: Runtime ──────────────────────────────────────────────────────────
+# 3.13 is verified against our deps; bump to 3.14-slim once all wheels ship.
+FROM python:3.13-slim
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends nginx supervisor curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# Non-root runtime user for gunicorn.
+RUN groupadd --system appuser && \
+    useradd --system --gid appuser --create-home --home-dir /home/appuser appuser
+
+WORKDIR /app
+
+# Install Python dependencies from pyproject (no app packaging — py-modules=[]).
+COPY backend/pyproject.toml ./
+RUN pip install --no-cache-dir .
+
+# Django project source.
+COPY backend/ ./
+# Angular static output → nginx web root.
+COPY --from=frontend-builder /app/dist/MeterFlow/browser /usr/share/nginx/html
+
+# Collect Django admin static (served by WhiteNoise via gunicorn).
+ENV DJANGO_SETTINGS_MODULE=config.settings.prod
+ENV DJANGO_SECRET_KEY=build-time-only-not-used-at-runtime
+RUN DATABASE_URL=sqlite:///tmp/build.sqlite3 python manage.py collectstatic --noinput
+
+RUN mkdir -p /app/media && chown -R appuser:appuser /app
+
+ENV GUNICORN_WORKERS=3
+
+COPY deploy/nginx.fullstack.conf /etc/nginx/sites-available/default
+COPY deploy/supervisord.conf /etc/supervisor/conf.d/meterflow.conf
+COPY deploy/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 80
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+    CMD curl -f http://localhost/health || exit 1
+
+ENTRYPOINT ["/entrypoint.sh"]

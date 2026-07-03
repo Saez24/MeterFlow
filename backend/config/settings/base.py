@@ -57,6 +57,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    # WhiteNoise serves Django's own static files (admin) without nginx.
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -93,6 +95,19 @@ DATABASES = {
         conn_max_age=600,
     )
 }
+
+# ── Cache (rate limiting) ────────────────────────────────────────────────────
+# Redis in prod (shared across gunicorn workers), local-memory otherwise.
+_redis_url = _env("REDIS_URL")
+if _redis_url:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": _redis_url,
+        }
+    }
+else:
+    CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}}
 
 # ── Auth ─────────────────────────────────────────────────────────────────────
 AUTH_USER_MODEL = "accounts.User"
@@ -170,15 +185,18 @@ TIME_ZONE = "Europe/Berlin"
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = "static/"
+# Distinct prefix so Django admin static never collides with the Angular SPA
+# that nginx serves at the root in the fullstack image.
+STATIC_URL = "django-static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "media/"
 MEDIA_ROOT = Path(LOCAL_STORAGE_PATH)
 
 # Reading photos: local FS in dev, S3/MinIO in prod. S3 objects are private and
 # served via signed URLs (security-standards §4 — no public PII buckets).
+# WhiteNoise (compressed + hashed) serves the admin's own static assets.
 _STATICFILES_STORAGE = {
-    "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"
+    "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
 }
 if STORAGE_BACKEND in {"s3", "minio"}:
     STORAGES = {

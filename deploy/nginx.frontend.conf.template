@@ -1,0 +1,54 @@
+# Deploy mode A — SPA + reverse proxy to an external backend (${BACKEND_URL}).
+# Proxying keeps the browser same-origin, so auth cookies and CSP 'self' hold.
+server {
+    listen 80;
+    server_name localhost;
+    server_tokens off;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    client_max_body_size 11m;
+
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_comp_level 5;
+    gzip_types text/html text/css text/plain application/javascript application/json
+        application/xml image/svg+xml font/woff2 application/wasm;
+
+    add_header X-Frame-Options "DENY" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'nonce-$request_id'; style-src 'self' 'nonce-$request_id'; worker-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'" always;
+
+    location /api/ {
+        proxy_pass ${BACKEND_URL};
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass_header Set-Cookie;
+        proxy_connect_timeout 10s;
+        proxy_read_timeout 30s;
+    }
+
+    location /health {
+        proxy_pass ${BACKEND_URL}/health;
+        proxy_read_timeout 5s;
+    }
+
+    location / {
+        sub_filter '__CSP_NONCE__' '$request_id';
+        sub_filter_once off;
+        try_files $uri $uri/ /index.html;
+    }
+
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff2?)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-Frame-Options "DENY" always;
+    }
+}

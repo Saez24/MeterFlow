@@ -1,0 +1,27 @@
+# Deploy mode A — frontend only: nginx serves the SPA and proxies /api → an
+# external backend (BACKEND_URL, substituted at container start).
+# Build context = repo root:  docker build -f deploy/Dockerfile.frontend .
+
+# ── Stage 1: Angular build ────────────────────────────────────────────────────
+FROM node:24-alpine AS frontend-builder
+WORKDIR /app
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci --prefer-offline --no-audit
+COPY frontend/ .
+RUN npm run build -- --configuration=production
+
+# ── Stage 2: nginx ────────────────────────────────────────────────────────────
+FROM nginx:1-alpine
+RUN nginx -V 2>&1 | grep -q http_sub_module || (echo "nginx lacks sub_module" && exit 1)
+
+COPY --from=frontend-builder /app/dist/MeterFlow/browser /usr/share/nginx/html
+COPY deploy/nginx.frontend.conf.template /etc/nginx/templates/default.conf.template
+
+# The nginx image renders templates via envsubst at start. Restrict it to
+# BACKEND_URL so nginx runtime vars ($request_id, $host, …) are left intact.
+ENV NGINX_ENVSUBST_FILTER=BACKEND_URL
+ENV BACKEND_URL=http://backend:8000
+
+EXPOSE 80
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+    CMD wget -qO- http://localhost/ >/dev/null 2>&1 || exit 1
