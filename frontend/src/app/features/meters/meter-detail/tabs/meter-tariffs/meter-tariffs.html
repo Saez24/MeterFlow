@@ -1,0 +1,8 @@
+@if (meter(); as m) {
+  <app-tariff-history
+    [meter]="m"
+    (addTariff)="openTariffDialog()"
+    (editTariff)="openTariffDialog($event)"
+    (deleteTariff)="deleteTariff($event.id)">
+  </app-tariff-history>
+}

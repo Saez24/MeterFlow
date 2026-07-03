@@ -1,0 +1,2163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="nav.dashboard" datatype="html">
+        <source>Dashboard</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.ts</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="nav.meters" datatype="html">
+        <source>Zähler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="nav.readings" datatype="html">
+        <source>Ablesungen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="nav.reports" datatype="html">
+        <source>Auswertungen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="nav.settings" datatype="html">
+        <source>Einstellungen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.ts</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="connection.connected" datatype="html">
+        <source>Verbunden</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.ts</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="connection.error" datatype="html">
+        <source>Keine Verbindung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.ts</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="connection.checking" datatype="html">
+        <source>Verbinde...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.ts</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.title.login" datatype="html">
+        <source>Willkommen zurück</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">16,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.title.register" datatype="html">
+        <source>Konto erstellen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">18,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.subtitle.login" datatype="html">
+        <source>Melde dich an um deine Zähler zu verwalten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">23,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.subtitle.register" datatype="html">
+        <source>Erstelle ein kostenloses Konto</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">25,27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.field.email" datatype="html">
+        <source>E-Mail</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">34,35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.placeholder.email" datatype="html">
+        <source>deine@email.de</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">35,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.error.email" datatype="html">
+        <source>Gültige E-Mail erforderlich</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">38,39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.field.password" datatype="html">
+        <source>Passwort</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">42,43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.placeholder.password" datatype="html">
+        <source>Mindestens 6 Zeichen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">44,45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.error.password" datatype="html">
+        <source>Mindestens 6 Zeichen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">51,52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.field.confirmPassword" datatype="html">
+        <source>Passwort bestätigen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">56,57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.placeholder.confirmPassword" datatype="html">
+        <source>Passwort wiederholen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">58,59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.error.confirmPassword" datatype="html">
+        <source>Passwörter stimmen nicht überein</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">61,62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.loading" datatype="html">
+        <source>Bitte warten...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">76,77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.submit.login" datatype="html">
+        <source>Anmelden</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">81,82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.submit.register" datatype="html">
+        <source>Registrieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">83,85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.switch.toRegister" datatype="html">
+        <source>Noch kein Konto?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">93,95</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.switch.toLogin" datatype="html">
+        <source>Bereits registriert?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">95,97</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.switch.registerBtn" datatype="html">
+        <source>Jetzt registrieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">99,101</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.switch.loginBtn" datatype="html">
+        <source>Anmelden</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.html</context>
+          <context context-type="linenumber">101,103</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.error.passwordMismatch" datatype="html">
+        <source>Passwörter stimmen nicht überein</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.accountCreated" datatype="html">
+        <source>Konto erstellt! Bitte bestätige deine E-Mail.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.ts</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.error.invalidCredentials" datatype="html">
+        <source>E-Mail oder Passwort falsch</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.ts</context>
+          <context context-type="linenumber">85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.error.emailNotConfirmed" datatype="html">
+        <source>Bitte bestätige zuerst deine E-Mail</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.ts</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.error.alreadyRegistered" datatype="html">
+        <source>Diese E-Mail ist bereits registriert</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.ts</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.error.passwordTooShort" datatype="html">
+        <source>Passwort muss mindestens 6 Zeichen haben</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.ts</context>
+          <context context-type="linenumber">88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.error.generic" datatype="html">
+        <source>Ein Fehler ist aufgetreten. Bitte versuche es erneut.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/auth/auth.ts</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.subtitle" datatype="html">
+        <source>Übersicht deiner Verbrauchsdaten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">5,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.budgetAlerts.aria" datatype="html">
+        <source>Budget-Warnungen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.budgetAlerts.monthlyCost" datatype="html">
+        <source> – Monatslimit</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.budgetAlerts.yearlyCost" datatype="html">
+        <source> – Jahreslimit</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.budgetAlerts.consumption" datatype="html">
+        <source> – Verbrauchslimit</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.budgetAlerts.of" datatype="html">
+        <source> von </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.budget.exceeded" datatype="html">
+        <source>Budget überschritten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.budget.warning" datatype="html">
+        <source>Budget-Warnung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.totalCosts" datatype="html">
+        <source>Gesamtkosten <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">16,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.activeMeters" datatype="html">
+        <source>Aktive Zähler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">27,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.yourMeters" datatype="html">
+        <source>Deine Zähler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">41,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.manageAll" datatype="html">
+        <source>Alle verwalten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.empty.title" datatype="html">
+        <source>Noch keine Zähler angelegt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">50,51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.empty.desc" datatype="html">
+        <source>Füge deinen ersten Zähler hinzu, um zu beginnen.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">51,52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.addMeter" datatype="html">
+        <source>Zähler hinzufügen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">53,55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.consumption" datatype="html">
+        <source>Verbrauch <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">84,86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.currentCosts" datatype="html">
+        <source>Aktuelle Kosten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">89,90</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.noData" datatype="html">
+        <source>Keine Daten für <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">97,98</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.recentReadings" datatype="html">
+        <source>Letzte Ablesungen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">113,114</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.showAll" datatype="html">
+        <source>Alle anzeigen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">115</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterReadings.empty" datatype="html">
+        <source>Noch keine Ablesungen vorhanden</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-detail/tabs/meter-readings/meter-readings.html</context>
+          <context context-type="linenumber">5,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterReadings.current" datatype="html">
+        <source>Aktuell</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-detail/tabs/meter-readings/meter-readings.html</context>
+          <context context-type="linenumber">24,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterReadings.photo.close" datatype="html">
+        <source>Foto schließen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-detail/tabs/meter-readings/meter-readings.html</context>
+          <context context-type="linenumber">90,91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterReadings.photo.alt" datatype="html">
+        <source>Zählerfoto</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-detail/tabs/meter-readings/meter-readings.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterReadings.photo.altDynamic" datatype="html">
+        <source><x id="meterName" equiv-text="meter.name"/> – Ablesung vom <x id="date" equiv-text="dateStr"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-detail/tabs/meter-readings/meter-readings.ts</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterReadings.delete.title" datatype="html">
+        <source>Ablesung löschen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-detail/tabs/meter-readings/meter-readings.ts</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterReadings.delete.message" datatype="html">
+        <source>Ablesung wirklich löschen?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-detail/tabs/meter-readings/meter-readings.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterReadings.delete.confirm" datatype="html">
+        <source>Löschen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-detail/tabs/meter-readings/meter-readings.ts</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterReadings.deleted" datatype="html">
+        <source>Ablesung gelöscht</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-detail/tabs/meter-readings/meter-readings.ts</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tariff.delete.title" datatype="html">
+        <source>Tarif-Periode löschen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-detail/tabs/meter-tariffs/meter-tariffs.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tariff.delete.message" datatype="html">
+        <source>Tarif-Periode löschen?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-detail/tabs/meter-tariffs/meter-tariffs.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tariff.delete.confirm" datatype="html">
+        <source>Löschen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-detail/tabs/meter-tariffs/meter-tariffs.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tariff.deleted" datatype="html">
+        <source>Tarif gelöscht</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-detail/tabs/meter-tariffs/meter-tariffs.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.title.edit" datatype="html">
+        <source>Zähler bearbeiten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">9,11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.title.new" datatype="html">
+        <source>Neuer Zähler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">11,14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.subtitle.edit" datatype="html">
+        <source>Konfiguration anpassen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">16,18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.subtitle.new" datatype="html">
+        <source>Füge einen neuen Zähler hinzu</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">18,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.type.title" datatype="html">
+        <source>Zählertyp</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">27,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.field.name" datatype="html">
+        <source>Name des Zählers</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">40,41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.placeholder.name" datatype="html">
+        <source>z.B. Haushaltsstrom</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">41,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.error.name" datatype="html">
+        <source>Bitte einen Namen eingeben</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">44,45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.field.provider" datatype="html">
+        <source>Anbieter</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">47,48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.placeholder.provider" datatype="html">
+        <source>z.B. Stadtwerke</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">48,49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.field.meterNumber" datatype="html">
+        <source>Zählernummer</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">55,56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.placeholder.meterNumber" datatype="html">
+        <source>z.B. 12345678</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">56,57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.garden.title" datatype="html">
+        <source>Verknüpfung mit Hauptwasserzähler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">69,72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.garden.desc" datatype="html">
+        <source> Wenn dieser Gartenwasserzähler mit einem Hauptwasserzähler verknüpft ist, wird der Gartenwasserverbrauch automatisch vom Abwasser des Hauptzählers abgezogen. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">73,77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.garden.mainMeter" datatype="html">
+        <source>Hauptwasserzähler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">79,80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.garden.noLink" datatype="html">
+        <source>Keine Verknüpfung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">81,82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.garden.hint" datatype="html">
+        <source>Abwasser wird automatisch berechnet</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">87,89</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.garden.linked" datatype="html">
+        <source>Gartenwasserverbrauch wird vom Abwasser des Hauptzählers abgezogen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">93,96</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.garden.noWaterMeter" datatype="html">
+        <source>Noch kein Wasserzähler angelegt. Füge zuerst einen Wasserzähler hinzu.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">99,103</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.gas.title" datatype="html">
+        <source>Gas-Parameter</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">113,115</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.gas.hint" datatype="html">
+        <source>Zur Umrechnung von m³ in kWh</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">115,118</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.gas.calorificValue" datatype="html">
+        <source>Brennwert (Hs)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">120,121</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.gas.calorificHint" datatype="html">
+        <source>Steht auf deiner Gasrechnung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">123,125</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.gas.zNumber" datatype="html">
+        <source>Z-Zahl (Zustandszahl)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">126,127</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.gas.zNumberHint" datatype="html">
+        <source>Üblicherweise 0.90–1.10</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">128,130</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.gas.formula.label" datatype="html">
+        <source>Formel:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">134,135</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.fernwarme.title" datatype="html">
+        <source>Fernwärme-Parameter</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">150</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.fernwarme.hint" datatype="html">
+        <source>Anschlussleistung laut Versorgungsvertrag</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">151</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.fernwarme.connectedLoad" datatype="html">
+        <source>Bereitstellungsleistung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">155</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.fernwarme.connectedLoadPlaceholder" datatype="html">
+        <source>7.99</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">156</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.fernwarme.connectedLoadHint" datatype="html">
+        <source>Festgeschriebene Leistung je Zähler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">157</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.notes.title" datatype="html">
+        <source>Notizen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">144,145</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.notes.label" datatype="html">
+        <source>Optionale Notizen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">146,147</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.cancel" datatype="html">
+        <source>Abbrechen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">153,154</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.save" datatype="html">
+        <source>Speichern</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">157,159</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.create" datatype="html">
+        <source>Zähler anlegen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.html</context>
+          <context context-type="linenumber">159,161</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.invalidType" datatype="html">
+        <source>Ungültiger Zählertyp</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.ts</context>
+          <context context-type="linenumber">149</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.saved" datatype="html">
+        <source>Zähler gespeichert</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.ts</context>
+          <context context-type="linenumber">175</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meterForm.created" datatype="html">
+        <source>Zähler angelegt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meter-form/meter-form.ts</context>
+          <context context-type="linenumber">178</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meters.title" datatype="html">
+        <source>Zähler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meters.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meters.subtitle" datatype="html">
+        <source>Verwalte deine Energie- und Wasserzähler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meters.html</context>
+          <context context-type="linenumber">5,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meters.newMeter" datatype="html">
+        <source>Neuer Zähler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meters.html</context>
+          <context context-type="linenumber">9,11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meters.empty.title" datatype="html">
+        <source>Noch keine Zähler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meters.html</context>
+          <context context-type="linenumber">18,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meters.empty.desc" datatype="html">
+        <source>Füge deinen ersten Zähler hinzu, um Ablesungen zu erfassen.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meters.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meters.empty.btn" datatype="html">
+        <source>Ersten Zähler hinzufügen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meters.html</context>
+          <context context-type="linenumber">20,22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meters.readingCount" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ readingCount(meter.id) }}"/> Ablesungen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meters.html</context>
+          <context context-type="linenumber">73,74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meters.noReadings" datatype="html">
+        <source>Keine Ablesungen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meters.html</context>
+          <context context-type="linenumber">75,79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meters.menu.details" datatype="html">
+        <source>Details &amp; Verlauf</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meters.html</context>
+          <context context-type="linenumber">90,92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meters.menu.edit" datatype="html">
+        <source>Bearbeiten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meters.html</context>
+          <context context-type="linenumber">94,96</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meters.menu.addReading" datatype="html">
+        <source>Ablesung hinzufügen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meters.html</context>
+          <context context-type="linenumber">98,100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meters.menu.delete" datatype="html">
+        <source>Löschen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meters.html</context>
+          <context context-type="linenumber">103,105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meters.delete.title" datatype="html">
+        <source>Zähler löschen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meters.ts</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meters.delete.message" datatype="html">
+        <source>Zähler &quot;<x id="PH" equiv-text="meter.name"/>&quot; wirklich löschen? Alle Ablesungen werden ebenfalls gelöscht.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meters.ts</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meters.delete.confirm" datatype="html">
+        <source>Löschen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meters.ts</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="meters.deleted" datatype="html">
+        <source>Zähler gelöscht</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/meters/meters.ts</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.title.edit" datatype="html">
+        <source>Ablesung bearbeiten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">10,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.title.new" datatype="html">
+        <source>Ablesung erfassen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">12,15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.subtitle.edit" datatype="html">
+        <source>Zählerstand korrigieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">17,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.subtitle.new" datatype="html">
+        <source>Aktuellen Zählerstand eintragen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">19,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.selectMeter" datatype="html">
+        <source>Zähler wählen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">29,30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.readingValue" datatype="html">
+        <source>Zählerstand</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">56,58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.previousReading" datatype="html">
+        <source> Vorheriger Stand: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ lr.value | number: &apos;1.0-3&apos; }}"/> <x id="INTERPOLATION_1" equiv-text="{{ meter.unit }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> am <x id="INTERPOLATION_2" equiv-text="{{ lr.date | date: &apos;dd.MM.yyyy&apos; }}"/> </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">66,69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.firstReading" datatype="html">
+        <source>Erste Ablesung für diesen Zeitraum</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">70,73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.field.value" datatype="html">
+        <source>Zählerstand</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">77,78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.field.date" datatype="html">
+        <source>Datum</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">85,86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.preview.consumption" datatype="html">
+        <source>Verbrauch</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">96,97</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.preview.kwh" datatype="html">
+        <source>Kilowattstunden</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">101,102</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.preview.cost" datatype="html">
+        <source>Kosten (ca.)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">106,107</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.gasInfo" datatype="html">
+        <source> Brennwert: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ meter.calorificValue }}"/> kWh/m³<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> · Z-Zahl: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ meter.zNumber }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">119,122</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.note.title" datatype="html">
+        <source>Notiz (optional)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">130,131</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.note.label" datatype="html">
+        <source>Anmerkung zur Ablesung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">132,133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.note.placeholder" datatype="html">
+        <source>z.B. Zähler abgelesen nach Urlaub...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">133,134</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.photo.title" datatype="html">
+        <source>Foto (optional)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">142,144</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.photo.existingAlt" datatype="html">
+        <source>Bestehendes Zählerfoto</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">147,148</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.photo.remove" datatype="html">
+        <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>delete_outline<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Foto entfernen </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">151,153</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.photo.previewAlt" datatype="html">
+        <source>Vorschau</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">157,158</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.photo.clear" datatype="html">
+        <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>close<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Auswahl aufheben </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">161,163</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.photo.inputLabel" datatype="html">
+        <source>Foto hochladen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">168,169</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.photo.upload" datatype="html">
+        <source>Foto hinzufügen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">171,175</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.photo.uploading" datatype="html">
+        <source>Foto wird hochgeladen…</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">176,181</context>
+        </context-group>
+      </trans-unit>
+      <!-- OCR -->
+      <trans-unit id="readingsForm.ocr.btnAria" datatype="html">
+        <source>Zählerstand aus Foto erkennen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.ocr.btn" datatype="html">
+        <source>Zählerstand erkennen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.ocr.detected" datatype="html">
+        <source>Erkannter Wert</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.ocr.confidence" datatype="html">
+        <source>Konfidenz</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.ocr.apply" datatype="html">
+        <source>Übernehmen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.ocr.dismiss" datatype="html">
+        <source>Ergebnis verwerfen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.ocr.noValue" datatype="html">
+        <source>Kein Zählerstand erkannt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.ocr.noValueHint" datatype="html">
+        <source>Bitte Wert manuell eingeben</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.ocr.error" datatype="html">
+        <source>Texterkennung fehlgeschlagen – bitte Wert manuell eingeben</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.cancel" datatype="html">
+        <source>Abbrechen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">183,184</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.save" datatype="html">
+        <source>Ablesung speichern</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.html</context>
+          <context context-type="linenumber">186,188</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.invalidValue" datatype="html">
+        <source>Ungültiger Wert für Zählerstand.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.ts</context>
+          <context context-type="linenumber">279</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.saved" datatype="html">
+        <source>Ablesung gespeichert</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.ts</context>
+          <context context-type="linenumber">330</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readingsForm.saveError" datatype="html">
+        <source>Fehler beim Speichern der Ablesung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings-form/readings-form.ts</context>
+          <context context-type="linenumber">334</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readings.title" datatype="html">
+        <source>Ablesungen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readings.subtitle" datatype="html">
+        <source>Alle erfassten Zählerstände</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings.html</context>
+          <context context-type="linenumber">5,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readings.addBtn" datatype="html">
+        <source>Ablesung erfassen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings.html</context>
+          <context context-type="linenumber">9,11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readings.filter.label" datatype="html">
+        <source>Zähler filtern</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings.html</context>
+          <context context-type="linenumber">16,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readings.filter.all" datatype="html">
+        <source>Alle Zähler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings.html</context>
+          <context context-type="linenumber">18,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readings.empty.title" datatype="html">
+        <source>Keine Ablesungen gefunden</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings.html</context>
+          <context context-type="linenumber">29,30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readings.empty.desc" datatype="html">
+        <source>Füge deine erste Ablesung hinzu.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readings.empty.btn" datatype="html">
+        <source>Ablesung erfassen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings.html</context>
+          <context context-type="linenumber">32,35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readings.delete.title" datatype="html">
+        <source>Ablesung löschen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readings.delete.message" datatype="html">
+        <source>Ablesung wirklich löschen?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings.ts</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readings.delete.confirm" datatype="html">
+        <source>Löschen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings.ts</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="readings.deleted" datatype="html">
+        <source>Ablesung gelöscht</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/readings/readings.ts</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.title" datatype="html">
+        <source>Auswertungen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.subtitle" datatype="html">
+        <source>Monats- und Jahresübersichten deiner Verbräuche</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">5,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.yearLabel" datatype="html">
+        <source>Jahr</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">8,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.totalCosts" datatype="html">
+        <source>Gesamtkosten <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">23,24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.monthlyCosts" datatype="html">
+        <source>Monatliche Kosten <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">56,57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.monthlyConsumption" datatype="html">
+        <source>Monatlicher Verbrauch</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">74,76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.waterBilling" datatype="html">
+        <source>Wasserabrechnung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">95,96</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.waterBillingDesc" datatype="html">
+        <source> Abwasserkosten werden automatisch um den Gartenwasserverbrauch reduziert. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">98,100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.water.month" datatype="html">
+        <source>Monat</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">102,103</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.water.totalM3" datatype="html">
+        <source>Gesamt m³</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">103,104</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.water.gardenM3" datatype="html">
+        <source>Garten m³</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">104,105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.water.billable" datatype="html">
+        <source>Abw.-pflichtig</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">105,106</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.water.freshwater" datatype="html">
+        <source>Frischwasser</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">106,107</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.water.wastewater" datatype="html">
+        <source>Abwasser</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">107,108</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.water.baseCharge" datatype="html">
+        <source>Grundgebühr</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">108,109</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.water.total" datatype="html">
+        <source>Gesamt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">109,111</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.water.yearTotal" datatype="html">
+        <source>Jahresgesamt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">134,135</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.yearlyComparison" datatype="html">
+        <source>Jahresvergleich Gesamtkosten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">156,157</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.title" datatype="html">
+        <source>Einstellungen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.subtitle" datatype="html">
+        <source>App-Konfiguration und Datenverwaltung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">4,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.appearance" datatype="html">
+        <source>Erscheinungsbild</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">9,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.theme.light" datatype="html">
+        <source>Hell</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">13,15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.theme.dark" datatype="html">
+        <source>Dunkel</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">17,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.theme.system" datatype="html">
+        <source>System</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">21,24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.dataManagement" datatype="html">
+        <source>Datenverwaltung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">28,30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.export.title" datatype="html">
+        <source>Daten exportieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">32,33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.export.desc" datatype="html">
+        <source>Alle Zähler und Ablesungen als JSON-Datei exportieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">33,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.exportBtn" datatype="html">
+        <source>Exportieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">38,40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.import.title" datatype="html">
+        <source>Daten importieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">44,45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.import.desc" datatype="html">
+        <source>Zuvor exportierte Daten wiederherstellen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">45,47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.importBtn" datatype="html">
+        <source>Importieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">50,52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.delete.title" datatype="html">
+        <source>Alle Daten löschen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">56,57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.delete.desc" datatype="html">
+        <source>Alle Zähler und Ablesungen unwiderruflich löschen </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">57,60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.deleteBtn" datatype="html">
+        <source>Löschen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">62,64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.stats" datatype="html">
+        <source>Statistiken</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">70,71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.stats.meters" datatype="html">
+        <source>Zähler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">74,76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.stats.readings" datatype="html">
+        <source>Ablesungen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">78,81</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.about.desc" datatype="html">
+        <source>Dein persönlicher Energie- und Verbrauchsrechner</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">89,90</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.version" datatype="html">
+        <source>Version 1.0</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">90,93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.logout" datatype="html">
+        <source>Abmelden</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">95,97</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.exported" datatype="html">
+        <source>Daten exportiert</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.imported" datatype="html">
+        <source>Daten importiert</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.ts</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.importError" datatype="html">
+        <source>Fehler beim Import</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.deleteAll.title" datatype="html">
+        <source>Alle Daten löschen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.ts</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.deleteAll.message" datatype="html">
+        <source>Alle Daten wirklich löschen? Diese Aktion kann nicht rükgängig gemacht werden!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.ts</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.deleteAll.confirm" datatype="html">
+        <source>Alles löschen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.ts</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.deleteAll.error" datatype="html">
+        <source>Fehler beim Löschen der Daten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.ts</context>
+          <context context-type="linenumber">163</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tariffForm.updated" datatype="html">
+        <source>Tarif aktualisiert</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/tariff-form/tariff-form.ts</context>
+          <context context-type="linenumber">136</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="tariffForm.added" datatype="html">
+        <source>Neuer Tarif hinzugefügt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/tariff-form/tariff-form.ts</context>
+          <context context-type="linenumber">139</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.notifications.title" datatype="html">
+        <source>Benachrichtigungen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.notifications.reminder.title" datatype="html">
+        <source>Monatliche Ableseerinnerung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.notifications.blocked" datatype="html">
+        <source>Benachrichtigungen sind im Browser blockiert.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.notifications.active" datatype="html">
+        <source>Aktiv – du wirst monatlich erinnert.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.notifications.reminder.desc" datatype="html">
+        <source>Erhalte monatlich eine Erinnerung, deinen Zählerstand einzutragen.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.notifications.toggle.aria" datatype="html">
+        <source>Ableseerinnerung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.notifications.test.title" datatype="html">
+        <source>Test-Benachrichtigung</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.notifications.test.desc" datatype="html">
+        <source>Sendet sofort eine Beispiel-Erinnerung.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.notifications.testBtn" datatype="html">
+        <source>Testen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="notification.reminder.title" datatype="html">
+        <source>MeterFlow – Zähler ablesen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/notification.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="notification.reminder.body" datatype="html">
+        <source>Zeit für deinen monatlichen Zählerstand! Jetzt Werte erfassen.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/notification.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.totalCo2" datatype="html">
+        <source>CO₂ <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.co2" datatype="html">
+        <source>CO₂</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.totalCo2" datatype="html">
+        <source>CO₂-Emissionen <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.co2Note" datatype="html">
+        <source>Basis: DE-Emissionsfaktoren (UBA 2024)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.pdfBtn" datatype="html">
+        <source>PDF exportieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reports.pdfBtn.aria" datatype="html">
+        <source>PDF exportieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/reports/reports.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pdf.subtitle" datatype="html">
+        <source>Jahresabrechnung <x id="year" equiv-text="year"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/pdf-export.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pdf.generatedOn" datatype="html">
+        <source>Erstellt am <x id="date" equiv-text="date"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/pdf-export.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pdf.overview" datatype="html">
+        <source>Übersicht <x id="year" equiv-text="year"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/pdf-export.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pdf.totalCostLabel" datatype="html">
+        <source>Gesamtkosten: </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/pdf-export.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pdf.totalCo2Label" datatype="html">
+        <source>Gesamtemissionen: </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/pdf-export.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pdf.meterTable" datatype="html">
+        <source>Zähler-Übersicht</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/pdf-export.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pdf.col.meter" datatype="html">
+        <source>Zähler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/pdf-export.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pdf.col.type" datatype="html">
+        <source>Typ</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/pdf-export.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pdf.col.consumption" datatype="html">
+        <source>Verbrauch</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/pdf-export.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pdf.col.unit" datatype="html">
+        <source>Einheit</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/pdf-export.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pdf.col.cost" datatype="html">
+        <source>Kosten (€)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/pdf-export.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pdf.col.co2" datatype="html">
+        <source>CO₂ (kg)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/pdf-export.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="pdf.col.month" datatype="html">
+        <source>Monat</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/pdf-export.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <!-- Jahresvergleich Dashboard -->
+      <trans-unit id="dashboard.yoy.cheaper" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ yoy.percent | number: '1.0-1' }}"/>% ggü. <x id="INTERPOLATION_1" equiv-text="{{ yoy.prevYear }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.yoy.costlier" datatype="html">
+        <source>+<x id="INTERPOLATION" equiv-text="{{ yoy.percent | number: '1.0-1' }}"/>% ggü. <x id="INTERPOLATION_1" equiv-text="{{ yoy.prevYear }}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/dashboard/dashboard.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <!-- CSV-Import Settings -->
+      <trans-unit id="settings.csvImport.title" datatype="html">
+        <source>CSV-Ablesungen importieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.csvImport.desc" datatype="html">
+        <source>Zählerstände aus einer CSV-Datei einlesen (Datum, Wert, Notiz)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.csvImportBtn" datatype="html">
+        <source>CSV importieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <!-- CSV-Import Dialog -->
+      <trans-unit id="csv.dialog.title" datatype="html">
+        <source>CSV-Ablesungen importieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.format.hint" datatype="html">
+        <source>Erwartetes Format: <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>datum,wert,notiz<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> – Datum als JJJJ-MM-TT oder TT.MM.JJJJ</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.dropzone.aria" datatype="html">
+        <source>CSV-Datei hier ablegen oder auswählen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.dropzone.hint" datatype="html">
+        <source>CSV hier ablegen oder</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.dropzone.select" datatype="html">
+        <source>Datei auswählen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.dropzone.change" datatype="html">
+        <source>Andere Datei</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.rows.total" datatype="html">
+        <source> Zeilen gelesen –</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.rows.errors" datatype="html">
+        <source> Fehler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.meter.label" datatype="html">
+        <source>Zähler auswählen:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.table.aria" datatype="html">
+        <source>Vorschau</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.col.line" datatype="html">
+        <source>#</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.col.date" datatype="html">
+        <source>Datum</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.col.value" datatype="html">
+        <source>Wert</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.col.note" datatype="html">
+        <source>Notiz</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.col.status" datatype="html">
+        <source>Status</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.status.error" datatype="html">
+        <source>Fehler</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.status.duplicate" datatype="html">
+        <source>Duplikat</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.status.ok" datatype="html">
+        <source>OK</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.cancel" datatype="html">
+        <source>Abbrechen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.importBtn" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ importableCount() }}"/> Ablesungen importieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <!-- CSV TS Strings -->
+      <trans-unit id="csv.error.date" datatype="html">
+        <source>Ungültiges Datum „<x id="date" equiv-text="${rawDatum}"/>"</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/csv-import.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.error.value" datatype="html">
+        <source>Ungültiger Wert „<x id="value" equiv-text="${rawWert}"/>"</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/csv-import.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.error.negative" datatype="html">
+        <source>Wert darf nicht negativ sein</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/services/csv-import.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.parseError" datatype="html">
+        <source>CSV-Datei konnte nicht gelesen werden</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.importSuccess" datatype="html">
+        <source><x id="count" equiv-text="${count}"/> Ablesungen importiert</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="csv.importError" datatype="html">
+        <source>Fehler beim Import</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/components/csv-import-dialog/csv-import-dialog.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <!-- PWA Install -->
+      <trans-unit id="settings.pwa.title" datatype="html">
+        <source>App installieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.pwa.doneTitle" datatype="html">
+        <source>Bereits installiert</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.pwa.doneDesc" datatype="html">
+        <source>MeterFlow läuft als eigenständige App auf deinem Gerät.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.pwa.installTitle" datatype="html">
+        <source>Zum Home-Bildschirm hinzufügen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.pwa.installDesc" datatype="html">
+        <source>Installiere MeterFlow als App – ohne App Store, direkt aus dem Browser.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.pwa.installBtn" datatype="html">
+        <source>Installieren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.pwa.iosTitle" datatype="html">
+        <source>iOS: Zum Home-Bildschirm</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.pwa.iosDesc" datatype="html">
+        <source>Tippe auf das Teilen-Symbol ↑ in Safari und wähle „Zum Home-Bildschirm".</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.pwa.installed" datatype="html">
+        <source>App wurde installiert</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <!-- CO₂-Emissionsfaktoren Settings -->
+      <trans-unit id="settings.co2Factors.title" datatype="html">
+        <source>CO₂-Emissionsfaktoren</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.desc" datatype="html">
+        <source>Faktoren für die CO₂-Berechnung pro Energietyp. Standardwerte stammen vom Umweltbundesamt (UBA) 2024. Du kannst sie jährlich aktualisieren und die Quelle verlinken.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.default" datatype="html">
+        <source>Standard (UBA)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.editAria" datatype="html">
+        <source>CO₂-Faktor bearbeiten</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.factor" datatype="html">
+        <source>Faktor (kg CO₂/<x id="INTERPOLATION" equiv-text="{{ entry.unit }}"/>)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.factorHint" datatype="html">
+        <source>Negative Werte = Gutschrift (Solar)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.source" datatype="html">
+        <source>Quelle</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.sourceUrl" datatype="html">
+        <source>Link zur Quelle (optional)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.sourceUrlHint" datatype="html">
+        <source>z.B. UBA-Emissionsfaktoren, AGFW-Statistik</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.cancel" datatype="html">
+        <source>Abbrechen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.save" datatype="html">
+        <source>Speichern</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.reset" datatype="html">
+        <source>Auf UBA-Standard zurücksetzen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.saved" datatype="html">
+        <source>CO₂-Faktor gespeichert</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.reset.done" datatype="html">
+        <source>Standardwert wiederhergestellt</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/features/settings/settings.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

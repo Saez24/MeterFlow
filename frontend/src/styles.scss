@@ -1,0 +1,272 @@
+/* ═══════════════════════════════════════════════════════ */
+/* Global Styles based on Apple Design Principles          */
+/* ═══════════════════════════════════════════════════════ */
+
+// 1. Core Imports
+@use '@angular/material' as mat;
+
+// Canonical Apple-style design tokens + Material-free base components (.df-*).
+// These are the foundation of the design-system migration (Material is being
+// removed module by module; tokens/components below coexist during that work).
+@use './styles/design-tokens';
+@use './styles/ui-components';
+
+// 2. CSS Reset
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// 3. Theme & Color Variables
+:root {
+  // Neutral Palette (Shared)
+  --apple-blue: #0071e3;
+  --apple-blue-rgb: 0, 113, 227;
+
+  // Light Mode Palette
+  --bg-light: #f5f5f7;
+  --bg-light-rgb: 245, 245, 247;
+  --surface-light: #ffffff;
+  --surface-light-rgb: 255, 255, 255;
+  --text-primary-light: #1d1d1f;
+  --text-secondary-light: #6e6e73;
+  --border-light: #d2d2d7;
+  --hover-bg-light: rgba(0, 0, 0, 0.05);
+
+  // Dark Mode Palette
+  --bg-dark: #000000;
+  --bg-dark-rgb: 0, 0, 0;
+  --surface-dark: #1c1c1e;
+  --surface-dark-rgb: 28, 28, 30;
+  --text-primary-dark: #f5f5f7;
+  --text-secondary-dark: #86868b;
+  --border-dark: #3a3a3c;
+  --hover-bg-dark: rgba(255, 255, 255, 0.1);
+}
+
+// 4. Apply Light Theme (default)
+body {
+  --bg: var(--bg-light);
+  --bg-rgb: var(--bg-light-rgb);
+  --bg-surface: var(--surface-light);
+  --bg-surface-rgb: var(--surface-light-rgb);
+  --text-primary: var(--text-primary-light);
+  --text-secondary: var(--text-secondary-light);
+  --border-color: var(--border-light);
+  --hover-bg: var(--hover-bg-light);
+
+  background-color: var(--bg);
+  color: var(--text-primary);
+}
+
+// 5. Dark Theme – gesetzt durch ThemeService
+[data-theme='dark'] body,
+body.dark-theme {
+  --bg: var(--bg-dark);
+  --bg-rgb: var(--bg-dark-rgb);
+  --bg-surface: var(--surface-dark);
+  --bg-surface-rgb: var(--surface-dark-rgb);
+  --text-primary: var(--text-primary-dark);
+  --text-secondary: var(--text-secondary-dark);
+  --border-color: var(--border-dark);
+  --hover-bg: var(--hover-bg-dark);
+}
+
+// 6. Base Typography & Body
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  overscroll-behavior-y: contain;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+p {
+  color: var(--text-secondary);
+}
+
+a {
+  color: var(--apple-blue);
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// 7. Accessibility Focus Ring
+:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--bg),
+    0 0 0 4px var(--apple-blue);
+  border-radius: 8px;
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// 7. Custom Scrollbar
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 100px;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: var(--text-secondary);
+  }
+}
+
+// Firefox
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+// 8. Layout & Utilities
+.card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+  padding: 1.5rem;
+}
+
+.frosted-glass {
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  background-color: rgba(var(--bg-surface-rgb), 0.7);
+  border: 1px solid rgba(var(--border-color), 0.5);
+}
+
+// 9. Angular Material Theming
+@include mat.core();
+
+$light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    density: (
+      scale: 0,
+    ),
+  )
+);
+
+$dark-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    density: (
+      scale: 0,
+    ),
+  )
+);
+
+// Light theme (default)
+:root {
+  @include mat.all-component-themes($light-theme);
+}
+
+// Dark theme
+[data-theme='dark'],
+.dark-theme {
+  @include mat.all-component-colors($dark-theme);
+}
+
+// 10. Angular Material Component Overrides
+.mat-mdc-unelevated-button.mat-primary {
+  --mdc-unelevated-button-container-color: var(--apple-blue);
+  --mdc-unelevated-button-label-text-color: white;
+  border-radius: 12px;
+  height: 44px;
+  padding: 0 24px;
+  box-shadow: none;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: scale(1.02);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 20px !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2) !important;
+  background: var(--bg-surface) !important;
+}
+
+.mat-mdc-form-field-flex {
+  border-radius: 12px !important;
+}
+
+.mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {
+  padding-right: 12px !important;
+}
+
+// Mat Tabs – Mobile Scroll Fix
+.mat-mdc-tab-header {
+  overflow-x: auto !important;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.mat-mdc-tab-list {
+  flex-shrink: 0 !important;
+  transform: none !important; // verhindert dass Angular die Scroll-Position per transform setzt
+}
+
+.mat-mdc-tab {
+  flex-shrink: 0 !important;
+  min-width: 80px;
+
+  @media (max-width: 768px) {
+  }
+
+  @media (max-width: 480px) {
+    min-width: 60px;
+    padding: 0 10px;
+  }
+}
+
+.blur-backdrop {
+  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+
+.submit-btn {
+  display: flex;
+  gap: 8px;
+}

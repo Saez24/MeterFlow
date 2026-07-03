@@ -1,0 +1,101 @@
+@if (meter(); as m) {
+@if (readings().length === 0) {
+<div class="empty-state">
+  <mat-icon>history</mat-icon>
+  <p i18n="@@meterReadings.empty">Noch keine Ablesungen vorhanden</p>
+</div>
+} @else {
+<div class="readings-list">
+  @for (reading of readings(); track reading.id; let i = $index) {
+  <div class="reading-entry" [class.reading-entry--first]="i === 0">
+    <div class="reading-timeline">
+      <div class="timeline-dot" [style.background]="i === 0 ? m.color : 'var(--color-border)'">
+      </div>
+      @if (i < readings().length - 1) { <div class="timeline-line">
+    </div>
+    }
+  </div>
+  <div class="reading-card">
+    <div class="reading-card__header">
+      <span class="reading-date-label">
+        {{ reading.date | date:'dd. MMMM yyyy' }}
+      </span>
+      @if (i === 0) {
+      <span class="latest-badge" i18n="@@meterReadings.current">Aktuell</span>
+      }
+      <div class="reading-card-actions">
+        @if (reading.photo) {
+        <button mat-icon-button (click)="showPhoto(reading.photo!)" class="photo-btn"
+          [attr.aria-label]="'Foto vom ' + (reading.date | date:'dd.MM.yyyy') + ' anzeigen'">
+          <mat-icon>photo</mat-icon>
+        </button>
+        }
+        <button mat-icon-button [routerLink]="['/readings', reading.id, 'edit']"
+          [attr.aria-label]="'Ablesung vom ' + (reading.date | date:'dd.MM.yyyy') + ' bearbeiten'">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="deleteReading(reading.id)" class="delete-btn"
+          [attr.aria-label]="'Ablesung vom ' + (reading.date | date:'dd.MM.yyyy') + ' löschen'">
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="reading-main-value">
+      {{ reading.value | number:'1.0-3' }}
+      <span class="reading-main-unit"> {{ m.unit }}</span>
+    </div>
+    @if (reading.consumption && reading.consumption > 0) {
+    <div class="reading-details-row">
+      <div class="detail-chip consumption-chip">
+        +{{ reading.consumption | number:'1.0-3' }} {{ m.unit }}
+      </div>
+      @if (reading.kwh) {
+      <div class="detail-chip kwh-chip">
+        {{ reading.kwh | number:'1.0-2' }} kWh
+      </div>
+      }
+      @if (reading.cost) {
+      <div class="detail-chip cost-chip">
+        FW: {{ reading.cost | currency:'EUR':'symbol':'1.2-2' }}
+      </div>
+      }
+      @if (reading.wastewaterCost) {
+      <div class="detail-chip ww-chip">
+        AW: {{ reading.wastewaterCost | currency:'EUR':'symbol':'1.2-2' }}
+      </div>
+      }
+      @if (reading.totalCost && reading.totalCost !== reading.cost) {
+      <div class="detail-chip total-chip">
+        Gesamt: {{ reading.totalCost | currency:'EUR':'symbol':'1.2-2' }}
+      </div>
+      }
+    </div>
+    }
+    @if (reading.note) {
+    <div class="reading-note">
+      <mat-icon>notes</mat-icon>{{ reading.note }}
+    </div>
+    }
+  </div>
+</div>
+}
+</div>
+}
+}
+
+
+@if (activePhoto()) {
+<div class="photo-modal-backdrop" (click)="closePhoto()">
+  <div class="photo-modal" (click)="$event.stopPropagation()">
+    <button mat-icon-button class="photo-modal-close" (click)="closePhoto()" aria-label="Foto schließen"
+      i18n-aria-label="@@meterReadings.photo.close">
+      <mat-icon>close</mat-icon>
+    </button>
+    @if (isPhotoLoading()) {
+    <div class="photo-loading"><mat-icon class="photo-loading-icon">hourglass_top</mat-icon></div>
+    } @else {
+    <img [src]="activePhotoUrl()!" class="photo-modal-img" [attr.alt]="photoAltText()" />
+    }
+  </div>
+</div>
+}

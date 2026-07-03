@@ -1,0 +1,260 @@
+:host {
+  display: block;
+  padding: 1rem;
+}
+
+.preview-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.input-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.preview-field {
+  width: 100%;
+
+  .mat-mdc-form-field-icon-prefix mat-icon {
+    color: var(--text-secondary);
+    font-size: 18px;
+    margin-right: 4px;
+  }
+}
+
+.calculate-btn {
+  align-self: flex-start;
+  background: var(--apple-blue) !important;
+  color: white !important;
+  border-radius: 12px !important;
+  height: 44px;
+  padding: 0 24px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 16px rgba(var(--apple-blue-rgb), 0.35);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  mat-icon {
+    margin-right: 6px;
+    font-size: 18px;
+  }
+}
+
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 59, 48, 0.08);
+  border: 1px solid rgba(255, 59, 48, 0.2);
+  border-radius: 14px;
+  padding: 14px 18px;
+  color: #ff3b30;
+  font-size: 14px;
+
+  mat-icon {
+    font-size: 18px;
+  }
+}
+
+.result-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: fadeUp 0.3s ease both;
+}
+
+.summary-strip {
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  padding: 6px;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.summary-divider {
+  width: 1px;
+  height: 32px;
+  background: var(--border-color);
+  flex-shrink: 0;
+}
+
+.summary-pill {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 12px;
+  transition: background 0.2s ease;
+
+  &--refund {
+    background: rgba(52, 199, 89, 0.1);
+    .pill-value--accent {
+      color: #34c759;
+    }
+  }
+
+  &--due {
+    background: rgba(255, 59, 48, 0.08);
+    .pill-value--accent {
+      color: #ff3b30;
+    }
+  }
+}
+
+.pill-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+.pill-value {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.periods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.period-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeUp 0.35s ease both;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+}
+
+.period-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.period-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.period-cost {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+}
+
+.period-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--hover-bg);
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+
+  mat-icon {
+    font-size: 13px;
+    width: 13px;
+    height: 13px;
+  }
+
+  em {
+    font-style: normal;
+    opacity: 0.6;
+    margin-left: 2px;
+  }
+}
+
+.period-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+
+  .stat:last-child:nth-child(odd) {
+    grid-column: span 2;
+  }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .calculate-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

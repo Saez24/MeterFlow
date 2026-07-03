@@ -1,0 +1,1238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="de" target-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="nav.dashboard" datatype="html">
+        <source>Dashboard</source>
+        <target>Dashboard</target>
+      </trans-unit>
+      <trans-unit id="nav.meters" datatype="html">
+        <source>Zähler</source>
+        <target>Meters</target>
+      </trans-unit>
+      <trans-unit id="nav.readings" datatype="html">
+        <source>Ablesungen</source>
+        <target>Readings</target>
+      </trans-unit>
+      <trans-unit id="nav.reports" datatype="html">
+        <source>Auswertungen</source>
+        <target>Reports</target>
+      </trans-unit>
+      <trans-unit id="nav.settings" datatype="html">
+        <source>Einstellungen</source>
+        <target>Settings</target>
+      </trans-unit>
+      <trans-unit id="connection.connected" datatype="html">
+        <source>Verbunden</source>
+        <target>Connected</target>
+      </trans-unit>
+      <trans-unit id="connection.error" datatype="html">
+        <source>Keine Verbindung</source>
+        <target>No connection</target>
+      </trans-unit>
+      <trans-unit id="connection.checking" datatype="html">
+        <source>Verbinde...</source>
+        <target>Connecting...</target>
+      </trans-unit>
+      <trans-unit id="auth.title.login" datatype="html">
+        <source>Willkommen zurück</source>
+        <target>Welcome back</target>
+      </trans-unit>
+      <trans-unit id="auth.title.register" datatype="html">
+        <source>Konto erstellen</source>
+        <target>Create account</target>
+      </trans-unit>
+      <trans-unit id="auth.subtitle.login" datatype="html">
+        <source>Melde dich an um deine Zähler zu verwalten</source>
+        <target>Sign in to manage your meters</target>
+      </trans-unit>
+      <trans-unit id="auth.subtitle.register" datatype="html">
+        <source>Erstelle ein kostenloses Konto</source>
+        <target>Create a free account</target>
+      </trans-unit>
+      <trans-unit id="auth.field.email" datatype="html">
+        <source>E-Mail</source>
+        <target>Email</target>
+      </trans-unit>
+      <trans-unit id="auth.placeholder.email" datatype="html">
+        <source>deine@email.de</source>
+        <target>your@email.com</target>
+      </trans-unit>
+      <trans-unit id="auth.error.email" datatype="html">
+        <source>Gültige E-Mail erforderlich</source>
+        <target>Valid email required</target>
+      </trans-unit>
+      <trans-unit id="auth.field.password" datatype="html">
+        <source>Passwort</source>
+        <target>Password</target>
+      </trans-unit>
+      <trans-unit id="auth.placeholder.password" datatype="html">
+        <source>Mindestens 6 Zeichen</source>
+        <target>At least 6 characters</target>
+      </trans-unit>
+      <trans-unit id="auth.error.password" datatype="html">
+        <source>Mindestens 6 Zeichen</source>
+        <target>At least 6 characters</target>
+      </trans-unit>
+      <trans-unit id="auth.field.confirmPassword" datatype="html">
+        <source>Passwort bestätigen</source>
+        <target>Confirm password</target>
+      </trans-unit>
+      <trans-unit id="auth.placeholder.confirmPassword" datatype="html">
+        <source>Passwort wiederholen</source>
+        <target>Repeat password</target>
+      </trans-unit>
+      <trans-unit id="auth.error.confirmPassword" datatype="html">
+        <source>Passwörter stimmen nicht überein</source>
+        <target>Passwords do not match</target>
+      </trans-unit>
+      <trans-unit id="auth.loading" datatype="html">
+        <source>Bitte warten...</source>
+        <target>Please wait...</target>
+      </trans-unit>
+      <trans-unit id="auth.submit.login" datatype="html">
+        <source>Anmelden</source>
+        <target>Sign in</target>
+      </trans-unit>
+      <trans-unit id="auth.submit.register" datatype="html">
+        <source>Registrieren</source>
+        <target>Register</target>
+      </trans-unit>
+      <trans-unit id="auth.switch.toRegister" datatype="html">
+        <source>Noch kein Konto?</source>
+        <target>No account yet?</target>
+      </trans-unit>
+      <trans-unit id="auth.switch.toLogin" datatype="html">
+        <source>Bereits registriert?</source>
+        <target>Already registered?</target>
+      </trans-unit>
+      <trans-unit id="auth.switch.registerBtn" datatype="html">
+        <source>Jetzt registrieren</source>
+        <target>Register now</target>
+      </trans-unit>
+      <trans-unit id="auth.switch.loginBtn" datatype="html">
+        <source>Anmelden</source>
+        <target>Sign in</target>
+      </trans-unit>
+      <trans-unit id="auth.error.passwordMismatch" datatype="html">
+        <source>Passwörter stimmen nicht überein</source>
+        <target>Passwords do not match</target>
+      </trans-unit>
+      <trans-unit id="auth.accountCreated" datatype="html">
+        <source>Konto erstellt! Bitte bestätige deine E-Mail.</source>
+        <target>Account created! Please confirm your email.</target>
+      </trans-unit>
+      <trans-unit id="auth.error.invalidCredentials" datatype="html">
+        <source>E-Mail oder Passwort falsch</source>
+        <target>Invalid email or password</target>
+      </trans-unit>
+      <trans-unit id="auth.error.emailNotConfirmed" datatype="html">
+        <source>Bitte bestätige zuerst deine E-Mail</source>
+        <target>Please confirm your email first</target>
+      </trans-unit>
+      <trans-unit id="auth.error.alreadyRegistered" datatype="html">
+        <source>Diese E-Mail ist bereits registriert</source>
+        <target>This email is already registered</target>
+      </trans-unit>
+      <trans-unit id="auth.error.passwordTooShort" datatype="html">
+        <source>Passwort muss mindestens 6 Zeichen haben</source>
+        <target>Password must be at least 6 characters</target>
+      </trans-unit>
+      <trans-unit id="auth.error.generic" datatype="html">
+        <source>Ein Fehler ist aufgetreten. Bitte versuche es erneut.</source>
+        <target>An error occurred. Please try again.</target>
+      </trans-unit>
+      <trans-unit id="dashboard.subtitle" datatype="html">
+        <source>Übersicht deiner Verbrauchsdaten</source>
+        <target>Overview of your consumption data</target>
+      </trans-unit>
+      <trans-unit id="dashboard.budgetAlerts.aria" datatype="html">
+        <source>Budget-Warnungen</source>
+        <target>Budget alerts</target>
+      </trans-unit>
+      <trans-unit id="dashboard.budgetAlerts.monthlyCost" datatype="html">
+        <source> – Monatslimit</source>
+        <target> – Monthly limit</target>
+      </trans-unit>
+      <trans-unit id="dashboard.budgetAlerts.yearlyCost" datatype="html">
+        <source> – Jahreslimit</source>
+        <target> – Yearly limit</target>
+      </trans-unit>
+      <trans-unit id="dashboard.budgetAlerts.consumption" datatype="html">
+        <source> – Verbrauchslimit</source>
+        <target> – Consumption limit</target>
+      </trans-unit>
+      <trans-unit id="dashboard.budgetAlerts.of" datatype="html">
+        <source> von </source>
+        <target> of </target>
+      </trans-unit>
+      <trans-unit id="dashboard.budget.exceeded" datatype="html">
+        <source>Budget überschritten</source>
+        <target>Budget exceeded</target>
+      </trans-unit>
+      <trans-unit id="dashboard.budget.warning" datatype="html">
+        <source>Budget-Warnung</source>
+        <target>Budget warning</target>
+      </trans-unit>
+      <trans-unit id="dashboard.totalCosts" datatype="html">
+        <source>Gesamtkosten <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></source>
+        <target>Total costs <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></target>
+      </trans-unit>
+      <trans-unit id="dashboard.activeMeters" datatype="html">
+        <source>Aktive Zähler</source>
+        <target>Active meters</target>
+      </trans-unit>
+      <trans-unit id="dashboard.yourMeters" datatype="html">
+        <source>Deine Zähler</source>
+        <target>Your meters</target>
+      </trans-unit>
+      <trans-unit id="dashboard.manageAll" datatype="html">
+        <source>Alle verwalten</source>
+        <target>Manage all</target>
+      </trans-unit>
+      <trans-unit id="dashboard.empty.title" datatype="html">
+        <source>Noch keine Zähler angelegt</source>
+        <target>No meters added yet</target>
+      </trans-unit>
+      <trans-unit id="dashboard.empty.desc" datatype="html">
+        <source>Füge deinen ersten Zähler hinzu, um zu beginnen.</source>
+        <target>Add your first meter to get started.</target>
+      </trans-unit>
+      <trans-unit id="dashboard.addMeter" datatype="html">
+        <source>Zähler hinzufügen</source>
+        <target>Add meter</target>
+      </trans-unit>
+      <trans-unit id="dashboard.consumption" datatype="html">
+        <source>Verbrauch <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></source>
+        <target>Consumption <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></target>
+      </trans-unit>
+      <trans-unit id="dashboard.currentCosts" datatype="html">
+        <source>Aktuelle Kosten</source>
+        <target>Current costs</target>
+      </trans-unit>
+      <trans-unit id="dashboard.noData" datatype="html">
+        <source>Keine Daten für <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></source>
+        <target>No data for <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></target>
+      </trans-unit>
+      <trans-unit id="dashboard.recentReadings" datatype="html">
+        <source>Letzte Ablesungen</source>
+        <target>Recent readings</target>
+      </trans-unit>
+      <trans-unit id="dashboard.showAll" datatype="html">
+        <source>Alle anzeigen</source>
+        <target>Show all</target>
+      </trans-unit>
+      <trans-unit id="meterReadings.empty" datatype="html">
+        <source>Noch keine Ablesungen vorhanden</source>
+        <target>No readings yet</target>
+      </trans-unit>
+      <trans-unit id="meterReadings.current" datatype="html">
+        <source>Aktuell</source>
+        <target>Current</target>
+      </trans-unit>
+      <trans-unit id="meterReadings.photo.close" datatype="html">
+        <source>Foto schließen</source>
+        <target>Close photo</target>
+      </trans-unit>
+      <trans-unit id="meterReadings.photo.alt" datatype="html">
+        <source>Zählerfoto</source>
+        <target>Meter photo</target>
+      </trans-unit>
+      <trans-unit id="meterReadings.photo.altDynamic" datatype="html">
+        <source><x id="PH" equiv-text="meter.name"/> – Ablesung vom <x id="PH_1" equiv-text="dateStr"/></source>
+        <target><x id="meterName" equiv-text="meter.name"/> – Reading from <x id="date" equiv-text="dateStr"/></target>
+      </trans-unit>
+      <trans-unit id="meterReadings.delete.title" datatype="html">
+        <source>Ablesung löschen</source>
+        <target>Delete reading</target>
+      </trans-unit>
+      <trans-unit id="meterReadings.delete.message" datatype="html">
+        <source>Ablesung wirklich löschen?</source>
+        <target>Delete this reading?</target>
+      </trans-unit>
+      <trans-unit id="meterReadings.delete.confirm" datatype="html">
+        <source>Löschen</source>
+        <target>Delete</target>
+      </trans-unit>
+      <trans-unit id="meterReadings.deleted" datatype="html">
+        <source>Ablesung gelöscht</source>
+        <target>Reading deleted</target>
+      </trans-unit>
+      <trans-unit id="tariff.delete.title" datatype="html">
+        <source>Tarif-Periode löschen</source>
+        <target>Delete tariff period</target>
+      </trans-unit>
+      <trans-unit id="tariff.delete.message" datatype="html">
+        <source>Tarif-Periode löschen?</source>
+        <target>Delete this tariff period?</target>
+      </trans-unit>
+      <trans-unit id="tariff.delete.confirm" datatype="html">
+        <source>Löschen</source>
+        <target>Delete</target>
+      </trans-unit>
+      <trans-unit id="tariff.deleted" datatype="html">
+        <source>Tarif gelöscht</source>
+        <target>Tariff deleted</target>
+      </trans-unit>
+      <trans-unit id="meterForm.title.edit" datatype="html">
+        <source>Zähler bearbeiten</source>
+        <target>Edit meter</target>
+      </trans-unit>
+      <trans-unit id="meterForm.title.new" datatype="html">
+        <source>Neuer Zähler</source>
+        <target>New meter</target>
+      </trans-unit>
+      <trans-unit id="meterForm.subtitle.edit" datatype="html">
+        <source>Konfiguration anpassen</source>
+        <target>Adjust configuration</target>
+      </trans-unit>
+      <trans-unit id="meterForm.subtitle.new" datatype="html">
+        <source>Füge einen neuen Zähler hinzu</source>
+        <target>Add a new meter</target>
+      </trans-unit>
+      <trans-unit id="meterForm.type.title" datatype="html">
+        <source>Zählertyp</source>
+        <target>Meter type</target>
+      </trans-unit>
+      <trans-unit id="meterForm.field.name" datatype="html">
+        <source>Name des Zählers</source>
+        <target>Meter name</target>
+      </trans-unit>
+      <trans-unit id="meterForm.placeholder.name" datatype="html">
+        <source>z.B. Haushaltsstrom</source>
+        <target>e.g. Household electricity</target>
+      </trans-unit>
+      <trans-unit id="meterForm.error.name" datatype="html">
+        <source>Bitte einen Namen eingeben</source>
+        <target>Please enter a name</target>
+      </trans-unit>
+      <trans-unit id="meterForm.field.provider" datatype="html">
+        <source>Anbieter</source>
+        <target>Provider</target>
+      </trans-unit>
+      <trans-unit id="meterForm.placeholder.provider" datatype="html">
+        <source>z.B. Stadtwerke</source>
+        <target>e.g. City utilities</target>
+      </trans-unit>
+      <trans-unit id="meterForm.field.meterNumber" datatype="html">
+        <source>Zählernummer</source>
+        <target>Meter number</target>
+      </trans-unit>
+      <trans-unit id="meterForm.placeholder.meterNumber" datatype="html">
+        <source>z.B. 12345678</source>
+        <target>e.g. 12345678</target>
+      </trans-unit>
+      <trans-unit id="meterForm.garden.title" datatype="html">
+        <source>Verknüpfung mit Hauptwasserzähler</source>
+        <target>Link to main water meter</target>
+      </trans-unit>
+      <trans-unit id="meterForm.garden.desc" datatype="html">
+        <source> Wenn dieser Gartenwasserzähler mit einem Hauptwasserzähler verknüpft ist, wird der Gartenwasserverbrauch automatisch vom Abwasser des Hauptzählers abgezogen. </source>
+        <target> If this garden water meter is linked to a main water meter, garden water consumption is automatically deducted from the main meter's wastewater. </target>
+      </trans-unit>
+      <trans-unit id="meterForm.garden.mainMeter" datatype="html">
+        <source>Hauptwasserzähler</source>
+        <target>Main water meter</target>
+      </trans-unit>
+      <trans-unit id="meterForm.garden.noLink" datatype="html">
+        <source>Keine Verknüpfung</source>
+        <target>No link</target>
+      </trans-unit>
+      <trans-unit id="meterForm.garden.hint" datatype="html">
+        <source>Abwasser wird automatisch berechnet</source>
+        <target>Wastewater is calculated automatically</target>
+      </trans-unit>
+      <trans-unit id="meterForm.garden.linked" datatype="html">
+        <source>Gartenwasserverbrauch wird vom Abwasser des Hauptzählers abgezogen</source>
+        <target>Garden water consumption is deducted from the main meter's wastewater</target>
+      </trans-unit>
+      <trans-unit id="meterForm.garden.noWaterMeter" datatype="html">
+        <source>Noch kein Wasserzähler angelegt. Füge zuerst einen Wasserzähler hinzu.</source>
+        <target>No water meter added yet. Please add a water meter first.</target>
+      </trans-unit>
+      <trans-unit id="meterForm.gas.title" datatype="html">
+        <source>Gas-Parameter</source>
+        <target>Gas parameters</target>
+      </trans-unit>
+      <trans-unit id="meterForm.gas.hint" datatype="html">
+        <source>Zur Umrechnung von m³ in kWh</source>
+        <target>For converting m³ to kWh</target>
+      </trans-unit>
+      <trans-unit id="meterForm.gas.calorificValue" datatype="html">
+        <source>Brennwert (Hs)</source>
+        <target>Calorific value (Hs)</target>
+      </trans-unit>
+      <trans-unit id="meterForm.gas.calorificHint" datatype="html">
+        <source>Steht auf deiner Gasrechnung</source>
+        <target>Found on your gas bill</target>
+      </trans-unit>
+      <trans-unit id="meterForm.gas.zNumber" datatype="html">
+        <source>Z-Zahl (Zustandszahl)</source>
+        <target>Z-factor (condition number)</target>
+      </trans-unit>
+      <trans-unit id="meterForm.gas.zNumberHint" datatype="html">
+        <source>Üblicherweise 0.90–1.10</source>
+        <target>Typically 0.90–1.10</target>
+      </trans-unit>
+      <trans-unit id="meterForm.gas.formula.label" datatype="html">
+        <source>Formel:</source>
+        <target>Formula:</target>
+      </trans-unit>
+      <trans-unit id="meterForm.fernwarme.title" datatype="html">
+        <source>Fernwärme-Parameter</source>
+        <target>District heating parameters</target>
+      </trans-unit>
+      <trans-unit id="meterForm.fernwarme.hint" datatype="html">
+        <source>Anschlussleistung laut Versorgungsvertrag</source>
+        <target>Connected load as per supply contract</target>
+      </trans-unit>
+      <trans-unit id="meterForm.fernwarme.connectedLoad" datatype="html">
+        <source>Bereitstellungsleistung</source>
+        <target>Connected load</target>
+      </trans-unit>
+      <trans-unit id="meterForm.fernwarme.connectedLoadPlaceholder" datatype="html">
+        <source>7.99</source>
+        <target>7.99</target>
+      </trans-unit>
+      <trans-unit id="meterForm.fernwarme.connectedLoadHint" datatype="html">
+        <source>Festgeschriebene Leistung je Zähler</source>
+        <target>Fixed capacity per meter</target>
+      </trans-unit>
+      <trans-unit id="meterForm.notes.title" datatype="html">
+        <source>Notizen</source>
+        <target>Notes</target>
+      </trans-unit>
+      <trans-unit id="meterForm.notes.label" datatype="html">
+        <source>Optionale Notizen</source>
+        <target>Optional notes</target>
+      </trans-unit>
+      <trans-unit id="meterForm.cancel" datatype="html">
+        <source>Abbrechen</source>
+        <target>Cancel</target>
+      </trans-unit>
+      <trans-unit id="meterForm.save" datatype="html">
+        <source>Speichern</source>
+        <target>Save</target>
+      </trans-unit>
+      <trans-unit id="meterForm.create" datatype="html">
+        <source>Zähler anlegen</source>
+        <target>Create meter</target>
+      </trans-unit>
+      <trans-unit id="meterForm.invalidType" datatype="html">
+        <source>Ungültiger Zählertyp</source>
+        <target>Invalid meter type</target>
+      </trans-unit>
+      <trans-unit id="meterForm.saved" datatype="html">
+        <source>Zähler gespeichert</source>
+        <target>Meter saved</target>
+      </trans-unit>
+      <trans-unit id="meterForm.created" datatype="html">
+        <source>Zähler angelegt</source>
+        <target>Meter created</target>
+      </trans-unit>
+      <trans-unit id="meters.title" datatype="html">
+        <source>Zähler</source>
+        <target>Meters</target>
+      </trans-unit>
+      <trans-unit id="meters.subtitle" datatype="html">
+        <source>Verwalte deine Energie- und Wasserzähler</source>
+        <target>Manage your energy and water meters</target>
+      </trans-unit>
+      <trans-unit id="meters.newMeter" datatype="html">
+        <source>Neuer Zähler</source>
+        <target>New meter</target>
+      </trans-unit>
+      <trans-unit id="meters.empty.title" datatype="html">
+        <source>Noch keine Zähler</source>
+        <target>No meters yet</target>
+      </trans-unit>
+      <trans-unit id="meters.empty.desc" datatype="html">
+        <source>Füge deinen ersten Zähler hinzu, um Ablesungen zu erfassen.</source>
+        <target>Add your first meter to start recording readings.</target>
+      </trans-unit>
+      <trans-unit id="meters.empty.btn" datatype="html">
+        <source>Ersten Zähler hinzufügen</source>
+        <target>Add first meter</target>
+      </trans-unit>
+      <trans-unit id="meters.readingCount" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ readingCount(meter.id) }}"/> Ablesungen</source>
+        <target><x id="INTERPOLATION" equiv-text="{{ readingCount(meter.id) }}"/> readings</target>
+      </trans-unit>
+      <trans-unit id="meters.noReadings" datatype="html">
+        <source>Keine Ablesungen</source>
+        <target>No readings</target>
+      </trans-unit>
+      <trans-unit id="meters.menu.details" datatype="html">
+        <source>Details &amp; Verlauf</source>
+        <target>Details &amp; History</target>
+      </trans-unit>
+      <trans-unit id="meters.menu.edit" datatype="html">
+        <source>Bearbeiten</source>
+        <target>Edit</target>
+      </trans-unit>
+      <trans-unit id="meters.menu.addReading" datatype="html">
+        <source>Ablesung hinzufügen</source>
+        <target>Add reading</target>
+      </trans-unit>
+      <trans-unit id="meters.menu.delete" datatype="html">
+        <source>Löschen</source>
+        <target>Delete</target>
+      </trans-unit>
+      <trans-unit id="meters.delete.title" datatype="html">
+        <source>Zähler löschen</source>
+        <target>Delete meter</target>
+      </trans-unit>
+      <trans-unit id="meters.delete.message" datatype="html">
+        <source>Zähler &quot;<x id="PH" equiv-text="meter.name"/>&quot; wirklich löschen? Alle Ablesungen werden ebenfalls gelöscht.</source>
+        <target>Really delete meter &quot;<x id="PH" equiv-text="meter.name"/>&quot;? All readings will also be deleted.</target>
+      </trans-unit>
+      <trans-unit id="meters.delete.confirm" datatype="html">
+        <source>Löschen</source>
+        <target>Delete</target>
+      </trans-unit>
+      <trans-unit id="meters.deleted" datatype="html">
+        <source>Zähler gelöscht</source>
+        <target>Meter deleted</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.title.edit" datatype="html">
+        <source>Ablesung bearbeiten</source>
+        <target>Edit reading</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.title.new" datatype="html">
+        <source>Ablesung erfassen</source>
+        <target>Add reading</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.subtitle.edit" datatype="html">
+        <source>Zählerstand korrigieren</source>
+        <target>Correct meter reading</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.subtitle.new" datatype="html">
+        <source>Aktuellen Zählerstand eintragen</source>
+        <target>Enter current meter reading</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.selectMeter" datatype="html">
+        <source>Zähler wählen</source>
+        <target>Select meter</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.readingValue" datatype="html">
+        <source>Zählerstand</source>
+        <target>Meter reading</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.previousReading" datatype="html">
+        <source> Vorheriger Stand: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ lr.value | number: '1.0-3' }}"/> <x id="INTERPOLATION_1" equiv-text="{{ meter.unit }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> am <x id="INTERPOLATION_2" equiv-text="{{ lr.date | date: 'dd.MM.yyyy' }}"/> </source>
+        <target> Previous reading: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ lr.value | number: '1.0-3' }}"/> <x id="INTERPOLATION_1" equiv-text="{{ meter.unit }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION_2" equiv-text="{{ lr.date | date: 'dd.MM.yyyy' }}"/> </target>
+      </trans-unit>
+      <trans-unit id="readingsForm.firstReading" datatype="html">
+        <source>Erste Ablesung für diesen Zeitraum</source>
+        <target>First reading for this period</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.field.value" datatype="html">
+        <source>Zählerstand</source>
+        <target>Meter reading</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.field.date" datatype="html">
+        <source>Datum</source>
+        <target>Date</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.preview.consumption" datatype="html">
+        <source>Verbrauch</source>
+        <target>Consumption</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.preview.kwh" datatype="html">
+        <source>Kilowattstunden</source>
+        <target>Kilowatt hours</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.preview.cost" datatype="html">
+        <source>Kosten (ca.)</source>
+        <target>Cost (est.)</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.gasInfo" datatype="html">
+        <source> Brennwert: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ meter.calorificValue }}"/> kWh/m³<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> · Z-Zahl: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ meter.zNumber }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <target> Calorific value: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ meter.calorificValue }}"/> kWh/m³<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> · Z-factor: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ meter.zNumber }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+      </trans-unit>
+      <trans-unit id="readingsForm.note.title" datatype="html">
+        <source>Notiz (optional)</source>
+        <target>Note (optional)</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.note.label" datatype="html">
+        <source>Anmerkung zur Ablesung</source>
+        <target>Note for this reading</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.note.placeholder" datatype="html">
+        <source>z.B. Zähler abgelesen nach Urlaub...</source>
+        <target>e.g. Read after vacation...</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.photo.title" datatype="html">
+        <source>Foto (optional)</source>
+        <target>Photo (optional)</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.photo.existingAlt" datatype="html">
+        <source>Bestehendes Zählerfoto</source>
+        <target>Existing meter photo</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.photo.remove" datatype="html">
+        <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>delete_outline<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Foto entfernen </source>
+        <target><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>delete_outline<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Remove photo </target>
+      </trans-unit>
+      <trans-unit id="readingsForm.photo.previewAlt" datatype="html">
+        <source>Vorschau</source>
+        <target>Preview</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.photo.clear" datatype="html">
+        <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>close<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Auswahl aufheben </source>
+        <target><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>close<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Clear selection </target>
+      </trans-unit>
+      <trans-unit id="readingsForm.photo.inputLabel" datatype="html">
+        <source>Foto hochladen</source>
+        <target>Upload photo</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.photo.upload" datatype="html">
+        <source>Foto hinzufügen</source>
+        <target>Add photo</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.photo.uploading" datatype="html">
+        <source>Foto wird hochgeladen…</source>
+        <target>Uploading photo…</target>
+      </trans-unit>
+      <!-- OCR -->
+      <trans-unit id="readingsForm.ocr.btnAria" datatype="html">
+        <source>Zählerstand aus Foto erkennen</source>
+        <target>Detect meter reading from photo</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.ocr.btn" datatype="html">
+        <source>Zählerstand erkennen</source>
+        <target>Detect reading</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.ocr.detected" datatype="html">
+        <source>Erkannter Wert</source>
+        <target>Detected value</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.ocr.confidence" datatype="html">
+        <source>Konfidenz</source>
+        <target>Confidence</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.ocr.apply" datatype="html">
+        <source>Übernehmen</source>
+        <target>Apply</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.ocr.dismiss" datatype="html">
+        <source>Ergebnis verwerfen</source>
+        <target>Dismiss result</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.ocr.noValue" datatype="html">
+        <source>Kein Zählerstand erkannt</source>
+        <target>No meter reading detected</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.ocr.noValueHint" datatype="html">
+        <source>Bitte Wert manuell eingeben</source>
+        <target>Please enter the value manually</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.ocr.error" datatype="html">
+        <source>Texterkennung fehlgeschlagen – bitte Wert manuell eingeben</source>
+        <target>Text recognition failed – please enter the value manually</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.cancel" datatype="html">
+        <source>Abbrechen</source>
+        <target>Cancel</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.save" datatype="html">
+        <source>Ablesung speichern</source>
+        <target>Save reading</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.invalidValue" datatype="html">
+        <source>Ungültiger Wert für Zählerstand.</source>
+        <target>Invalid meter reading value.</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.saved" datatype="html">
+        <source>Ablesung gespeichert</source>
+        <target>Reading saved</target>
+      </trans-unit>
+      <trans-unit id="readingsForm.saveError" datatype="html">
+        <source>Fehler beim Speichern der Ablesung</source>
+        <target>Error saving the reading</target>
+      </trans-unit>
+      <trans-unit id="readings.title" datatype="html">
+        <source>Ablesungen</source>
+        <target>Readings</target>
+      </trans-unit>
+      <trans-unit id="readings.subtitle" datatype="html">
+        <source>Alle erfassten Zählerstände</source>
+        <target>All recorded meter readings</target>
+      </trans-unit>
+      <trans-unit id="readings.addBtn" datatype="html">
+        <source>Ablesung erfassen</source>
+        <target>Add reading</target>
+      </trans-unit>
+      <trans-unit id="readings.filter.label" datatype="html">
+        <source>Zähler filtern</source>
+        <target>Filter by meter</target>
+      </trans-unit>
+      <trans-unit id="readings.filter.all" datatype="html">
+        <source>Alle Zähler</source>
+        <target>All meters</target>
+      </trans-unit>
+      <trans-unit id="readings.empty.title" datatype="html">
+        <source>Keine Ablesungen gefunden</source>
+        <target>No readings found</target>
+      </trans-unit>
+      <trans-unit id="readings.empty.desc" datatype="html">
+        <source>Füge deine erste Ablesung hinzu.</source>
+        <target>Add your first reading.</target>
+      </trans-unit>
+      <trans-unit id="readings.empty.btn" datatype="html">
+        <source>Ablesung erfassen</source>
+        <target>Add reading</target>
+      </trans-unit>
+      <trans-unit id="readings.delete.title" datatype="html">
+        <source>Ablesung löschen</source>
+        <target>Delete reading</target>
+      </trans-unit>
+      <trans-unit id="readings.delete.message" datatype="html">
+        <source>Ablesung wirklich löschen?</source>
+        <target>Really delete this reading?</target>
+      </trans-unit>
+      <trans-unit id="readings.delete.confirm" datatype="html">
+        <source>Löschen</source>
+        <target>Delete</target>
+      </trans-unit>
+      <trans-unit id="readings.deleted" datatype="html">
+        <source>Ablesung gelöscht</source>
+        <target>Reading deleted</target>
+      </trans-unit>
+      <trans-unit id="reports.title" datatype="html">
+        <source>Auswertungen</source>
+        <target>Reports</target>
+      </trans-unit>
+      <trans-unit id="reports.subtitle" datatype="html">
+        <source>Monats- und Jahresübersichten deiner Verbräuche</source>
+        <target>Monthly and yearly overviews of your consumption</target>
+      </trans-unit>
+      <trans-unit id="reports.yearLabel" datatype="html">
+        <source>Jahr</source>
+        <target>Year</target>
+      </trans-unit>
+      <trans-unit id="reports.totalCosts" datatype="html">
+        <source>Gesamtkosten <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></source>
+        <target>Total costs <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></target>
+      </trans-unit>
+      <trans-unit id="reports.monthlyCosts" datatype="html">
+        <source>Monatliche Kosten <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></source>
+        <target>Monthly costs <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></target>
+      </trans-unit>
+      <trans-unit id="reports.monthlyConsumption" datatype="html">
+        <source>Monatlicher Verbrauch</source>
+        <target>Monthly consumption</target>
+      </trans-unit>
+      <trans-unit id="reports.waterBilling" datatype="html">
+        <source>Wasserabrechnung</source>
+        <target>Water billing</target>
+      </trans-unit>
+      <trans-unit id="reports.waterBillingDesc" datatype="html">
+        <source> Abwasserkosten werden automatisch um den Gartenwasserverbrauch reduziert. </source>
+        <target> Wastewater costs are automatically reduced by garden water consumption. </target>
+      </trans-unit>
+      <trans-unit id="reports.water.month" datatype="html">
+        <source>Monat</source>
+        <target>Month</target>
+      </trans-unit>
+      <trans-unit id="reports.water.totalM3" datatype="html">
+        <source>Gesamt m³</source>
+        <target>Total m³</target>
+      </trans-unit>
+      <trans-unit id="reports.water.gardenM3" datatype="html">
+        <source>Garten m³</source>
+        <target>Garden m³</target>
+      </trans-unit>
+      <trans-unit id="reports.water.billable" datatype="html">
+        <source>Abw.-pflichtig</source>
+        <target>Billable ww.</target>
+      </trans-unit>
+      <trans-unit id="reports.water.freshwater" datatype="html">
+        <source>Frischwasser</source>
+        <target>Fresh water</target>
+      </trans-unit>
+      <trans-unit id="reports.water.wastewater" datatype="html">
+        <source>Abwasser</source>
+        <target>Wastewater</target>
+      </trans-unit>
+      <trans-unit id="reports.water.baseCharge" datatype="html">
+        <source>Grundgebühr</source>
+        <target>Base charge</target>
+      </trans-unit>
+      <trans-unit id="reports.water.total" datatype="html">
+        <source>Gesamt</source>
+        <target>Total</target>
+      </trans-unit>
+      <trans-unit id="reports.water.yearTotal" datatype="html">
+        <source>Jahresgesamt</source>
+        <target>Year total</target>
+      </trans-unit>
+      <trans-unit id="reports.yearlyComparison" datatype="html">
+        <source>Jahresvergleich Gesamtkosten</source>
+        <target>Yearly comparison – total costs</target>
+      </trans-unit>
+      <trans-unit id="settings.title" datatype="html">
+        <source>Einstellungen</source>
+        <target>Settings</target>
+      </trans-unit>
+      <trans-unit id="settings.subtitle" datatype="html">
+        <source>App-Konfiguration und Datenverwaltung</source>
+        <target>App configuration and data management</target>
+      </trans-unit>
+      <trans-unit id="settings.appearance" datatype="html">
+        <source>Erscheinungsbild</source>
+        <target>Appearance</target>
+      </trans-unit>
+      <trans-unit id="settings.theme.light" datatype="html">
+        <source>Hell</source>
+        <target>Light</target>
+      </trans-unit>
+      <trans-unit id="settings.theme.dark" datatype="html">
+        <source>Dunkel</source>
+        <target>Dark</target>
+      </trans-unit>
+      <trans-unit id="settings.theme.system" datatype="html">
+        <source>System</source>
+        <target>System</target>
+      </trans-unit>
+      <trans-unit id="settings.dataManagement" datatype="html">
+        <source>Datenverwaltung</source>
+        <target>Data management</target>
+      </trans-unit>
+      <trans-unit id="settings.export.title" datatype="html">
+        <source>Daten exportieren</source>
+        <target>Export data</target>
+      </trans-unit>
+      <trans-unit id="settings.export.desc" datatype="html">
+        <source>Alle Zähler und Ablesungen als JSON-Datei exportieren</source>
+        <target>Export all meters and readings as a JSON file</target>
+      </trans-unit>
+      <trans-unit id="settings.exportBtn" datatype="html">
+        <source>Exportieren</source>
+        <target>Export</target>
+      </trans-unit>
+      <trans-unit id="settings.import.title" datatype="html">
+        <source>Daten importieren</source>
+        <target>Import data</target>
+      </trans-unit>
+      <trans-unit id="settings.import.desc" datatype="html">
+        <source>Zuvor exportierte Daten wiederherstellen</source>
+        <target>Restore previously exported data</target>
+      </trans-unit>
+      <trans-unit id="settings.importBtn" datatype="html">
+        <source>Importieren</source>
+        <target>Import</target>
+      </trans-unit>
+      <trans-unit id="settings.delete.title" datatype="html">
+        <source>Alle Daten löschen</source>
+        <target>Delete all data</target>
+      </trans-unit>
+      <trans-unit id="settings.delete.desc" datatype="html">
+        <source>Alle Zähler und Ablesungen unwiderruflich löschen </source>
+        <target>Permanently delete all meters and readings </target>
+      </trans-unit>
+      <trans-unit id="settings.deleteBtn" datatype="html">
+        <source>Löschen</source>
+        <target>Delete</target>
+      </trans-unit>
+      <trans-unit id="settings.stats" datatype="html">
+        <source>Statistiken</source>
+        <target>Statistics</target>
+      </trans-unit>
+      <trans-unit id="settings.stats.meters" datatype="html">
+        <source>Zähler</source>
+        <target>Meters</target>
+      </trans-unit>
+      <trans-unit id="settings.stats.readings" datatype="html">
+        <source>Ablesungen</source>
+        <target>Readings</target>
+      </trans-unit>
+      <trans-unit id="settings.about.desc" datatype="html">
+        <source>Dein persönlicher Energie- und Verbrauchsrechner</source>
+        <target>Your personal energy and consumption tracker</target>
+      </trans-unit>
+      <trans-unit id="settings.version" datatype="html">
+        <source>Version 1.0</source>
+        <target>Version 1.0</target>
+      </trans-unit>
+      <trans-unit id="settings.logout" datatype="html">
+        <source>Abmelden</source>
+        <target>Sign out</target>
+      </trans-unit>
+      <trans-unit id="settings.exported" datatype="html">
+        <source>Daten exportiert</source>
+        <target>Data exported</target>
+      </trans-unit>
+      <trans-unit id="settings.imported" datatype="html">
+        <source>Daten importiert</source>
+        <target>Data imported</target>
+      </trans-unit>
+      <trans-unit id="settings.importError" datatype="html">
+        <source>Fehler beim Import</source>
+        <target>Import error</target>
+      </trans-unit>
+      <trans-unit id="settings.deleteAll.title" datatype="html">
+        <source>Alle Daten löschen</source>
+        <target>Delete all data</target>
+      </trans-unit>
+      <trans-unit id="settings.deleteAll.message" datatype="html">
+        <source>Alle Daten wirklich löschen? Diese Aktion kann nicht rükgängig gemacht werden!</source>
+        <target>Really delete all data? This action cannot be undone!</target>
+      </trans-unit>
+      <trans-unit id="settings.deleteAll.confirm" datatype="html">
+        <source>Alles löschen</source>
+        <target>Delete everything</target>
+      </trans-unit>
+      <trans-unit id="settings.deleteAll.error" datatype="html">
+        <source>Fehler beim Löschen der Daten</source>
+        <target>Error deleting data</target>
+      </trans-unit>
+      <trans-unit id="tariffForm.updated" datatype="html">
+        <source>Tarif aktualisiert</source>
+        <target>Tariff updated</target>
+      </trans-unit>
+      <trans-unit id="tariffForm.added" datatype="html">
+        <source>Neuer Tarif hinzugefügt</source>
+        <target>New tariff added</target>
+      </trans-unit>
+      <trans-unit id="settings.notifications.title" datatype="html">
+        <source>Benachrichtigungen</source>
+        <target>Notifications</target>
+      </trans-unit>
+      <trans-unit id="settings.notifications.reminder.title" datatype="html">
+        <source>Monatliche Ableseerinnerung</source>
+        <target>Monthly reading reminder</target>
+      </trans-unit>
+      <trans-unit id="settings.notifications.blocked" datatype="html">
+        <source>Benachrichtigungen sind im Browser blockiert.</source>
+        <target>Notifications are blocked in your browser.</target>
+      </trans-unit>
+      <trans-unit id="settings.notifications.active" datatype="html">
+        <source>Aktiv – du wirst monatlich erinnert.</source>
+        <target>Active – you will be reminded monthly.</target>
+      </trans-unit>
+      <trans-unit id="settings.notifications.reminder.desc" datatype="html">
+        <source>Erhalte monatlich eine Erinnerung, deinen Zählerstand einzutragen.</source>
+        <target>Receive a monthly reminder to enter your meter readings.</target>
+      </trans-unit>
+      <trans-unit id="settings.notifications.toggle.aria" datatype="html">
+        <source>Ableseerinnerung</source>
+        <target>Reading reminder</target>
+      </trans-unit>
+      <trans-unit id="settings.notifications.test.title" datatype="html">
+        <source>Test-Benachrichtigung</source>
+        <target>Test notification</target>
+      </trans-unit>
+      <trans-unit id="settings.notifications.test.desc" datatype="html">
+        <source>Sendet sofort eine Beispiel-Erinnerung.</source>
+        <target>Sends an example reminder immediately.</target>
+      </trans-unit>
+      <trans-unit id="settings.notifications.testBtn" datatype="html">
+        <source>Testen</source>
+        <target>Test</target>
+      </trans-unit>
+      <trans-unit id="notification.reminder.title" datatype="html">
+        <source>MeterFlow – Zähler ablesen</source>
+        <target>MeterFlow – Read your meters</target>
+      </trans-unit>
+      <trans-unit id="notification.reminder.body" datatype="html">
+        <source>Zeit für deinen monatlichen Zählerstand! Jetzt Werte erfassen.</source>
+        <target>Time for your monthly meter reading! Enter your values now.</target>
+      </trans-unit>
+      <trans-unit id="dashboard.totalCo2" datatype="html">
+        <source>CO₂ <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></source>
+        <target>CO₂ <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></target>
+      </trans-unit>
+      <trans-unit id="dashboard.co2" datatype="html">
+        <source>CO₂</source>
+        <target>CO₂</target>
+      </trans-unit>
+      <trans-unit id="reports.totalCo2" datatype="html">
+        <source>CO₂-Emissionen <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></source>
+        <target>CO₂ emissions <x id="INTERPOLATION" equiv-text="{{ state.selectedYear() }}"/></target>
+      </trans-unit>
+      <trans-unit id="reports.co2Note" datatype="html">
+        <source>Basis: DE-Emissionsfaktoren (UBA 2024)</source>
+        <target>Based on: DE emission factors (UBA 2024)</target>
+      </trans-unit>
+      <trans-unit id="reports.pdfBtn" datatype="html">
+        <source>PDF exportieren</source>
+        <target>Export PDF</target>
+      </trans-unit>
+      <trans-unit id="reports.pdfBtn.aria" datatype="html">
+        <source>PDF exportieren</source>
+        <target>Export PDF</target>
+      </trans-unit>
+      <trans-unit id="pdf.subtitle" datatype="html">
+        <source>Jahresabrechnung <x id="year" equiv-text="year"/></source>
+        <target>Annual report <x id="year" equiv-text="year"/></target>
+      </trans-unit>
+      <trans-unit id="pdf.generatedOn" datatype="html">
+        <source>Erstellt am <x id="date" equiv-text="date"/></source>
+        <target>Generated on <x id="date" equiv-text="date"/></target>
+      </trans-unit>
+      <trans-unit id="pdf.overview" datatype="html">
+        <source>Übersicht <x id="year" equiv-text="year"/></source>
+        <target>Overview <x id="year" equiv-text="year"/></target>
+      </trans-unit>
+      <trans-unit id="pdf.totalCostLabel" datatype="html">
+        <source>Gesamtkosten: </source>
+        <target>Total costs: </target>
+      </trans-unit>
+      <trans-unit id="pdf.totalCo2Label" datatype="html">
+        <source>Gesamtemissionen: </source>
+        <target>Total emissions: </target>
+      </trans-unit>
+      <trans-unit id="pdf.meterTable" datatype="html">
+        <source>Zähler-Übersicht</source>
+        <target>Meter overview</target>
+      </trans-unit>
+      <trans-unit id="pdf.col.meter" datatype="html">
+        <source>Zähler</source>
+        <target>Meter</target>
+      </trans-unit>
+      <trans-unit id="pdf.col.type" datatype="html">
+        <source>Typ</source>
+        <target>Type</target>
+      </trans-unit>
+      <trans-unit id="pdf.col.consumption" datatype="html">
+        <source>Verbrauch</source>
+        <target>Consumption</target>
+      </trans-unit>
+      <trans-unit id="pdf.col.unit" datatype="html">
+        <source>Einheit</source>
+        <target>Unit</target>
+      </trans-unit>
+      <trans-unit id="pdf.col.cost" datatype="html">
+        <source>Kosten (€)</source>
+        <target>Cost (€)</target>
+      </trans-unit>
+      <trans-unit id="pdf.col.co2" datatype="html">
+        <source>CO₂ (kg)</source>
+        <target>CO₂ (kg)</target>
+      </trans-unit>
+      <trans-unit id="pdf.col.month" datatype="html">
+        <source>Monat</source>
+        <target>Month</target>
+      </trans-unit>
+      <trans-unit id="dashboard.yoy.cheaper" datatype="html">
+        <source><x id="INTERPOLATION"/>% ggü. <x id="INTERPOLATION_1"/></source>
+        <target><x id="INTERPOLATION"/>% vs. <x id="INTERPOLATION_1"/></target>
+      </trans-unit>
+      <trans-unit id="dashboard.yoy.costlier" datatype="html">
+        <source>+<x id="INTERPOLATION"/>% ggü. <x id="INTERPOLATION_1"/></source>
+        <target>+<x id="INTERPOLATION"/>% vs. <x id="INTERPOLATION_1"/></target>
+      </trans-unit>
+      <trans-unit id="settings.csvImport.title" datatype="html">
+        <source>CSV-Ablesungen importieren</source>
+        <target>Import CSV readings</target>
+      </trans-unit>
+      <trans-unit id="settings.csvImport.desc" datatype="html">
+        <source>Zählerstände aus einer CSV-Datei einlesen (Datum, Wert, Notiz)</source>
+        <target>Import meter readings from a CSV file (date, value, note)</target>
+      </trans-unit>
+      <trans-unit id="settings.csvImportBtn" datatype="html">
+        <source>CSV importieren</source>
+        <target>Import CSV</target>
+      </trans-unit>
+      <trans-unit id="csv.dialog.title" datatype="html">
+        <source>CSV-Ablesungen importieren</source>
+        <target>Import CSV readings</target>
+      </trans-unit>
+      <trans-unit id="csv.format.hint" datatype="html">
+        <source>Erwartetes Format: <x id="START_TAG_CODE"/>datum,wert,notiz<x id="CLOSE_TAG_CODE"/> – Datum als JJJJ-MM-TT oder TT.MM.JJJJ</source>
+        <target>Expected format: <x id="START_TAG_CODE"/>date,value,note<x id="CLOSE_TAG_CODE"/> – date as YYYY-MM-DD or DD.MM.YYYY</target>
+      </trans-unit>
+      <trans-unit id="csv.dropzone.aria" datatype="html">
+        <source>CSV-Datei hier ablegen oder auswählen</source>
+        <target>Drop CSV file here or select one</target>
+      </trans-unit>
+      <trans-unit id="csv.dropzone.hint" datatype="html">
+        <source>CSV hier ablegen oder</source>
+        <target>Drop CSV here or</target>
+      </trans-unit>
+      <trans-unit id="csv.dropzone.select" datatype="html">
+        <source>Datei auswählen</source>
+        <target>Select file</target>
+      </trans-unit>
+      <trans-unit id="csv.dropzone.change" datatype="html">
+        <source>Andere Datei</source>
+        <target>Different file</target>
+      </trans-unit>
+      <trans-unit id="csv.rows.total" datatype="html">
+        <source> Zeilen gelesen –</source>
+        <target> rows read –</target>
+      </trans-unit>
+      <trans-unit id="csv.rows.errors" datatype="html">
+        <source> Fehler</source>
+        <target> errors</target>
+      </trans-unit>
+      <trans-unit id="csv.meter.label" datatype="html">
+        <source>Zähler auswählen:</source>
+        <target>Select meter:</target>
+      </trans-unit>
+      <trans-unit id="csv.table.aria" datatype="html">
+        <source>Vorschau</source>
+        <target>Preview</target>
+      </trans-unit>
+      <trans-unit id="csv.col.line" datatype="html">
+        <source>#</source>
+        <target>#</target>
+      </trans-unit>
+      <trans-unit id="csv.col.date" datatype="html">
+        <source>Datum</source>
+        <target>Date</target>
+      </trans-unit>
+      <trans-unit id="csv.col.value" datatype="html">
+        <source>Wert</source>
+        <target>Value</target>
+      </trans-unit>
+      <trans-unit id="csv.col.note" datatype="html">
+        <source>Notiz</source>
+        <target>Note</target>
+      </trans-unit>
+      <trans-unit id="csv.col.status" datatype="html">
+        <source>Status</source>
+        <target>Status</target>
+      </trans-unit>
+      <trans-unit id="csv.status.error" datatype="html">
+        <source>Fehler</source>
+        <target>Error</target>
+      </trans-unit>
+      <trans-unit id="csv.status.duplicate" datatype="html">
+        <source>Duplikat</source>
+        <target>Duplicate</target>
+      </trans-unit>
+      <trans-unit id="csv.status.ok" datatype="html">
+        <source>OK</source>
+        <target>OK</target>
+      </trans-unit>
+      <trans-unit id="csv.cancel" datatype="html">
+        <source>Abbrechen</source>
+        <target>Cancel</target>
+      </trans-unit>
+      <trans-unit id="csv.importBtn" datatype="html">
+        <source><x id="INTERPOLATION"/> Ablesungen importieren</source>
+        <target>Import <x id="INTERPOLATION"/> readings</target>
+      </trans-unit>
+      <trans-unit id="csv.error.date" datatype="html">
+        <source>Ungültiges Datum „<x id="date"/>"</source>
+        <target>Invalid date "<x id="date"/>"</target>
+      </trans-unit>
+      <trans-unit id="csv.error.value" datatype="html">
+        <source>Ungültiger Wert „<x id="value"/>"</source>
+        <target>Invalid value "<x id="value"/>"</target>
+      </trans-unit>
+      <trans-unit id="csv.error.negative" datatype="html">
+        <source>Wert darf nicht negativ sein</source>
+        <target>Value must not be negative</target>
+      </trans-unit>
+      <trans-unit id="csv.parseError" datatype="html">
+        <source>CSV-Datei konnte nicht gelesen werden</source>
+        <target>Could not read CSV file</target>
+      </trans-unit>
+      <trans-unit id="csv.importSuccess" datatype="html">
+        <source><x id="count"/> Ablesungen importiert</source>
+        <target><x id="count"/> readings imported</target>
+      </trans-unit>
+      <trans-unit id="csv.importError" datatype="html">
+        <source>Fehler beim Import</source>
+        <target>Import error</target>
+      </trans-unit>
+      <!-- PWA Install -->
+      <trans-unit id="settings.pwa.title" datatype="html">
+        <source>App installieren</source>
+        <target>Install App</target>
+      </trans-unit>
+      <trans-unit id="settings.pwa.doneTitle" datatype="html">
+        <source>Bereits installiert</source>
+        <target>Already installed</target>
+      </trans-unit>
+      <trans-unit id="settings.pwa.doneDesc" datatype="html">
+        <source>MeterFlow läuft als eigenständige App auf deinem Gerät.</source>
+        <target>MeterFlow is running as a standalone app on your device.</target>
+      </trans-unit>
+      <trans-unit id="settings.pwa.installTitle" datatype="html">
+        <source>Zum Home-Bildschirm hinzufügen</source>
+        <target>Add to Home Screen</target>
+      </trans-unit>
+      <trans-unit id="settings.pwa.installDesc" datatype="html">
+        <source>Installiere MeterFlow als App – ohne App Store, direkt aus dem Browser.</source>
+        <target>Install MeterFlow as an app – no App Store required, directly from the browser.</target>
+      </trans-unit>
+      <trans-unit id="settings.pwa.installBtn" datatype="html">
+        <source>Installieren</source>
+        <target>Install</target>
+      </trans-unit>
+      <trans-unit id="settings.pwa.iosTitle" datatype="html">
+        <source>iOS: Zum Home-Bildschirm</source>
+        <target>iOS: Add to Home Screen</target>
+      </trans-unit>
+      <trans-unit id="settings.pwa.iosDesc" datatype="html">
+        <source>Tippe auf das Teilen-Symbol ↑ in Safari und wähle „Zum Home-Bildschirm".</source>
+        <target>Tap the Share icon ↑ in Safari and choose "Add to Home Screen".</target>
+      </trans-unit>
+      <trans-unit id="settings.pwa.installed" datatype="html">
+        <source>App wurde installiert</source>
+        <target>App installed</target>
+      </trans-unit>
+      <!-- CO₂-Emissionsfaktoren Settings -->
+      <trans-unit id="settings.co2Factors.title" datatype="html">
+        <source>CO₂-Emissionsfaktoren</source>
+        <target>CO₂ Emission Factors</target>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.desc" datatype="html">
+        <source>Faktoren für die CO₂-Berechnung pro Energietyp. Standardwerte stammen vom Umweltbundesamt (UBA) 2024. Du kannst sie jährlich aktualisieren und die Quelle verlinken.</source>
+        <target>Factors for CO₂ calculation per energy type. Defaults are from the German Federal Environment Agency (UBA) 2024. You can update them annually and link to your source.</target>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.default" datatype="html">
+        <source>Standard (UBA)</source>
+        <target>Default (UBA)</target>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.editAria" datatype="html">
+        <source>CO₂-Faktor bearbeiten</source>
+        <target>Edit CO₂ factor</target>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.factor" datatype="html">
+        <source>Faktor (kg CO₂/<x id="INTERPOLATION" equiv-text="{{ entry.unit }}"/>)</source>
+        <target>Factor (kg CO₂/<x id="INTERPOLATION"/>)</target>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.factorHint" datatype="html">
+        <source>Negative Werte = Gutschrift (Solar)</source>
+        <target>Negative values = credit (Solar)</target>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.source" datatype="html">
+        <source>Quelle</source>
+        <target>Source</target>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.sourceUrl" datatype="html">
+        <source>Link zur Quelle (optional)</source>
+        <target>Source link (optional)</target>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.sourceUrlHint" datatype="html">
+        <source>z.B. UBA-Emissionsfaktoren, AGFW-Statistik</source>
+        <target>e.g. UBA emission factors, AGFW statistics</target>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.cancel" datatype="html">
+        <source>Abbrechen</source>
+        <target>Cancel</target>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.save" datatype="html">
+        <source>Speichern</source>
+        <target>Save</target>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.reset" datatype="html">
+        <source>Auf UBA-Standard zurücksetzen</source>
+        <target>Reset to UBA default</target>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.saved" datatype="html">
+        <source>CO₂-Faktor gespeichert</source>
+        <target>CO₂ factor saved</target>
+      </trans-unit>
+      <trans-unit id="settings.co2Factors.reset.done" datatype="html">
+        <source>Standardwert wiederhergestellt</source>
+        <target>Default value restored</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

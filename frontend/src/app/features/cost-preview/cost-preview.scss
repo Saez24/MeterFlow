@@ -1,0 +1,251 @@
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 0 0 4px;
+}
+
+.page-subtitle {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.year-select {
+  min-width: 120px;
+  height: 56px;
+}
+
+.total-summary-card {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  margin-bottom: 32px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+
+  mat-card-header {
+    padding: 16px 16px 8px;
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  mat-card-title {
+    color: var(--text-primary);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  mat-card-subtitle {
+    color: var(--text-secondary);
+    opacity: 1;
+    font-size: 0.9rem;
+  }
+
+  mat-card-content {
+    padding: 8px 16px 16px;
+  }
+}
+
+.total-amount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+
+  .total-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    color: var(--apple-blue);
+  }
+
+  .total-value {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--apple-blue);
+  }
+}
+
+.total-amount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+
+  .total-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .total-value {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+}
+
+.meters-section {
+  .section-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0 0 24px;
+    color: var(--text-primary);
+  }
+}
+
+.meters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.meter-preview-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--meter-color, #666);
+  border-radius: 8px;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.04);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  text-align: center;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.15),
+      0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.meter-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 16px 16px 0;
+
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  mat-card-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+}
+
+.meter-header mat-card-subtitle {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+.meter-cost-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.cost-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .cost-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    color: var(--accent-color);
+  }
+
+  .cost-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+  }
+}
+
+.cost-details {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.cost-detail {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  .detail-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: var(--text-secondary);
+  }
+
+  .detail-value {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+}
+
+.cost-table {
+  width: 100%;
+
+  th,
+  td {
+    padding: 12px 8px;
+    text-align: left;
+  }
+
+  th {
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--border-color);
+  }
+
+  td {
+    border-bottom: 1px solid var(--border-color);
+  }
+}

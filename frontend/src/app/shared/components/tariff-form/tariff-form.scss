@@ -1,0 +1,72 @@
+:host {
+  display: block;
+  min-width: 450px;
+}
+
+.header {
+  padding: 0 24px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  margin-top: 0;
+}
+
+.meter-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.tariff-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-content {
+  padding: 12px 24px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
+}
+
+.form-row--2 > * {
+  flex: 1 1 calc(50% - 8px);
+  min-width: 220px;
+}
+
+.form-field--full {
+  width: 100%;
+}
+
+.section-divider {
+  margin: 24px 0;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+  color: var(--text-secondary);
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-color);
+  margin-top: 24px;
+}

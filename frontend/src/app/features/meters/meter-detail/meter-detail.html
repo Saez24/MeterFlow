@@ -1,0 +1,146 @@
+<div class="page-container">
+  @if (meter(); as m) {
+
+  <div class="page-header">
+    <button class="back-btn" mat-icon-button routerLink="/meters">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="header-main">
+      <div class="header-icon" [style.background]="m.color + '22'">
+        <mat-icon [style.color]="m.color">{{ m.icon }}</mat-icon>
+      </div>
+      <div class="header-info">
+        <h1 class="page-title">{{ m.name }}</h1>
+        <p class="page-subtitle">
+          {{ getMeta(m.type).label }}{{ m.provider ? ' · ' + m.provider : '' }}
+        </p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button mat-stroked-button [routerLink]="['/readings/new']" [queryParams]="{ meterId: m.id }">
+        <mat-icon>add</mat-icon>Ablesung
+      </button>
+      <button class="edit-btn" mat-icon-button [routerLink]="['edit']">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+
+    <div class="stat-card">
+      <div class="stat-icon" [style.background]="m.color + '22'">
+        <mat-icon [style.color]="m.color">speed</mat-icon>
+      </div>
+      <div>
+        <div class="stat-label">Aktueller Stand</div>
+        @if (latestReading()) {
+        <div class="stat-value">{{ latestReading()!.value | number:'1.0-3' }} {{ m.unit }}</div>
+        } @else {
+        <div class="stat-value"><span class="stat-empty">Keine Ablesung</span></div>
+        }
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background:rgba(16,185,129,0.12)">
+        <mat-icon style="color:#10b981">show_chart</mat-icon>
+      </div>
+      <div>
+        <div class="stat-label">Letzter Verbrauch</div>
+        @if (lastConsumption()) {
+        <div class="stat-value">
+          {{ lastConsumption() ?? 0 | number:'1.0-3' }} {{ m.unit }}
+        </div>
+        } @else {
+        <div class="stat-value"><span class="stat-empty">—</span></div>
+        }
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background:rgba(245,158,11,0.12)">
+        <mat-icon style="color:#f59e0b">euro</mat-icon>
+      </div>
+      <div>
+        <div class="stat-label">Grundgebühr / Monat</div>
+        <div class="stat-value">
+          {{ (activeTariff()?.baseCharge ?? 0) | currency: 'EUR' : 'symbol' : '1.2-2' }}
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background:rgba(99,102,241,0.12)">
+        <mat-icon style="color:#6366f1">receipt_long</mat-icon>
+      </div>
+      <div>
+        <div class="stat-label">Preis / {{ m.unit }}</div>
+        <div class="stat-value">
+          {{ (activeTariff()?.pricePerUnit ?? 0) | currency: 'EUR' : 'symbol' : '1.4-4' }}
+        </div>
+      </div>
+    </div>
+
+    @if (m.type === 'water' && activeTariff()?.wastewaterPrice) {
+    <div class="stat-card">
+      <div class="stat-icon" style="background:rgba(6,182,212,0.12)">
+        <mat-icon style="color:#06b6d4">water</mat-icon>
+      </div>
+      <div>
+        <div class="stat-label">Abwasser / m³</div>
+        <div class="stat-value">
+          {{ activeTariff()!.wastewaterPrice | currency:'EUR':'symbol':'1.4-4' }}
+        </div>
+      </div>
+    </div>
+    }
+
+  </div>
+
+  @if (m.type === 'gas' && activeTariff()) {
+  <div class="gas-params-box">
+    <mat-icon style="color:#3b82f6">local_fire_department</mat-icon>
+    Brennwert: <strong>{{ activeTariff()?.calorificValue ?? m.calorificValue }} kWh/m³</strong> ·
+    Z-Zahl: <strong>{{ activeTariff()?.zNumber ?? m.zNumber }}</strong> ·
+    Faktor:
+    <strong>{{
+      ((activeTariff()?.calorificValue ?? m.calorificValue) ?? 0) *
+      ((activeTariff()?.zNumber ?? m.zNumber) ?? 0) | number: '1.4-4'
+      }}</strong>
+  </div>
+  }
+
+  <!-- Tabs -->
+  <nav class="detail-nav">
+    <a class="detail-nav-link" routerLink="chart" routerLinkActive="active">
+      <mat-icon class="tab-icons">bar_chart</mat-icon>
+      <span class="tab-names">Verlauf</span>
+    </a>
+    <a class="detail-nav-link" routerLink="readings" routerLinkActive="active">
+      <mat-icon class="tab-icons">history</mat-icon>
+      <span class="tab-names">Ablesungen</span>
+    </a>
+    <a class="detail-nav-link" routerLink="tariffs" routerLinkActive="active">
+      <mat-icon class="tab-icons">receipt_long</mat-icon>
+      <span class="tab-names">Tarife</span>
+    </a>
+    <a class="detail-nav-link" routerLink="costs" routerLinkActive="active">
+      <mat-icon class="tab-icons">price_check</mat-icon>
+      <span class="tab-names">Kostenvorschau</span>
+    </a>
+  </nav>
+
+  <div class="tab-content">
+    <router-outlet></router-outlet>
+  </div>
+
+  } @else {
+  <div class="not-found">
+    <mat-icon>search_off</mat-icon>
+    <h3>Zähler nicht gefunden</h3>
+    <button mat-flat-button color="primary" routerLink="/meters">Zurück</button>
+  </div>
+  }
+</div>

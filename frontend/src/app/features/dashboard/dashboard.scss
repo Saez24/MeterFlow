@@ -1,0 +1,476 @@
+.dashboard {
+  padding: 0 0 40px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+// ── Budget-Warnbanner ──────────────────────────────────────────────────────────
+.budget-alerts-section {
+  padding: 0 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.budget-alert {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 12px;
+  row-gap: 6px;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(255, 149, 0, 0.08);
+  border: 1px solid rgba(255, 149, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+
+  &--critical {
+    background: rgba(255, 59, 48, 0.08);
+    border-color: rgba(255, 59, 48, 0.3);
+
+    .budget-alert__icon {
+      color: var(--apple-red, #ff3b30);
+    }
+    .budget-alert__bar-fill {
+      background: var(--apple-red, #ff3b30);
+    }
+  }
+
+  &__icon {
+    grid-row: span 2;
+    color: #ff9500;
+    font-size: 22px;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__title {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+  }
+
+  &__detail {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  &__bar {
+    grid-column: 2;
+    height: 4px;
+    background: var(--border-subtle, rgba(0, 0, 0, 0.08));
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  &__bar-fill {
+    height: 100%;
+    background: #ff9500;
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+}
+
+// ── Budget-Badge auf Meter-Card ────────────────────────────────────────────────
+.meter-budget-badge {
+  margin-left: auto;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 149, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: #ff9500;
+  }
+
+  &--critical {
+    background: rgba(255, 59, 48, 0.12);
+    mat-icon {
+      color: var(--apple-red, #ff3b30);
+    }
+  }
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 40px 24px 32px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.dashboard-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 0 0 8px;
+  line-height: 1;
+}
+
+.title-accent {
+  color: var(--apple-blue);
+}
+
+.dashboard-subtitle {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 1rem;
+}
+
+.summary-section {
+  padding: 0 24px 32px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.summary-card {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 20px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+  }
+}
+
+.summary-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(var(--apple-blue-rgb), 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  mat-icon {
+    color: var(--apple-blue);
+  }
+
+  &--co2 {
+    background: rgba(16, 185, 129, 0.1);
+    mat-icon {
+      color: #10b981;
+    }
+  }
+}
+
+.summary-card--co2 {
+  .summary-value {
+    color: #10b981;
+  }
+}
+
+.yoy-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  padding: 4px 10px 4px 6px;
+  border-radius: 20px;
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    color: inherit;
+  }
+
+  .yoy-period {
+    font-weight: 400;
+    opacity: 0.75;
+    font-size: 0.7rem;
+  }
+
+  &--worse {
+    background: rgba(255, 59, 48, 0.1);
+    color: var(--apple-red, #ff3b30);
+  }
+}
+
+.stat-value.co2 {
+  color: #10b981;
+  font-size: 0.875rem;
+}
+
+.summary-info {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  gap: 2px;
+  align-items: center;
+  justify-content: center;
+}
+
+.summary-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+}
+
+.summary-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px 16px;
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+}
+
+.see-all-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--apple-blue) !important;
+  font-weight: 500;
+}
+
+.meters-section {
+  margin-bottom: 40px;
+}
+
+.meters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 0 24px;
+}
+
+.meter-card {
+  border-radius: 20px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--meter-color, var(--apple-blue));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+    border-color: var(--meter-color, var(--apple-blue));
+
+    &::before {
+      opacity: 1;
+    }
+  }
+}
+
+.meter-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.meter-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.meter-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  background: var(--bg);
+  padding: 4px 10px;
+  border-radius: 100px;
+  border: 1px solid var(--border-color);
+}
+
+.meter-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 8px;
+  letter-spacing: -0.01em;
+}
+
+.meter-reading {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.reading-value {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--meter-color, var(--apple-blue));
+}
+
+.reading-unit {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.reading-date {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.no-reading {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: 16px;
+  padding: 12px 0;
+}
+
+.meter-card__footer {
+  border-top: 1px solid var(--border-color);
+  padding-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.meter-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  min-width: 70px;
+}
+
+.stat-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+
+  &.cost {
+    color: var(--meter-color, var(--apple-blue));
+  }
+}
+
+.meter-price {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+.recent-section {
+  margin-top: 40px;
+
+  // readings-list wrapper im Dashboard-Kontext
+  app-readings-list {
+    display: block;
+    margin: 0 24px;
+    padding: 12px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    background: var(--bg-surface);
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--text-secondary);
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    opacity: 0.4;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    justify-content: center;
+    text-align: center;
+  }
+}

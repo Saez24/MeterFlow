@@ -1,0 +1,277 @@
+.page-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.back-btn {
+  margin-top: 4px;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 0 0 4px;
+  color: var(--text-primary);
+}
+
+.page-subtitle {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.meter-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-section {
+  padding: 24px 0;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-primary);
+}
+
+.section-divider {
+  opacity: 0.4;
+}
+
+/* ── Typ-Auswahl ── */
+.type-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.type-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid var(--border-color);
+  background: var(--bg-surface);
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 80px;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+.type-btn:hover {
+  border-color: var(--type-color);
+  color: var(--type-color);
+}
+
+.type-btn--active {
+  border-color: var(--type-color) !important;
+  background: color-mix(in srgb, var(--type-color) 12%, transparent) !important;
+  color: var(--type-color) !important;
+}
+
+/* ── Form Layout ── */
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.form-row--2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 600px) {
+  .form-row--2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-field {
+  flex: 1;
+  width: 100%;
+}
+
+.form-field--full {
+  width: 100%;
+}
+
+/* ── Wasser ── */
+.water-price-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.water-price-info mat-icon {
+  color: #06b6d4;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.water-total-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--bg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+
+.preview-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.preview-value {
+  font-weight: 700;
+  color: #06b6d4;
+}
+
+/* ── Gartenwasser ── */
+.garden-section {
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.garden-header {
+  margin-bottom: 12px;
+}
+.garden-icon {
+  color: #10b981;
+}
+
+.garden-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 0 0 20px;
+  line-height: 1.6;
+}
+
+.link-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  color: #10b981;
+  margin-top: 8px;
+}
+
+.no-water-meter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(245, 158, 11, 0.1);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  color: #f59e0b;
+}
+
+/* ── Gas ── */
+.gas-section {
+  background: rgba(var(--apple-blue-rgb), 0.06);
+  border: 1px solid rgba(var(--apple-blue-rgb), 0.15);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.gas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.gas-icon {
+  color: var(--apple-blue);
+}
+
+.gas-hint {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.gas-preview {
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid var(--border-color);
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.formula-label,
+.example-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.formula {
+  font-family: monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.example-result {
+  font-weight: 600;
+  color: var(--apple-blue);
+}
+
+/* ── Aktionen ── */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 24px;
+}
+
+.save-btn {
+  border-radius: 12px;
+  padding: 0 24px;
+  height: 44px;
+}

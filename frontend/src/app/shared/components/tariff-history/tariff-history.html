@@ -1,0 +1,122 @@
+@if (isLinkedGardenWater()) {
+<div class="tariff-container--linked">
+  <mat-icon>info_outline</mat-icon>
+  <span>Dieser Gartenwasserzähler ist mit einem Hauptzähler verknüpft. Der Verbrauch wird
+    automatisch vom Abwasser abgezogen und es ist kein separater Tarif erforderlich.</span>
+</div>
+} @else {
+<div class="tariff-container">
+  <div class="tariff-header">
+    <div>
+      <h3 class="tariff-title">
+        <mat-icon>history</mat-icon>
+        Tarifhistorie
+      </h3>
+      <p class="tariff-desc">
+        Beim Speichern einer Ablesung wird automatisch der zum Datum passende Tarif verwendet.
+      </p>
+    </div>
+    <button mat-stroked-button (click)="addTariff.emit()" class="add-btn">
+      <mat-icon>add</mat-icon>
+      Neuer Tarif
+    </button>
+  </div>
+
+  <!-- Tarifhistorie Liste -->
+  <div class="tariff-timeline">
+    @if (sortedHistory().length === 0) {
+    <div class="no-history">
+      <mat-icon>info_outline</mat-icon>
+      <span>Keine Tarife für diesen Zähler vorhanden. Bitte fügen Sie einen Tarif hinzu.</span>
+    </div>
+    }
+
+    <!-- Historische Tarife (neueste zuerst) -->
+    @for (period of sortedHistory(); track period.id; let i = $index; let last = $last) {
+    <div class="tariff-entry">
+      <div class="tariff-timeline-col">
+        <div class="tariff-dot" [class.tariff-dot--current]="i === 0"></div>
+        @if (!last) {
+        <div class="tariff-line"></div>
+        }
+      </div>
+      <div class="tariff-card">
+        <div class="tariff-card-header">
+          <div class="tariff-date-block">
+            <mat-icon class="date-icon">event</mat-icon>
+            <span class="tariff-date">Gültig: {{ period.validFrom | date: 'dd.MM.yyyy' }} @if(period.validTo) { - {{
+              period.validTo | date: 'dd.MM.yyyy' }} }</span>
+            @if (i === 0) {
+            <span class="tariff-active-badge">Aktiv</span>
+            }
+          </div>
+          <div class="tariff-card-actions">
+            <button mat-icon-button (click)="editTariff.emit(period.id)" [matTooltip]="'Tarif bearbeiten'"
+              class="edit-btn">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button (click)="delete(period)" [matTooltip]="'Tarif löschen'" class="delete-btn">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="tariff-prices">
+          <div class="price-chip">
+            <span class="price-label">Arbeitspreis</span>
+            <span class="price-val">{{ period.pricePerUnit | currency: 'EUR' : 'symbol' : '1.4-4' }}/{{
+              meter().unit
+              }}</span>
+          </div>
+          @if (isDistrictHeating()) {
+          <div class="price-chip">
+            <span class="price-label">Bereitstellungspreis</span>
+            <span class="price-val">{{ getFernwaermeAnnualBaseCharge(period) | currency: 'EUR' : 'symbol' : '1.2-2' }}/Jahr</span>
+            <span class="price-hint">{{ meter().connectedLoadKw ?? 10 }} kW × {{ period.basePricePerKw | currency: 'EUR' : 'symbol' : '1.4-4' }}/kW</span>
+          </div>
+          } @else {
+          <div class="price-chip">
+            <span class="price-label">Grundgebühr</span>
+            <span class="price-val">{{ period.baseCharge | currency: 'EUR' : 'symbol' : '1.2-2' }}/Mon.</span>
+          </div>
+          }
+          @if (period.wastewaterPrice) {
+          <div class="price-chip">
+            <span class="price-label">Abwasser</span>
+            <span class="price-val">{{ period.wastewaterPrice | currency: 'EUR' : 'symbol' : '1.4-4' }}/m³</span>
+          </div>
+          } @if (period.calorificValue) {
+          <div class="price-chip">
+            <span class="price-label">Brennwert</span>
+            <span class="price-val">{{ period.calorificValue }} kWh/m³</span>
+          </div>
+          } @if (period.zNumber) {
+          <div class="price-chip">
+            <span class="price-label">Z-Zahl</span>
+            <span class="price-val">{{ period.zNumber }}</span>
+          </div>
+          }
+        </div>
+
+        @if (period.note) {
+        <div class="tariff-note">
+          <mat-icon>notes</mat-icon>
+          {{ period.note }}
+        </div>
+        }
+
+        <!-- Preisvergleich zum vorherigen Tarif -->
+        @if (getPriceDiff(i); as diff) {
+        <div class="tariff-diff" [class.tariff-diff--up]="diff.pct > 0" [class.tariff-diff--down]="diff.pct < 0">
+          <mat-icon>{{ diff.pct > 0 ? 'trending_up' : 'trending_down' }}</mat-icon>
+          {{ diff.pct > 0 ? '+' : '' }}{{ diff.pct | number: '1.1-1' }}% gegenüber vorherigem Tarif
+          ({{ diff.prev | currency: 'EUR' : 'symbol' : '1.4-4' }} →
+          {{ diff.curr | currency: 'EUR' : 'symbol' : '1.4-4' }})
+        </div>
+        }
+      </div>
+    </div>
+    }
+  </div>
+</div>
+}

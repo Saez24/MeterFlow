@@ -75,10 +75,32 @@ Empfehlung: **Contract-First** — REST-Endpunkt-Liste zuerst fixieren, dann WS2
 
 ## 6. Aktueller Stand
 
-**WS2 (Backend-Fundament) — größtenteils fertig.** 🟡 · **Contract-First — abgeschlossen.** ✅ · **WS1 — abgeschlossen.** ✅
+**WS3b (Design-Fundament) — gestartet.** 🟡 · **WS2 (Backend) — funktional fertig.** ✅ · **Contract-First** ✅ · **WS1** ✅
 
-**WS2 — Django-Backend-Fundament (dieser Schritt):**
-- [x] `backend/.venv` + Deps installiert (Django 5.2, DRF, `djangorestframework-camel-case`,
+**WS3b — Design-System-Fundament (dieser Schritt):**
+- [x] MeterFlow-Angular-App (Angular 22, 7 Feature-Module) nach `frontend/` übernommen
+      (`src/`, `angular.json`, `package.json`, tsconfig). `npm install` (Node 26) + `npm run build`
+      **grün** (nur bekannte CommonJS-Warnungen von tesseract/jspdf/papaparse).
+- [x] **Kanonische Design-Tokens** `src/styles/_design-tokens.scss` (Apple, Light/Dark via
+      `:root` + `[data-theme='dark']`, aus DataForge, **ohne Material**): `--bg/--bg-card/--text-1..3/
+      --accent/--border/--r-sm..xl/--shadow-*/--blur`. Font = Apple-System-Stack (**kein CDN**;
+      self-hosted DM Sans WOFF2 später möglich). Additiv in `styles.scss` eingebunden — Material
+      koexistiert noch, wird modulweise entfernt.
+- [x] **Basis-Komponenten** (`_ui-components.scss` `.df-btn/.df-card/.df-field/.df-input`) +
+      Standalone Angular-22-Komponenten `app-button` (Signal-Inputs variant/size/block/disabled)
+      und `app-icon` (Inline-SVG-Registry, **kein Material-Icon-Font**, XSS/CSP-sicher via `[attr.d]`).
+      5 Vitest-Specs grün (`ng test --include`).
+- [x] ThemeService bereits vorhanden & passend (Signal mode light/dark/system, `prefers-color-scheme`,
+      localStorage, setzt `data-theme` auf `<html>`) — übernommen.
+
+Noch offen in WS3b (nächste Schritte):
+- [ ] **Material entfernen** (21 Dateien importieren `@angular/material`/`@angular/cdk`) — modulweise
+      auf `.df-*`/`app-*` migrieren; danach `@angular/material`+`@angular/cdk` aus `package.json`.
+- [ ] Weitere Basis-Komponenten: Dialog/Overlay, Select, Toast/Notification, Tabs.
+- [ ] Signal Forms für die Formulare (zusammen mit Input-Migration).
+
+**WS2 — Django-Backend (fertig):**
+- [x] `backend/.venv` + Deps installiert (Django 5.2→6.0, DRF, `djangorestframework-camel-case`,
       `django-cors-headers`, `django-ratelimit`, `django-storages`, `psycopg`, `dj-database-url`,
       `pyjwt`, `argon2-cffi`). `pyproject.toml` mit ruff/black/mypy/bandit/pytest-Konfig.
 - [x] Projekt-Scaffold: `manage.py`, `config/settings/{base,dev,prod}.py` (Split, Prod-Härtung:
@@ -154,16 +176,16 @@ Noch **nicht** gemacht (bewusst, für spätere Workstreams):
 
 ## 7. Nächster Schritt
 
-**WS2 ist funktional abgeschlossen** (alle 26 Endpunkte, Foto-Upload, voller `/verify`-Gate grün;
-einziger Rest: Redis-Cache fürs Rate-Limiting → WS4).
+**Fundament steht** (App im Monorepo, Tokens, Theme, Basis-Komponenten, Build+Tests grün).
 
-Nächster Strang: **WS3b — Design-System-Fundament** (Isabel/Kilian/Jelena), unabhängig vom Backend:
-- Angular-App aus `../MeterFlow/src` nach `frontend/` übernehmen (falls noch nicht geschehen).
-- Design-Tokens `frontend/src/styles.scss` (Light/Dark aus DataForge), Theme-Service (`data-theme`
-  + Signal-`effect`, `prefers-color-scheme`), Basis-Komponenten (Button/Input/Dialog/Icon).
+Weiter in **WS3b — Material entfernen, modulweise**: pro Feature-/Shared-Komponente die `mat-*`
+durch `.df-*`/`app-*` ersetzen (Button/Input/Select/Dialog/Icon/Tabs/Snackbar), fehlende Basis-
+Komponenten (Dialog/Overlay, Select, Toast) dabei ergänzen, Formulare auf **Signal Forms**. Sinnvolle
+Reihenfolge: erst die kleinen Shared-Komponenten (`confirm-dialog`, `tariff-form`), dann Feature-Module.
+Am Ende `@angular/material` + `@angular/cdk` aus `package.json`.
 
-Danach **WS3** (Frontend-Datenschicht Supabase→REST + Angular-22-Idiome) gegen das laufende Backend,
-und **WS4** (Docker/CI, inkl. Redis).
+Parallel möglich: **WS3** (Datenschicht Supabase→REST gegen das laufende Backend) und **WS4**
+(Docker/CI inkl. Redis).
 
 ## 8. Referenz-Quellen (aus den Altprojekten)
 
@@ -203,3 +225,7 @@ und **WS4** (Docker/CI, inkl. Redis).
   **Stats-Decimal-Renderer** (Decimal→String global), **mypy strict clean** (84 Dateien) +
   **bandit 0 / pip-audit 0**. Backend-`/verify`-Gate vollständig grün. **38 Tests, 91 % Coverage.**
   Einziger WS2-Restpunkt: Rate-Limit-Cache → Redis (Infra, WS4).
+- (WS3b/Isabel+Kilian) **Design-Fundament**: MeterFlow-App nach `frontend/` übernommen (Build grün),
+  kanonische Apple-Tokens Light/Dark (`_design-tokens.scss`, ohne Material, kein CDN), Basis-Klassen
+  `.df-*` + Standalone-Komponenten `app-button`/`app-icon` (Angular-22-Signal-Inputs, Inline-SVG),
+  5 Vitest-Specs grün. Material koexistiert noch (21 Dateien) → modulweise Entfernung als nächstes.

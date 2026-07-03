@@ -1,0 +1,66 @@
+@if (rows().length === 0) {
+<div class="empty-state">
+  <mat-icon>history</mat-icon>
+  <p>Keine Ablesungen vorhanden</p>
+</div>
+} @else {
+<div class="readings-list">
+  @for (row of rows(); track row.reading.id) { @if (getMeter(row.reading.meterId); as meter) {
+  <div class="reading-item" [routerLink]="['/readings', row.reading.id, 'edit']">
+    <div class="reading-meter-icon" [style.background]="meter.color + '22'">
+      <mat-icon [style.color]="meter.color">{{ meter.icon }}</mat-icon>
+    </div>
+
+    <div class="reading-details">
+      <span class="reading-meter-name">{{ meter.name }}</span>
+      <span class="reading-date-small">{{
+        row.reading.date | date: "dd.MM.yyyy"
+        }}</span>
+    </div>
+
+    <div class="reading-values">
+      <span class="reading-val">
+        {{ row.reading.value | number: "1.0-3" }} {{ meter.unit }}
+      </span>
+      @if (row.reading.consumption && row.reading.consumption > 0) {
+      <span class="reading-consumption">
+        +{{ row.reading.consumption | number: "1.0-3" }} {{ meter.unit }}
+      </span>
+      @if (row.reading.kwh) {
+      <span class="kwh-badge">+{{ row.reading.kwh | number: "1.0-1" }} kWh</span>
+      }
+      } @else if (row.reading.consumption === 0) {
+      <span class="no-consumption">Erste Ablesung</span>
+      }
+    </div>
+
+    <div class="reading-cost">
+      @if (row.gardenWaterCost) {
+      <span class="cost-saving">
+        −{{ row.gardenWaterCost | currency: "EUR" : "symbol" : "1.2-2" }}
+      </span>
+      } @else if (row.reading.cost && row.reading.cost > 0) {
+      <span>{{
+        row.reading.cost | currency: "EUR" : "symbol" : "1.2-2"
+        }}</span>
+      } @else {
+      <span>–</span>
+      }
+    </div>
+
+    @if (row.reading.note) {
+    <div class="reading-note">
+      <mat-icon>notes</mat-icon>
+      <span>{{ row.reading.note }}</span>
+    </div>
+    } @if (showActions()) {
+    <div class="reading-actions">
+      <button mat-icon-button (click)="onDelete(row.reading.id)" class="delete-btn" title="Löschen">
+        <mat-icon>delete_outline</mat-icon>
+      </button>
+    </div>
+    }
+  </div>
+  } }
+</div>
+}

@@ -1,0 +1,116 @@
+<div class="auth-page">
+    <div class="auth-card">
+
+        <!-- Logo -->
+        <div class="auth-logo">
+            <div class="logo-icon">
+                <mat-icon>bolt</mat-icon>
+            </div>
+            <span class="logo-text">MeterFlow</span>
+        </div>
+
+        <!-- Title -->
+        <div class="auth-header">
+            <h1 class="auth-title">
+                @if (mode() === 'login') {
+                <span i18n="@@auth.title.login">Willkommen zurück</span>
+                } @else {
+                <span i18n="@@auth.title.register">Konto erstellen</span>
+                }
+            </h1>
+            <p class="auth-subtitle">
+                @if (mode() === 'login') {
+                <span i18n="@@auth.subtitle.login">Melde dich an um deine Zähler zu verwalten</span>
+                } @else {
+                <span i18n="@@auth.subtitle.register">Erstelle ein kostenloses Konto</span>
+                }
+            </p>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
+
+            <mat-form-field appearance="outline" class="auth-field">
+                <mat-label i18n="@@auth.field.email">E-Mail</mat-label>
+                <input matInput id="email" type="email" formControlName="email" placeholder="deine@email.de"
+                    autocomplete="email" i18n-placeholder="@@auth.placeholder.email">
+                <mat-icon matPrefix>mail</mat-icon>
+                <mat-error i18n="@@auth.error.email">Gültige E-Mail erforderlich</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="auth-field">
+                <mat-label i18n="@@auth.field.password">Passwort</mat-label>
+                <input matInput id="password" [type]="showPassword() ? 'text' : 'password'" formControlName="password"
+                    placeholder="Mindestens 6 Zeichen" autocomplete="current-password"
+                    i18n-placeholder="@@auth.placeholder.password">
+                <mat-icon matPrefix>lock</mat-icon>
+                <button type="button" mat-icon-button matSuffix (click)="showPassword.set(!showPassword())"
+                    [attr.aria-label]="showPassword() ? 'Passwort verbergen' : 'Passwort anzeigen'">
+                    <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                <mat-error i18n="@@auth.error.password">Mindestens 6 Zeichen</mat-error>
+            </mat-form-field>
+
+            @if (mode() === 'register') {
+            <mat-form-field appearance="outline" class="auth-field">
+                <mat-label i18n="@@auth.field.confirmPassword">Passwort bestätigen</mat-label>
+                <input matInput id="confirmPassword" [type]="showPassword() ? 'text' : 'password'"
+                    formControlName="confirmPassword" placeholder="Passwort wiederholen" autocomplete="new-password"
+                    i18n-placeholder="@@auth.placeholder.confirmPassword">
+                <mat-icon matPrefix>lock_outline</mat-icon>
+                <mat-error i18n="@@auth.error.confirmPassword">Passwörter stimmen nicht überein</mat-error>
+            </mat-form-field>
+            }
+
+            @if (errorMessage()) {
+            <div class="auth-error" role="alert">
+                <mat-icon>error_outline</mat-icon>
+                {{ errorMessage() }}
+            </div>
+            }
+
+            <button type="submit" mat-flat-button color="primary" class="auth-submit-btn"
+                [disabled]="form.invalid || loading()">
+                @if (loading()) {
+                <span class="loading-spinner"></span>
+                <span i18n="@@auth.loading">Bitte warten...</span>
+                } @else {
+                <ng-container>
+                    <div class="submit-btn">
+                        <mat-icon>{{ mode() === 'login' ? 'login' : 'person_add' }}</mat-icon>
+                        @if (mode() === 'login') {
+                        <span i18n="@@auth.submit.login">Anmelden</span>
+                        } @else {
+                        <span i18n="@@auth.submit.register">Registrieren</span>
+                        }
+                    </div>
+                </ng-container>
+                }
+            </button>
+        </form>
+
+        <!-- Mode Switch -->
+        <div class="auth-switch">
+            @if (mode() === 'login') {
+            <span i18n="@@auth.switch.toRegister">Noch kein Konto?</span>
+            } @else {
+            <span i18n="@@auth.switch.toLogin">Bereits registriert?</span>
+            }
+            <button type="button" mat-button color="primary" (click)="toggleMode()">
+                @if (mode() === 'login') {
+                <span i18n="@@auth.switch.registerBtn">Jetzt registrieren</span>
+                } @else {
+                <span i18n="@@auth.switch.loginBtn">Anmelden</span>
+                }
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Background decoration -->
+    <div class="auth-bg">
+        <div class="bg-blob bg-blob--1"></div>
+        <div class="bg-blob bg-blob--2"></div>
+        <div class="bg-blob bg-blob--3"></div>
+    </div>
+</div>

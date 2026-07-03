@@ -1,0 +1,261 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title" i18n="@@settings.title">Einstellungen</h1>
+    <p class="page-subtitle" i18n="@@settings.subtitle">App-Konfiguration und Datenverwaltung</p>
+  </div>
+
+  <!-- Theme -->
+  <div class="settings-section">
+    <h3 class="section-title" i18n="@@settings.appearance">Erscheinungsbild</h3>
+    <div class="theme-options">
+      <button class="theme-btn" [class.theme-btn--active]="themeMode() === 'light'" (click)="setTheme('light')">
+        <mat-icon>light_mode</mat-icon>
+        <span i18n="@@settings.theme.light">Hell</span>
+      </button>
+      <button class="theme-btn" [class.theme-btn--active]="themeMode() === 'dark'" (click)="setTheme('dark')">
+        <mat-icon>dark_mode</mat-icon>
+        <span i18n="@@settings.theme.dark">Dunkel</span>
+      </button>
+      <button class="theme-btn" [class.theme-btn--active]="themeMode() === 'system'" (click)="setTheme('system')">
+        <mat-icon>brightness_auto</mat-icon>
+        <span i18n="@@settings.theme.system">System</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Data -->
+  <div class="settings-section">
+    <h3 class="section-title" i18n="@@settings.dataManagement">Datenverwaltung</h3>
+    <div class="data-actions">
+      <div class="data-action-item">
+        <div class="data-action-info">
+          <div class="data-action-title" i18n="@@settings.export.title">Daten exportieren</div>
+          <div class="data-action-desc" i18n="@@settings.export.desc">Alle Zähler und Ablesungen als JSON-Datei
+            exportieren</div>
+        </div>
+        <button (click)="exportData()" class="import-export-btn">
+          <mat-icon>download</mat-icon>
+          <span i18n="@@settings.exportBtn">Exportieren</span>
+        </button>
+      </div>
+
+      <div class="data-action-item">
+        <div class="data-action-info">
+          <div class="data-action-title" i18n="@@settings.import.title">Daten importieren</div>
+          <div class="data-action-desc" i18n="@@settings.import.desc">Zuvor exportierte Daten wiederherstellen</div>
+        </div>
+        <label class="import-export-btn">
+          <input type="file" accept=".json" (change)="importData($event)" hidden />
+          <mat-icon>upload</mat-icon>
+          <span i18n="@@settings.importBtn">Importieren</span>
+        </label>
+      </div>
+
+      <div class="data-action-item">
+        <div class="data-action-info">
+          <div class="data-action-title" i18n="@@settings.csvImport.title">CSV-Ablesungen importieren</div>
+          <div class="data-action-desc" i18n="@@settings.csvImport.desc">Zählerstände aus einer CSV-Datei einlesen
+            (Datum, Wert, Notiz)</div>
+        </div>
+        <button class="import-export-btn" (click)="openCsvImport()">
+          <mat-icon>table_chart</mat-icon>
+          <span i18n="@@settings.csvImportBtn">CSV importieren</span>
+        </button>
+      </div>
+
+      <div class="data-action-item danger-item">
+        <div class="data-action-info">
+          <div class="data-action-title" i18n="@@settings.delete.title">Alle Daten löschen</div>
+          <div class="data-action-desc" i18n="@@settings.delete.desc">Alle Zähler und Ablesungen unwiderruflich löschen
+          </div>
+        </div>
+        <button mat-stroked-button color="warn" (click)="clearAll()">
+          <mat-icon>delete_forever</mat-icon>
+          <span i18n="@@settings.deleteBtn">Löschen</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="settings-section">
+    <h3 class="section-title" i18n="@@settings.stats">Statistiken</h3>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-number">{{ meterCount() }}</div>
+        <div class="stat-label" i18n="@@settings.stats.meters">Zähler</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">{{ readingCount() }}</div>
+        <div class="stat-label" i18n="@@settings.stats.readings">Ablesungen</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- App installieren (PWA) -->
+  @if (!pwaInstall.isStandalone) {
+  <div class="settings-section">
+    <h3 class="section-title" i18n="@@settings.pwa.title">App installieren</h3>
+    <div class="data-actions">
+      @if (pwaInstall.installed()) {
+      <div class="data-action-item">
+        <div class="data-action-info">
+          <div class="data-action-title" i18n="@@settings.pwa.doneTitle">Bereits installiert</div>
+          <div class="data-action-desc" i18n="@@settings.pwa.doneDesc">MeterFlow läuft als eigenständige App auf deinem
+            Gerät.</div>
+        </div>
+        <mat-icon class="pwa-check">check_circle</mat-icon>
+      </div>
+      } @else if (pwaInstall.canInstall()) {
+      <div class="data-action-item">
+        <div class="data-action-info">
+          <div class="data-action-title" i18n="@@settings.pwa.installTitle">Zum Home-Bildschirm hinzufügen</div>
+          <div class="data-action-desc" i18n="@@settings.pwa.installDesc">Installiere MeterFlow als App – ohne App
+            Store, direkt aus dem Browser.</div>
+        </div>
+        <button class="import-export-btn" (click)="installPwa()">
+          <mat-icon>install_mobile</mat-icon>
+          <span i18n="@@settings.pwa.installBtn">Installieren</span>
+        </button>
+      </div>
+      } @else if (pwaInstall.isIos) {
+      <div class="data-action-item">
+        <div class="data-action-info">
+          <div class="data-action-title" i18n="@@settings.pwa.iosTitle">iOS: Zum Home-Bildschirm</div>
+          <div class="data-action-desc" i18n="@@settings.pwa.iosDesc">Tippe auf das Teilen-Symbol ↑ in Safari und wähle
+            „Zum Home-Bildschirm".</div>
+        </div>
+        <mat-icon class="pwa-hint-icon">ios_share</mat-icon>
+      </div>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- CO₂-Emissionsfaktoren -->
+  <div class="settings-section">
+    <h3 class="section-title" i18n="@@settings.co2Factors.title">CO₂-Emissionsfaktoren</h3>
+    <p class="section-desc" i18n="@@settings.co2Factors.desc">
+      Faktoren für die CO₂-Berechnung pro Energietyp (kg CO₂ pro Verbrauchseinheit).
+      Standardwerte nach UBA 2024. Jährlich aktualisierbar – füge die offizielle Quelle als Link hinzu.
+    </p>
+    <div class="market-prices-list">
+      @for (type of supportedTypes; track type) {
+      @let entry = co2FactorService.getEntryForType(type);
+      <div class="market-price-row" [class.market-price-row--editing]="editingType() === type">
+        <div class="market-price-info">
+          <span class="market-price-type">{{ energyLabel(type) }}</span>
+          <span class="market-price-val">
+            {{ entry.factor | number: '1.3-4' }} kg/{{ entry.unit }}
+          </span>
+          @if (entry.sourceUrl) {
+          <a class="market-price-source" [href]="entry.sourceUrl" target="_blank" rel="noopener noreferrer">
+            {{ entry.source }}&nbsp;<mat-icon>open_in_new</mat-icon>
+          </a>
+          } @else {
+          <span class="market-price-source">{{ entry.source }}</span>
+          }
+          @if (entry.isDefault) {
+          <span class="market-price-badge" i18n="@@settings.co2Factors.default">Standard (UBA)</span>
+          }
+        </div>
+        <div class="market-price-actions">
+          @if (editingType() !== type) {
+          <button class="import-export-btn" (click)="startEdit(type, entry)" aria-label="CO₂-Faktor bearbeiten"
+            i18n-aria-label="@@settings.co2Factors.editAria">
+            <mat-icon>edit</mat-icon>
+          </button>
+          }
+        </div>
+      </div>
+
+      @if (editingType() === type) {
+      <div class="market-price-form">
+        <div class="market-price-form-row">
+          <mat-form-field appearance="outline" class="mp-field mp-field--price">
+            <mat-label i18n="@@settings.co2Factors.factor">Faktor (kg CO₂/{{ entry.unit }})</mat-label>
+            <input matInput type="number" step="0.001" [(ngModel)]="editFactor" />
+            <mat-hint i18n="@@settings.co2Factors.factorHint">Negative Werte = Gutschrift (Solar)</mat-hint>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="mp-field mp-field--source">
+            <mat-label i18n="@@settings.co2Factors.source">Quelle</mat-label>
+            <input matInput type="text" [(ngModel)]="editSource" />
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="outline" class="mp-field mp-field--url">
+          <mat-label i18n="@@settings.co2Factors.sourceUrl">Link zur Quelle (optional)</mat-label>
+          <input matInput type="url" [(ngModel)]="editSourceUrl" placeholder="https://www.umweltbundesamt.de/..." />
+          <mat-hint i18n="@@settings.co2Factors.sourceUrlHint">z.B. UBA-Emissionsfaktoren, AGFW-Statistik</mat-hint>
+        </mat-form-field>
+        <div class="market-price-form-actions">
+          <button mat-stroked-button (click)="cancelEdit()" i18n="@@settings.co2Factors.cancel">Abbrechen</button>
+          <button mat-flat-button color="primary" (click)="saveEdit(type, entry.unit)" [disabled]="editFactor === null"
+            i18n="@@settings.co2Factors.save">Speichern</button>
+          @if (!entry.isDefault) {
+          <button mat-stroked-button color="warn" (click)="resetToDefault(type)" i18n="@@settings.co2Factors.reset">Auf
+            UBA-Standard zurücksetzen</button>
+          }
+        </div>
+      </div>
+      }
+      }
+    </div>
+  </div>
+
+  <!-- Benachrichtigungen -->
+  <div class="settings-section">
+    <h3 class="section-title" i18n="@@settings.notifications.title">Benachrichtigungen</h3>
+    <div class="data-actions">
+      <div class="data-action-item">
+        <div class="data-action-info">
+          <div class="data-action-title" i18n="@@settings.notifications.reminder.title">Monatliche Ableseerinnerung
+          </div>
+          <div class="data-action-desc">
+            @if (notificationService.permission() === 'denied') {
+            <span i18n="@@settings.notifications.blocked">Benachrichtigungen sind im Browser blockiert.</span>
+            } @else if (notificationService.permission() === 'granted' && notificationService.enabled()) {
+            <span i18n="@@settings.notifications.active">Aktiv – du wirst monatlich erinnert.</span>
+            } @else {
+            <span i18n="@@settings.notifications.reminder.desc">Erhalte monatlich eine Erinnerung, deinen Zählerstand
+              einzutragen.</span>
+            }
+          </div>
+        </div>
+        <mat-slide-toggle [checked]="notificationService.enabled()"
+          [disabled]="notificationService.permission() === 'denied'"
+          (change)="notificationService.setEnabled($event.checked)" aria-label="Ableseerinnerung"
+          i18n-aria-label="@@settings.notifications.toggle.aria">
+        </mat-slide-toggle>
+      </div>
+
+      @if (notificationService.enabled() && notificationService.permission() === 'granted') {
+      <div class="data-action-item">
+        <div class="data-action-info">
+          <div class="data-action-title" i18n="@@settings.notifications.test.title">Test-Benachrichtigung</div>
+          <div class="data-action-desc" i18n="@@settings.notifications.test.desc">Sendet sofort eine
+            Beispiel-Erinnerung.</div>
+        </div>
+        <button class="import-export-btn" (click)="sendTestNotification()">
+          <mat-icon>notifications_active</mat-icon>
+          <span i18n="@@settings.notifications.testBtn">Testen</span>
+        </button>
+      </div>
+      }
+    </div>
+  </div>
+
+  <!-- About -->
+  <div class="settings-section about-section">
+    <div class="about-logo">
+      <mat-icon>electric_bolt</mat-icon>
+    </div>
+    <h2 class="about-title">MeterFlow</h2>
+    <p class="about-desc" i18n="@@settings.about.desc">Dein persönlicher Energie- und Verbrauchsrechner</p>
+    <p class="about-version" i18n="@@settings.version">Version 1.0</p>
+  </div>
+
+  <button mat-stroked-button color="warn" (click)="logout()" class="logout-btn">
+    <mat-icon>logout</mat-icon>
+    <span i18n="@@settings.logout">Abmelden</span>
+  </button>
+</div>

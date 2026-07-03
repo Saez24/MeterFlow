@@ -1,0 +1,50 @@
+.page-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 0 0 4px;
+}
+
+.page-subtitle {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.action-btn {
+  border-radius: 12px !important;
+  height: 44px;
+}
+
+.filter-bar {
+  margin-bottom: 20px;
+}
+
+.filter-select {
+  min-width: 240px;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .filter-bar {
+    text-align: center;
+  }
+}

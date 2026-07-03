@@ -1,0 +1,210 @@
+<div class="dashboard">
+  <header class="dashboard-header">
+    <div class="header-content">
+      <h1 class="dashboard-title"><span class="title-accent">Energie</span>Monitor</h1>
+      <p class="dashboard-subtitle" i18n="@@dashboard.subtitle">Übersicht deiner Verbrauchsdaten</p>
+    </div>
+    <div class="header-actions">
+      <!-- "Ablesung erfassen" button removed as per user request -->
+    </div>
+  </header>
+
+  <!-- Budget-Warnbanner -->
+  @if (state.budgetAlerts().length > 0) {
+  <section class="budget-alerts-section" aria-label="Budget-Warnungen" i18n-aria-label="@@dashboard.budgetAlerts.aria">
+    @for (alert of state.budgetAlerts(); track alert.meterId + alert.type) {
+    <div class="budget-alert" [class.budget-alert--critical]="alert.critical" role="alert">
+      <mat-icon class="budget-alert__icon">{{ alert.critical ? 'error' : 'warning' }}</mat-icon>
+      <div class="budget-alert__body">
+        <span class="budget-alert__title">
+          <strong>{{ alert.meterName }}</strong>
+          @if (alert.type === 'monthly_cost') {
+          <ng-container i18n="@@dashboard.budgetAlerts.monthlyCost"> – Monatslimit</ng-container>
+          } @else if (alert.type === 'yearly_cost') {
+          <ng-container i18n="@@dashboard.budgetAlerts.yearlyCost"> – Jahreslimit</ng-container>
+          } @else {
+          <ng-container i18n="@@dashboard.budgetAlerts.consumption"> – Verbrauchslimit</ng-container>
+          }
+        </span>
+        <span class="budget-alert__detail">
+          {{ alert.current | currency: 'EUR' : 'symbol' : '1.2-2' }}
+          <ng-container i18n="@@dashboard.budgetAlerts.of"> von </ng-container>
+          {{ alert.limit | currency: 'EUR' : 'symbol' : '1.2-2' }}
+          ({{ alert.percent | number: '1.0-0' }}%)
+        </span>
+      </div>
+      <div class="budget-alert__bar">
+        <div class="budget-alert__bar-fill" [style.width.%]="alert.percent > 100 ? 100 : alert.percent"></div>
+      </div>
+    </div>
+    }
+  </section>
+  }
+
+  <!-- Summary Cards -->
+  <section class="summary-section">
+    <div class="summary-grid">
+      <div class="summary-card summary-card--total">
+        <div class="summary-header">
+          <div class="summary-icon">
+            <mat-icon>account_balance</mat-icon>
+          </div>
+          <span class="summary-label" i18n="@@dashboard.totalCosts">Gesamtkosten {{ state.selectedYear() }}</span>
+        </div>
+        <div class="summary-info">
+
+          <span class="summary-value">{{
+            state.totalYearCostWithBase() | currency: 'EUR' : 'symbol' : '1.2-2'
+            }}</span>
+        </div>
+        @if (state.yearOverYearDiff(); as yoy) {
+        <div class="yoy-chip" [class.yoy-chip--better]="yoy.percent < 0" [class.yoy-chip--worse]="yoy.percent >= 5">
+          <mat-icon>{{ yoy.percent < 0 ? 'trending_down' : 'trending_up' }}</mat-icon>
+              <span>
+                @if (yoy.percent < 0) { <ng-container i18n="@@dashboard.yoy.cheaper">{{ yoy.percent | number: '1.0-1'
+                  }}% ggü. {{ yoy.prevYear }}</ng-container>
+                  } @else {
+                  <ng-container i18n="@@dashboard.yoy.costlier">+{{ yoy.percent | number: '1.0-1' }}% ggü. {{
+                    yoy.prevYear }}</ng-container>
+                  }
+              </span>
+              <span class="yoy-period">(Jan–{{ monthShort(yoy.upToMonth) }})</span>
+        </div>
+        }
+      </div>
+      <div class="summary-card summary-card--meters">
+        <div class="summary-header">
+          <div class="summary-icon">
+            <mat-icon>speed</mat-icon>
+          </div>
+          <span class="summary-label" i18n="@@dashboard.activeMeters">Aktive Zähler</span>
+        </div>
+        <div class="summary-info">
+          <span class="summary-value">{{ state.activeCount() }}</span>
+        </div>
+      </div>
+      <div class="summary-card summary-card--co2">
+        <div class="summary-header">
+          <div class="summary-icon">
+            <mat-icon>eco</mat-icon>
+          </div>
+          <span class="summary-label" i18n="@@dashboard.totalCo2">CO₂ {{ state.selectedYear() }}</span>
+        </div>
+        <div class="summary-info">
+          <span class="summary-value">
+            @if (state.totalYearCo2Kg() >= 1000) {
+            {{ state.totalYearCo2Kg() / 1000 | number: '1.1-2' }} t
+            } @else {
+            {{ state.totalYearCo2Kg() | number: '1.0-1' }} kg
+            }
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Meter Cards -->
+  <section class="meters-section">
+    <div class="section-header">
+      <h2 i18n="@@dashboard.yourMeters">Deine Zähler</h2>
+      <button mat-button routerLink="/meters" class="see-all-btn">
+        <span i18n="@@dashboard.manageAll">Alle verwalten</span> <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+
+    @if (state.activeMeters().length === 0) {
+    <div class="empty-state">
+      <mat-icon>add_circle_outline</mat-icon>
+      <h3 i18n="@@dashboard.empty.title">Noch keine Zähler angelegt</h3>
+      <p i18n="@@dashboard.empty.desc">Füge deinen ersten Zähler hinzu, um zu beginnen.</p>
+      <button mat-flat-button color="primary" routerLink="/meters/new">
+        <span i18n="@@dashboard.addMeter">Zähler hinzufügen</span>
+      </button>
+    </div>
+    }
+
+    <div class="meters-grid">
+      @for (meter of state.activeMeters(); track meter.id) {
+      <div class="meter-card" [style.--meter-color]="meter.color" matRipple [routerLink]="['/meters', meter.id]">
+        <div class="meter-card__header">
+          <div class="meter-icon" [style.background]="meter.color + '22'">
+            <mat-icon [style.color]="meter.color">{{ meter.icon }}</mat-icon>
+          </div>
+          <div class="meter-badge">{{ state.getMeta(meter.type).label }}</div>
+          @if (state.budgetAlerts().some(a => a.meterId === meter.id && a.critical)) {
+          <div class="meter-budget-badge meter-budget-badge--critical" aria-label="Budget überschritten"
+            i18n-aria-label="@@dashboard.budget.exceeded">
+            <mat-icon>error</mat-icon>
+          </div>
+          } @else if (state.budgetAlerts().some(a => a.meterId === meter.id)) {
+          <div class="meter-budget-badge" aria-label="Budget-Warnung" i18n-aria-label="@@dashboard.budget.warning">
+            <mat-icon>warning</mat-icon>
+          </div>
+          }
+        </div>
+
+        <div class="meter-card__body">
+          <h3 class="meter-name">{{ meter.name }}</h3>
+
+          @if (state.statsService.getMeterSummary(meter.id, state.selectedYear()); as summary) {
+          <div class="meter-reading">
+            @if (summary.consumptionKwh !== undefined) {
+            <span class="reading-value">{{ summary.consumptionKwh | number: '1.0-0' }}</span>
+            <span class="reading-unit">kWh</span>
+            <span class="reading-unit reading-unit--secondary">
+              ({{ summary.consumption | number: (meter.type === 'fernwarme' ? '1.3-3' : '1.0-2') }} {{ summary.unit }})
+            </span>
+            } @else {
+            <span class="reading-value">{{ summary.consumption | number: (meter.type === 'fernwarme' ? '1.3-3' : '1.0-2') }}</span>
+            <span class="reading-unit">{{ summary.unit }}</span>
+            }
+          </div>
+          <div class="reading-date" i18n="@@dashboard.consumption">Verbrauch {{ state.selectedYear() }}</div>
+
+          <div class="meter-card__footer">
+            <div class="meter-stats">
+              <div class="stat">
+                <span class="stat-label" i18n="@@dashboard.currentCosts">Aktuelle Kosten</span>
+                <span class="stat-value cost" [style.color]="meter.color">
+                  {{ summary.cost | currency: 'EUR' : 'symbol' : '1.2-2' }}
+                </span>
+              </div>
+              @if (summary.co2Kg !== 0) {
+              <div class="stat">
+                <span class="stat-label" i18n="@@dashboard.co2">CO₂</span>
+                <span class="stat-value co2">
+                  @if (summary.co2Kg >= 1000) {
+                  {{ summary.co2Kg / 1000 | number: '1.1-2' }} t
+                  } @else {
+                  {{ summary.co2Kg | number: '1.0-1' }} kg
+                  }
+                </span>
+              </div>
+              }
+            </div>
+          </div>
+          } @else {
+          <div class="no-reading" i18n="@@dashboard.noData">Keine Daten für {{ state.selectedYear() }}</div>
+          }
+
+          <div class="meter-price">
+            @if (state.getActiveTariff(meter); as tariff) {
+            {{ tariff.pricePerUnit | currency: 'EUR' : 'symbol' : '1.4-4' }}/{{ meter.unit }}
+            } @else { - }
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+  </section>
+
+  <section class="recent-section">
+    <div class="section-header">
+      <h2 i18n="@@dashboard.recentReadings">Letzte Ablesungen</h2>
+      <button mat-button routerLink="/readings" class="see-all-btn">
+        <span i18n="@@dashboard.showAll">Alle anzeigen</span> <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+    <app-readings-list [rows]="state.recentReadings()" />
+  </section>
+</div>

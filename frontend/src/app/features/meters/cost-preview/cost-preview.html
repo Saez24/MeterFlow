@@ -1,0 +1,98 @@
+<div class="preview-form">
+  <div class="input-row">
+    <mat-form-field appearance="outline" class="preview-field">
+      @if (meter().type === 'gas') {
+      <mat-label>Jahresverbrauch (kWh)</mat-label>
+      } @else {
+      <mat-label>Jahresverbrauch ({{ meter().unit }})</mat-label>
+      }
+      <mat-icon matPrefix>bolt</mat-icon>
+      <input matInput type="number" [(ngModel)]="estimatedConsumption" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="preview-field">
+      <mat-label>Monatlicher Abschlag</mat-label>
+      <mat-icon matPrefix>payments</mat-icon>
+      <input matInput type="number" [(ngModel)]="monthlyPayment" />
+      <span matSuffix>€</span>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="preview-field">
+      <mat-label>Anzahl Abschläge</mat-label>
+      <mat-icon matPrefix>tag</mat-icon>
+      <input matInput type="number" [(ngModel)]="paymentCount" />
+    </mat-form-field>
+  </div>
+
+  <button mat-flat-button class="calculate-btn" (click)="calculatePreview()">
+    <mat-icon>calculate</mat-icon>
+    Vorschau berechnen
+  </button>
+</div>
+
+@if (result(); as res) {
+<div class="result-container">
+  @if (res.error) {
+  <div class="error-banner">
+    <mat-icon>error_outline</mat-icon>
+    <span>{{ res.error }}</span>
+  </div>
+  } @else {
+  <div class="summary-strip">
+    <div class="summary-pill summary-pill--neutral">
+      <span class="pill-label">Gesamtkosten</span>
+      <span class="pill-value">{{ res.totalCost | currency:'EUR' }}</span>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="summary-pill summary-pill--neutral">
+      <span class="pill-label">Gezahlt</span>
+      <span class="pill-value">{{ res.totalPayment | currency:'EUR' }}</span>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="summary-pill" [class.summary-pill--refund]="res.balance > 0"
+      [class.summary-pill--due]="res.balance < 0">
+      <span class="pill-label">{{ res.balance > 0 ? '↩ Guthaben' : '↪ Nachzahlung' }}</span>
+      <span class="pill-value pill-value--accent">{{ res.balance | currency:'EUR' }}</span>
+    </div>
+  </div>
+
+  <div class="periods-grid">
+    @for (period of res.periods; track period.name; let i = $index) {
+    <div class="period-card" [style.animation-delay]="i * 60 + 'ms'">
+      <div class="period-header">
+        <span class="period-name">{{ period.name }}</span>
+        <span class="period-cost">{{ period.cost | currency:'EUR' }}</span>
+      </div>
+      <div class="period-meta">
+        <span class="meta-chip">
+          <mat-icon>calendar_today</mat-icon>
+          {{ period.startDate | date:'dd.MM.yy' }} – {{ period.endDate | date:'dd.MM.yy' }}
+          <em>{{ period.days }} Tage</em>
+        </span>
+      </div>
+      <div class="period-stats">
+        <div class="stat">
+          <span class="stat-label">Verbrauch</span>
+          <span class="stat-value">
+            @if (meter().type === 'gas') {
+            {{ period.consumption | number:'1.3-3' }} kWh
+            } @else {
+            {{ period.consumption | number:'1.3-3' }} {{ meter().unit }}
+            }
+          </span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Arbeitspreis</span>
+          <span class="stat-value">{{ period.pricePerUnit | currency:'EUR':'symbol':'1.4-4' }}</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Grundgebühr</span>
+          <span class="stat-value">{{ period.baseCharge | currency:'EUR' }}</span>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+  }
+</div>
+}

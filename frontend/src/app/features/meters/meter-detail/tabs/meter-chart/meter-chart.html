@@ -1,0 +1,25 @@
+@if (meter(); as m) {
+  @if (readings().length >= 2) {
+  <div class="chart-toggle">
+    <div class="chart-toggle--modes">
+      <button class="toggle-btn" [class.active]="chartMode() === 'consumption'" (click)="chartMode.set('consumption')">Verbrauch</button>
+      @if (m.type === 'gas') {
+      <button class="toggle-btn" [class.active]="chartMode() === 'kwh'" (click)="chartMode.set('kwh')">kWh</button>
+      }
+      <button class="toggle-btn" [class.active]="chartMode() === 'cost'" (click)="chartMode.set('cost')">Kosten</button>
+    </div>
+    <div class="chart-toggle chart-toggle--years">
+      @for (year of availableYears(); track year) {
+      <button class="toggle-btn" [class.active]="selectedYear() === year" (click)="selectedYear.set(year)">{{ year }}</button>
+      }
+    </div>
+  </div>
+
+  <div class="chart-wrapper"><canvas #detailChart></canvas></div>
+  } @else {
+  <div class="chart-empty">
+    <mat-icon>bar_chart</mat-icon>
+    <p>Mindestens 2 Ablesungen für Chart-Anzeige nötig</p>
+  </div>
+  }
+}

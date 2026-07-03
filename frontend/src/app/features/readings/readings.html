@@ -1,0 +1,38 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title" i18n="@@readings.title">Ablesungen</h1>
+      <p class="page-subtitle" i18n="@@readings.subtitle">Alle erfassten Zählerstände</p>
+    </div>
+    <button mat-flat-button color="primary" routerLink="new" class="action-btn">
+      <mat-icon>add</mat-icon>
+      <span i18n="@@readings.addBtn">Ablesung erfassen</span>
+    </button>
+  </div>
+
+  <!-- Filter -->
+  <div class="filter-bar">
+    <mat-form-field appearance="outline" class="filter-select">
+      <mat-label i18n="@@readings.filter.label">Zähler filtern</mat-label>
+      <mat-select [value]="filterMeterId()" (selectionChange)="filterMeterId.set($event.value)">
+        <mat-option value="" i18n="@@readings.filter.all">Alle Zähler</mat-option>
+        @for (meter of meters(); track meter.id) {
+        <mat-option [value]="meter.id">{{ meter.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (filteredReadings().length === 0) {
+  <div class="empty-state">
+    <mat-icon>history</mat-icon>
+    <h3 i18n="@@readings.empty.title">Keine Ablesungen gefunden</h3>
+    <p i18n="@@readings.empty.desc">Füge deine erste Ablesung hinzu.</p>
+    <button mat-flat-button color="primary" routerLink="new">
+      <span i18n="@@readings.empty.btn">Ablesung erfassen</span>
+    </button>
+  </div>
+  }
+
+  <app-readings-list [rows]="filteredReadings()" [showActions]="true" (deleteReading)="deleteReading($event)" />
+</div>

@@ -1,0 +1,112 @@
+<h2 mat-dialog-title i18n="@@csv.dialog.title">CSV-Ablesungen importieren</h2>
+
+<mat-dialog-content class="csv-dialog-content">
+
+    <!-- Format hint -->
+    <div class="format-hint">
+        <mat-icon>info_outline</mat-icon>
+        <span i18n="@@csv.format.hint">Erwartetes Format: <code>datum,wert,notiz</code> – Datum als JJJJ-MM-TT oder
+            TT.MM.JJJJ</span>
+    </div>
+
+    <!-- Drop zone -->
+    <div class="drop-zone" [class.drop-zone--active]="dragOver()" [class.drop-zone--loaded]="parseResult() !== null"
+        (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)" role="button" tabindex="0"
+        aria-label="CSV-Datei hier ablegen oder auswählen" i18n-aria-label="@@csv.dropzone.aria">
+        <mat-icon>upload_file</mat-icon>
+        @if (parseResult() === null) {
+        <span i18n="@@csv.dropzone.hint">CSV hier ablegen oder</span>
+        <label class="file-select-btn">
+            <input type="file" accept=".csv,.txt" (change)="onFileChange($event)" hidden />
+            <span i18n="@@csv.dropzone.select">Datei auswählen</span>
+        </label>
+        } @else {
+        <span class="loaded-info">
+            <mat-icon class="check-icon">check_circle</mat-icon>
+            <span>
+                {{ parseResult()!.rows.length }}
+                <ng-container i18n="@@csv.rows.total"> Zeilen gelesen –</ng-container>
+                {{ parseResult()!.errorCount }}
+                <ng-container i18n="@@csv.rows.errors"> Fehler</ng-container>
+            </span>
+        </span>
+        <label class="file-select-btn">
+            <input type="file" accept=".csv,.txt" (change)="onFileChange($event)" hidden />
+            <span i18n="@@csv.dropzone.change">Andere Datei</span>
+        </label>
+        }
+    </div>
+
+    <!-- Meter select -->
+    @if (parseResult() !== null) {
+    <div class="meter-select-row">
+        <label class="meter-select-label" i18n="@@csv.meter.label">Zähler auswählen:</label>
+        <div class="meter-chips">
+            @for (meter of meters(); track meter.id) {
+            <button class="meter-chip" [class.meter-chip--active]="selectedMeterId() === meter.id"
+                [style.--chip-color]="meter.color" (click)="selectMeter(meter)" type="button">
+                <mat-icon [style.color]="meter.color">{{ meter.icon }}</mat-icon>
+                {{ meter.name }}
+            </button>
+            }
+        </div>
+    </div>
+
+    <!-- Preview table -->
+    <div class="preview-table-wrapper">
+        <table class="preview-table" aria-label="Vorschau" i18n-aria-label="@@csv.table.aria">
+            <thead>
+                <tr>
+                    <th i18n="@@csv.col.line">#</th>
+                    <th i18n="@@csv.col.date">Datum</th>
+                    <th i18n="@@csv.col.value">Wert</th>
+                    <th i18n="@@csv.col.note">Notiz</th>
+                    <th i18n="@@csv.col.status">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (row of processedRows(); track row.line) {
+                <tr [class.row--error]="row.errors.length > 0"
+                    [class.row--duplicate]="row.duplicate && row.errors.length === 0">
+                    <td class="cell-line">{{ row.line }}</td>
+                    <td>{{ row.rawDatum }}</td>
+                    <td>{{ row.rawWert }}</td>
+                    <td>{{ row.note }}</td>
+                    <td class="cell-status">
+                        @if (row.errors.length > 0) {
+                        <span class="status-badge status-badge--error" [title]="row.errors.join(', ')">
+                            <mat-icon>error_outline</mat-icon>
+                            <span i18n="@@csv.status.error">Fehler</span>
+                        </span>
+                        } @else if (row.duplicate) {
+                        <span class="status-badge status-badge--dupe">
+                            <mat-icon>content_copy</mat-icon>
+                            <span i18n="@@csv.status.duplicate">Duplikat</span>
+                        </span>
+                        } @else {
+                        <span class="status-badge status-badge--ok">
+                            <mat-icon>check</mat-icon>
+                            <span i18n="@@csv.status.ok">OK</span>
+                        </span>
+                        }
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+
+    @if (importing()) {
+    <mat-progress-bar mode="indeterminate" />
+    }
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="dialogRef.close(0)" i18n="@@csv.cancel">Abbrechen</button>
+    <button mat-flat-button [disabled]="!canImport()" (click)="import()" class="import-btn">
+        <mat-icon>file_download</mat-icon>
+        <ng-container i18n="@@csv.importBtn">{{ importableCount() }} Ablesungen importieren</ng-container>
+    </button>
+</mat-dialog-actions>

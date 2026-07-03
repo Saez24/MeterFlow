@@ -1,0 +1,336 @@
+/* ---- Timeline (neu) ---- */
+.tariff-timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.tariff-entry {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.tariff-timeline-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  padding-top: 18px;
+  width: 14px;
+}
+
+.tariff-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--border-color);
+  flex-shrink: 0;
+}
+
+.tariff-dot--current {
+  width: 14px;
+  height: 14px;
+  background: var(--apple-blue);
+}
+
+.tariff-line {
+  width: 2px;
+  flex: 1;
+  background: var(--border-color);
+  margin: 6px 0;
+  min-height: 16px;
+}
+
+/* ---- Cards ---- */
+.tariff-card {
+  flex: 1;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.tariff-card--current {
+  border-color: var(--apple-blue);
+  background: rgba(var(--apple-blue-rgb), 0.1);
+}
+
+/* ---- Price Chips ---- */
+.price-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 8px 12px;
+}
+
+.price-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.price-val {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.price-hint {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+}
+
+/* ---- Formular ---- */
+.tariff-form {
+  background: var(--bg);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+/* ---- No History ---- */
+.no-history {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  background: var(--bg);
+  border-radius: 12px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  border: 1px dashed var(--border-color);
+  margin-bottom: 16px;
+}
+
+.no-history mat-icon {
+  color: var(--apple-blue);
+  flex-shrink: 0;
+}
+
+/* ---- Diff Preview ---- */
+.price-diff-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--bg-surface);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.diff-value {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.new-price {
+  color: var(--apple-blue);
+}
+.diff-arrow {
+  color: var(--text-secondary);
+}
+
+.diff-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+.diff-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-left: auto;
+}
+
+.diff-badge--up {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+.diff-badge--down {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+}
+
+/* ---- Rest ---- */
+.tariff-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.tariff-date-block {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.date-icon {
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+
+.tariff-date {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.tariff-current-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: var(--apple-blue);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+
+.tariff-active-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+
+.tariff-prices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.delete-btn {
+  color: var(--text-secondary) !important;
+  transform: scale(0.85);
+}
+.delete-btn:hover {
+  color: #ef4444 !important;
+}
+
+.tariff-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.tariff-note mat-icon {
+  font-size: 14px;
+}
+
+.tariff-diff {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.tariff-diff mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+.tariff-diff--up {
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+}
+.tariff-diff--down {
+  background: rgba(16, 185, 129, 0.08);
+  color: #10b981;
+}
+
+/* ---- Misc ---- */
+.tariff-container {
+  padding: 8px 0;
+}
+.tariff-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.tariff-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-primary);
+}
+.tariff-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+.add-btn {
+  border-radius: 12px !important;
+}
+.form-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+  color: var(--apple-blue);
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.field {
+  width: 100%;
+}
+.field--full {
+  grid-column: 1 / -1;
+}
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.save-btn {
+  border-radius: 12px !important;
+}
+.diff-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
