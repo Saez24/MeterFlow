@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+import logging
+import mimetypes
 import uuid
 from datetime import date as date_cls
 from pathlib import Path
 
 from django.core.files.storage import default_storage
 from django.db.models import QuerySet
+from django.http import FileResponse, HttpResponseBase
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.parsers import FormParser, MultiPartParser
@@ -23,6 +26,8 @@ from apps.meters.models import Meter
 from apps.readings.models import Reading
 from apps.readings.serializers import ReadingSerializer
 from apps.readings.services import compute_reading, recalculate_readings
+
+logger = logging.getLogger(__name__)
 
 _DEFAULT_LIMIT = 1000
 _MAX_LIMIT = 10000
@@ -156,13 +161,49 @@ class ReadingViewSet(viewsets.ModelViewSet[Reading]):
 
     @action(
         detail=True,
-        methods=["post"],
+        methods=["get", "post", "delete"],
         url_path="photo",
         parser_classes=[MultiPartParser, FormParser],
     )
-    def photo(self, request: Request, pk: str | None = None) -> Response:
-        # get_object() is scoped to the user -> a foreign reading yields 404.
+    def photo(self, request: Request, pk: str | None = None) -> HttpResponseBase:
+        # get_object() is scoped to the user -> a foreign reading yields 404,
+        # so the photo is never served/replaced/removed across users (§4).
         reading = self.get_object()
+        if request.method == "GET":
+            return self._serve_photo(reading)
+        if request.method == "DELETE":
+            return self._delete_photo(request, reading)
+        return self._upload_photo(request, reading)
+
+    def _delete_photo(self, request: Request, reading: Reading) -> HttpResponseBase:
+        if reading.photo:
+            try:
+                default_storage.delete(reading.photo)
+            except OSError as exc:
+                logger.warning("photo.delete_failed key=%s err=%s", reading.photo, exc)
+            reading.photo = None
+            reading.save(update_fields=["photo"])
+            record_audit(
+                action="reading.photo_delete",
+                resource_type="reading",
+                request=request,
+                resource_id=reading.id,
+            )
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def _serve_photo(self, reading: Reading) -> HttpResponseBase:
+        if not reading.photo:
+            return Response({"detail": "No photo"}, status=status.HTTP_404_NOT_FOUND)
+        try:
+            handle = default_storage.open(reading.photo, "rb")
+        except FileNotFoundError:
+            return Response({"detail": "No photo"}, status=status.HTTP_404_NOT_FOUND)
+        content_type = (
+            mimetypes.guess_type(reading.photo)[0] or "application/octet-stream"
+        )
+        return FileResponse(handle, content_type=content_type)
+
+    def _upload_photo(self, request: Request, reading: Reading) -> HttpResponseBase:
         upload = request.FILES.get("file")
         if upload is None:
             return Response(
@@ -183,8 +224,21 @@ class ReadingViewSet(viewsets.ModelViewSet[Reading]):
                 status=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
             )
 
+        if reading.photo:
+            try:
+                default_storage.delete(reading.photo)
+            except OSError as exc:
+                logger.warning("photo.delete_failed key=%s err=%s", reading.photo, exc)
+
         name = f"readings/{reading.id}/{uuid.uuid4().hex}{extension}"
-        saved_name = default_storage.save(name, upload)
-        reading.photo = default_storage.url(saved_name)
+        # `photo` holds the internal storage key; the serializer exposes it as an
+        # authenticated endpoint URL, never a public /media path.
+        reading.photo = default_storage.save(name, upload)
         reading.save(update_fields=["photo"])
+        record_audit(
+            action="reading.photo_upload",
+            resource_type="reading",
+            request=request,
+            resource_id=reading.id,
+        )
         return Response(self.get_serializer(reading).data)

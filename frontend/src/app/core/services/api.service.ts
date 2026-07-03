@@ -183,6 +183,11 @@ export class ApiService {
     return;
   }
 
+  /** Explicitly remove a reading's photo (ownership-checked server-side). */
+  async removePhoto(readingId: string): Promise<void> {
+    await firstValueFrom(this.http.delete(`${this.base}/readings/${readingId}/photo/`));
+  }
+
   // ── CO₂ factors ─────────────────────────────────────────────────────────
   async getCo2Factors(): Promise<{ data: unknown[] | null; error: unknown }> {
     try {

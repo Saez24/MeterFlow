@@ -322,8 +322,8 @@ export class ReadingsForm {
     try {
       // ── Reading speichern, dann Foto ──────────────────────────
       // Der REST-Foto-Endpunkt setzt `reading.photo` serverseitig und braucht
-      // die Reading-ID, daher: erst speichern, dann Foto hochladen.
-      // (Foto-Entfernen im Edit-Modus wird vom Backend noch nicht unterstützt.)
+      // die Reading-ID, daher: erst Reading speichern, dann Foto hochladen bzw.
+      // entfernen.
       let readingId: string;
       if (this.isEditMode && this.originalReading) {
         const changes: Partial<MeterReading> = {
@@ -351,6 +351,12 @@ export class ReadingsForm {
           console.error('Photo upload failed:', e);
         } finally {
           this.isUploading.set(false);
+        }
+      } else if (this.existingPhotoRemoved()) {
+        try {
+          await this.apiService.removePhoto(readingId);
+        } catch (e) {
+          console.error('Photo removal failed:', e);
         }
       }
 

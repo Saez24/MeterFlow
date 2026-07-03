@@ -26,6 +26,7 @@ export function apiServiceMock(): ApiService {
     uploadPhoto: async () => '',
     getSignedPhotoUrl: async (p: string) => p,
     deletePhoto: async () => {},
+    removePhoto: async () => {},
     getCo2Factors: async () => ({ data: [], error: null }),
     upsertCo2Factor: async () => {},
     deleteCo2Factor: async () => {},

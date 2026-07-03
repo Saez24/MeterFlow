@@ -13,6 +13,9 @@ class ReadingSerializer(serializers.ModelSerializer[Reading]):
     meter_id: serializers.PrimaryKeyRelatedField[Meter] = (
         serializers.PrimaryKeyRelatedField(source="meter", read_only=True)
     )
+    # `photo` stores an internal storage key; expose the authenticated,
+    # ownership-checked endpoint URL instead of a public /media path (§4).
+    photo = serializers.SerializerMethodField()
 
     class Meta:
         model = Reading
@@ -38,6 +41,8 @@ class ReadingSerializer(serializers.ModelSerializer[Reading]):
             "cost",
             "wastewater_cost",
             "total_cost",
-            "photo",
             "created_at",
         ]
+
+    def get_photo(self, obj: Reading) -> str | None:
+        return f"/api/v1/readings/{obj.id}/photo/" if obj.photo else None

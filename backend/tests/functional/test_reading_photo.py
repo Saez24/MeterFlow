@@ -54,10 +54,31 @@ class TestReadingPhoto(BaseTest):
         reading = self._reading(auth_api, data)
         # Act
         response = auth_api.readings.upload_photo(reading.id, _png())
-        # Assert
+        # Assert — photo is exposed as an authenticated endpoint URL, not /media
         body = self.assert_status(response, 200)
-        assert body["photo"] is not None
-        assert body["photo"].endswith(".png")
+        assert body["photo"] == f"/api/v1/readings/{reading.id}/photo/"
+        # …and the owner can fetch the image bytes back
+        served = auth_api.readings.get_photo(reading.id)
+        assert served.status_code == 200
+        assert served["Content-Type"] == "image/png"
+
+    @allure.story("Delete")
+    @allure.severity(allure.severity_level.NORMAL)
+    def test_delete_photo_removes_it(
+        self,
+        auth_api: ApiFacade,
+        data: DataGenerator,
+        settings: pytest.FixtureRequest,
+        tmp_path: object,
+    ) -> None:
+        # Arrange
+        settings.MEDIA_ROOT = str(tmp_path)  # type: ignore[attr-defined]
+        reading = self._reading(auth_api, data)
+        self.assert_status(auth_api.readings.upload_photo(reading.id, _png()), 200)
+        # Act
+        self.assert_status(auth_api.readings.delete_photo(reading.id), 204)
+        # Assert — photo gone
+        assert auth_api.readings.get_photo(reading.id).status_code == 404
 
     @allure.story("Validation")
     @allure.severity(allure.severity_level.NORMAL)
@@ -95,6 +116,28 @@ class TestReadingPhoto(BaseTest):
         response = user_b.readings.upload_photo(reading.id, _png())
         # Assert — foreign row must not leak
         self.assert_status(response, 404)
+
+    @allure.story("Access control")
+    @allure.severity(allure.severity_level.BLOCKER)
+    @pytest.mark.django_db
+    def test_cannot_fetch_foreign_photo(
+        self,
+        data: DataGenerator,
+        settings: pytest.FixtureRequest,
+        tmp_path: object,
+    ) -> None:
+        # Arrange — user A uploads a photo
+        settings.MEDIA_ROOT = str(tmp_path)  # type: ignore[attr-defined]
+        user_a = ApiFacade()
+        user_a.authenticate(data)
+        reading = self._reading(user_a, data)
+        self.assert_status(user_a.readings.upload_photo(reading.id, _png()), 200)
+        user_b = ApiFacade()
+        user_b.authenticate(data)
+        # Act — user B tries to fetch the image (the whole point of §4)
+        response = user_b.readings.get_photo(reading.id)
+        # Assert — foreign photo must not leak
+        assert response.status_code == 404
 
     @allure.story("Access control")
     @allure.severity(allure.severity_level.CRITICAL)

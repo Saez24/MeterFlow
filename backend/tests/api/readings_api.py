@@ -32,3 +32,11 @@ class ReadingsAPI:
     @allure.step("POST /readings/{reading_id}/photo")
     def upload_photo(self, reading_id: uuid.UUID, file_obj: Any) -> Response:
         return self._client.upload(f"/readings/{reading_id}/photo/", file_obj)
+
+    @allure.step("GET /readings/{reading_id}/photo")
+    def get_photo(self, reading_id: uuid.UUID) -> Response:
+        return self._client.get(f"/readings/{reading_id}/photo/")
+
+    @allure.step("DELETE /readings/{reading_id}/photo")
+    def delete_photo(self, reading_id: uuid.UUID) -> Response:
+        return self._client.delete(f"/readings/{reading_id}/photo/")

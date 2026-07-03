@@ -91,10 +91,13 @@ Empfehlung: **Contract-First** — REST-Endpunkt-Liste zuerst fixieren, dann WS2
       npm-audit = 0. Cookie-Flags/CORS/CSP/Rate-Limiting/Ownership bestätigt.
 - [x] Voller Backend-Gate grün: ruff · black · mypy (87) · bandit 0 · **40 Tests**.
 
+- [x] **Finding 2 (§4 Media-Access) behoben**: öffentliches `/media/` durch **authentifizierten,
+      ownership-geprüften Endpunkt** `GET /api/v1/readings/{id}/photo/` ersetzt (fremder User → 404);
+      `photo` speichert internen Storage-Key, Serializer liefert Endpunkt-URL; `/media/`-nginx-Block
+      entfernt. Tests (`test_cannot_fetch_foreign_photo`). **41 Backend-Tests grün.**
+
 Deploy-Zeit-Follow-ups (vor Produktion, in SECURITY_REVIEW dokumentiert):
 - [ ] **Actions per SHA pinnen** (§11) — `# TODO(§11)` in Workflows.
-- [ ] **Prod-Media** via S3 signierte URLs (`STORAGE_BACKEND=s3`) oder authentifizierter Media-Endpoint
-      (Finding 2, §4 — mitigiert durch unrätselbare UUID-Pfade).
 - [ ] Realer `docker compose up`-E2E-Durchlauf (kein Docker in dieser Umgebung).
 
 **WS4 — Deployment (Schritt 1: Docker/Compose):**
@@ -263,9 +266,8 @@ Deployment (3 Images + Compose), CI/CD (Trivy-Gate), Security-Gate bestanden.
 1. GitHub Actions per **SHA pinnen** (§11).
 2. **Realer Docker-Build + `docker compose up`** E2E-Durchklick (Registrierung→Zähler→Ablesung+Foto→
    Dashboard→CSV/PDF), Images bauen/Trivy-scannen.
-3. **Prod-Storage** auf S3/MinIO (signierte URLs) umstellen.
-4. WS3b: optische Light/Dark-Sichtung pro Feature-Modul im Browser.
-5. Optional: erster **git commit** (bisher bewusst keiner — auf Freigabe warten).
+3. WS3b: optische Light/Dark-Sichtung pro Feature-Modul im Browser.
+4. Optional: S3/MinIO-Media als CDN-Offload (Foto-Zugriff ist bereits authentifiziert abgesichert).
 
 ## 8. Referenz-Quellen (aus den Altprojekten)
 
@@ -330,4 +332,14 @@ Deployment (3 Images + Compose), CI/CD (Trivy-Gate), Security-Gate bestanden.
 - (WS5/Elena+Lukas) **Security-Gate bestanden**: `docs/SECURITY_REVIEW.md` (OWASP-Tabelle, §12-Checkliste),
   **Audit-Logging (SOX §5) implementiert** (AuditLog + record_audit, Auth/Meter/Reading/CO₂, 2 Tests),
   Scans clean (Secrets/`.env`/localStorage/CVEs/Deploy-Check). Backend-Gate grün (ruff/black/mypy/bandit/
-  40 Tests). Follow-ups (Deploy-Zeit): SHA-Pinning, S3-Media, realer Docker-E2E. **WS5 done.**
+  40 Tests). **WS5 done.**
+- (WS5/Elena, Follow-up) **§4 Media-Finding behoben**: authentifizierter, ownership-geprüfter Foto-Endpunkt
+  `GET /readings/{id}/photo/` (fremd → 404) statt öffentlichem `/media/`; Storage-Key statt Public-URL;
+  nginx-`/media/`-Block entfernt; SECURITY_REVIEW aktualisiert. **41 Backend-Tests grün.** Zusätzlich
+  Finding 3 (toter `storage.service.ts`) entfernt (Build grün). Alle 3 Review-Findings resolved.
+- (WS3/Finn) **Frontend-Service-Tests** ergänzt: `api.service.spec` (Auth, camelCase/Decimal-Mapping,
+  ISO-Datum, Foto-Upload, CO₂) + `credentials.interceptor.spec` (withCredentials, 401→Refresh-Retry,
+  kein Refresh auf Auth-Endpunkten) gegen `HttpClientTesting`. **69 Vitest grün** (20 Files).
+- (Abschluss) **Foto-Entfernen-Endpunkt** `DELETE /readings/{id}/photo/` (ownership, Audit) + Test +
+  Frontend-Verdrahtung (readings-form Edit-Modus). **Release-Kandidat** dokumentiert:
+  `docs/RELEASE_CANDIDATE.md`. Voller `/verify`: Backend 42 Tests, Frontend 69 Tests, alle Gates grün.

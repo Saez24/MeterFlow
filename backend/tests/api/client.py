@@ -28,10 +28,13 @@ class HttpClient:
         return self._client.cookies
 
     def _attach(self, method: str, path: str, response: Response) -> None:
-        try:
-            body = json.dumps(response.json(), indent=2, ensure_ascii=False)  # type: ignore[attr-defined]
-        except (ValueError, TypeError):
-            body = response.content.decode(errors="replace")
+        if getattr(response, "streaming", False):
+            body = f"<streaming {response.headers.get('Content-Type', '')}>"
+        else:
+            try:
+                body = json.dumps(response.json(), indent=2, ensure_ascii=False)  # type: ignore[attr-defined]
+            except (ValueError, TypeError):
+                body = response.content.decode(errors="replace")
         allure.attach(
             f"{method} {path} -> {response.status_code}\n{body}",
             name=f"{method} {path}",
