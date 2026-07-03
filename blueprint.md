@@ -24,8 +24,10 @@ Es existierten zwei getrennte MeterFlow-Projekte mit zwei Frontends, die doppelt
 4. **UI-Basis = das Supabase-Frontend** (`../MeterFlow/src`, featurereicher); Datenschicht wird auf
    REST/Django umgebaut. Das Fullstack-Frontend ist die **Vorlage** für REST-Client + Cookie-Auth.
 5. Getrennt deploybar: **Frontend allein / Backend allein / Fullstack (ein Container)** → 3 Images.
-6. **Angular Material RAUS** → eigenes cleanes **Apple-Design** mit Light/Dark. Token-System als
-   Inspiration aus `../DataForge/src/styles.scss` (nur Tokens + `.df-*`-Komponenten, nicht Materials).
+6. **Angular Material BLEIBT — DataForge-artig gethemt** (Regeländerung 2026-07-03; ersetzt die
+   frühere „Material RAUS"-Entscheidung). Apple-Look via `mat.define-theme` (azure/green,
+   System-/DM-Sans-Typo, Density -1) + Token-System + `.df-*`/`app-*`-Custom-Komponenten obendrauf —
+   genau wie DataForge (das ebenfalls auf Material sitzt). Keine flächige Material-Entfernung mehr.
 7. Durchgängig **Angular-22-Idiome**: `httpResource`/`resource`, **Signal Forms**, `@Service()`,
    `injectAsync()`, neuer Kontrollfluss, FetchBackend, `@angular/aria`. (Quellen gelesen:
    angulararchitects.io v22-Überblick + angular.dev/events/v22.)
@@ -92,12 +94,14 @@ Empfehlung: **Contract-First** — REST-Endpunkt-Liste zuerst fixieren, dann WS2
       5 Vitest-Specs grün (`ng test --include`).
 - [x] ThemeService bereits vorhanden & passend (Signal mode light/dark/system, `prefers-color-scheme`,
       localStorage, setzt `data-theme` auf `<html>`) — übernommen.
+- [x] **Regeländerung: Material bleibt, DataForge-artig gethemt.** `styles.scss`: `mat.define-theme`
+      light/dark mit azure/**green**-Palette, System-Font-Typografie (`plain/brand-family`), **Density -1**;
+      Tokens + `.df-*`/`app-*` liegen obendrauf. Build grün. Keine Material-Entfernung mehr nötig.
 
 Noch offen in WS3b (nächste Schritte):
-- [ ] **Material entfernen** (21 Dateien importieren `@angular/material`/`@angular/cdk`) — modulweise
-      auf `.df-*`/`app-*` migrieren; danach `@angular/material`+`@angular/cdk` aus `package.json`.
-- [ ] Weitere Basis-Komponenten: Dialog/Overlay, Select, Toast/Notification, Tabs.
-- [ ] Signal Forms für die Formulare (zusammen mit Input-Migration).
+- [ ] Material-Component-Overrides ausbauen (Button/Dialog/Form-Field/Tabs/Select) für konsistenten
+      Apple-Look über alle Feature-Module — DataForge-`.df-*`-Overrides als Vorlage.
+- [ ] Optional self-hosted DM Sans/DM Mono WOFF2 (`public/fonts/`) statt System-Stack.
 
 **WS2 — Django-Backend (fertig):**
 - [x] `backend/.venv` + Deps installiert (Django 5.2→6.0, DRF, `djangorestframework-camel-case`,
@@ -176,13 +180,12 @@ Noch **nicht** gemacht (bewusst, für spätere Workstreams):
 
 ## 7. Nächster Schritt
 
-**Fundament steht** (App im Monorepo, Tokens, Theme, Basis-Komponenten, Build+Tests grün).
+**Fundament + Material-Theming stehen** (App im Monorepo, Tokens, DataForge-artiges Material-Theme,
+Basis-Komponenten, Build+Tests grün).
 
-Weiter in **WS3b — Material entfernen, modulweise**: pro Feature-/Shared-Komponente die `mat-*`
-durch `.df-*`/`app-*` ersetzen (Button/Input/Select/Dialog/Icon/Tabs/Snackbar), fehlende Basis-
-Komponenten (Dialog/Overlay, Select, Toast) dabei ergänzen, Formulare auf **Signal Forms**. Sinnvolle
-Reihenfolge: erst die kleinen Shared-Komponenten (`confirm-dialog`, `tariff-form`), dann Feature-Module.
-Am Ende `@angular/material` + `@angular/cdk` aus `package.json`.
+Weiter in **WS3b — Apple-Feinschliff auf Material**: Component-Overrides ausbauen (Buttons/Dialoge/
+Form-Fields/Tabs runde Ecken, Token-Farben, Frosted-Glass) über alle Feature-Module, `.df-*`/`app-*`
+gezielt dort einsetzen, wo Material zu schwer ist. Danach optional self-hosted Fonts.
 
 Parallel möglich: **WS3** (Datenschicht Supabase→REST gegen das laufende Backend) und **WS4**
 (Docker/CI inkl. Redis).
@@ -226,6 +229,7 @@ Parallel möglich: **WS3** (Datenschicht Supabase→REST gegen das laufende Back
   **bandit 0 / pip-audit 0**. Backend-`/verify`-Gate vollständig grün. **38 Tests, 91 % Coverage.**
   Einziger WS2-Restpunkt: Rate-Limit-Cache → Redis (Infra, WS4).
 - (WS3b/Isabel+Kilian) **Design-Fundament**: MeterFlow-App nach `frontend/` übernommen (Build grün),
-  kanonische Apple-Tokens Light/Dark (`_design-tokens.scss`, ohne Material, kein CDN), Basis-Klassen
-  `.df-*` + Standalone-Komponenten `app-button`/`app-icon` (Angular-22-Signal-Inputs, Inline-SVG),
-  5 Vitest-Specs grün. Material koexistiert noch (21 Dateien) → modulweise Entfernung als nächstes.
+  kanonische Apple-Tokens Light/Dark (`_design-tokens.scss`, kein CDN), Basis-Klassen `.df-*` +
+  Standalone-Komponenten `app-button`/`app-icon` (Angular-22-Signal-Inputs, Inline-SVG), 5 Vitest grün.
+- (WS3b, Regeländerung) **Material bleibt, DataForge-artig gethemt** statt raus: `define-theme`
+  azure/green + System-Typo + Density -1. Build grün. Entscheidung #6 im Blueprint aktualisiert.

@@ -161,18 +161,27 @@ a {
   border: 1px solid rgba(var(--border-color), 0.5);
 }
 
-// 9. Angular Material Theming
+// 9. Angular Material Theming — DataForge-style (Material stays, themed Apple).
+// Azure primary + green tertiary, system/DM-Sans typography, density -1 for a
+// tighter, more refined feel. Custom .df-* components + tokens layer on top.
 @include mat.core();
+
+// No CDN: use the local Apple system stack (swap for 'DM Sans' once self-hosted).
+$app-font: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif';
 
 $light-theme: mat.define-theme(
   (
     color: (
       theme-type: light,
       primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
+      tertiary: mat.$green-palette,
+    ),
+    typography: (
+      plain-family: $app-font,
+      brand-family: $app-font,
     ),
     density: (
-      scale: 0,
+      scale: -1,
     ),
   )
 );
@@ -182,10 +191,14 @@ $dark-theme: mat.define-theme(
     color: (
       theme-type: dark,
       primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
+      tertiary: mat.$green-palette,
+    ),
+    typography: (
+      plain-family: $app-font,
+      brand-family: $app-font,
     ),
     density: (
-      scale: 0,
+      scale: -1,
     ),
   )
 );
