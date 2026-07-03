@@ -1,9 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { App } from './app';
 import { provideRouter, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { vi } from 'vitest';
-import { SupabaseService } from './core/services/supabase.service';
+import { ApiService } from './core/services/api.service';
+import { apiServiceMock } from './core/services/api.service.mock';
 import { of } from 'rxjs';
 
 describe('App', () => {
@@ -26,8 +29,10 @@ describe('App', () => {
       imports: [App],
       providers: [
         provideZonelessChangeDetection(),
+        provideHttpClient(),
+        provideHttpClientTesting(),
         provideRouter([{ path: '', component: App }]),
-        SupabaseService,
+        { provide: ApiService, useValue: apiServiceMock() },
         {
           provide: ActivatedRoute,
           useValue: {

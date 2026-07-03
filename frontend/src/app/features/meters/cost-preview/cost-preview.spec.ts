@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ApiService } from '../../../core/services/api.service';
+import { apiServiceMock } from '../../../core/services/api.service.mock';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CostPreview } from './cost-preview';
@@ -22,7 +24,8 @@ describe('CostPreview', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [CostPreview, NoopAnimationsModule],
-            providers: [provideZonelessChangeDetection()],
+            providers: [
+        { provide: ApiService, useValue: apiServiceMock() },provideZonelessChangeDetection()],
         }).compileComponents();
 
         fixture = TestBed.createComponent(CostPreview);

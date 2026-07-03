@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ThemeService } from './core/services/theme.service';
-import { SupabaseService } from './core/services/supabase.service';
+import { ApiService } from './core/services/api.service';
 import { NotificationService } from './core/services/notification.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
@@ -33,7 +33,7 @@ interface NavItem {
 export class App {
   protected readonly title = signal('MeterFlow');
   readonly themeService = inject(ThemeService);
-  readonly supabaseService = inject(SupabaseService);
+  readonly supabaseService = inject(ApiService);
   readonly sidebarCollapsed = signal(false);
 
   private readonly router = inject(Router);

@@ -10,7 +10,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ThemeService } from '../../core/services/theme.service';
-import { SupabaseService } from '../../core/services/supabase.service';
+import { ApiService } from '../../core/services/api.service';
 import { Router } from '@angular/router';
 import { MeterService } from '../../core/services/meter.service';
 import { ReadingService } from '../../core/services/reading.service';
@@ -37,7 +37,7 @@ export class Settings {
   private readonly dataSyncService = inject(DataSyncService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly router = inject(Router);
-  private readonly supabase = inject(SupabaseService);
+  private readonly supabase = inject(ApiService);
   private readonly dialog = inject(MatDialog);
 
   readonly notificationService = inject(NotificationService);

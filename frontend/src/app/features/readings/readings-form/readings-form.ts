@@ -21,7 +21,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MeterService } from '../../../core/services/meter.service';
 import { ReadingService } from '../../../core/services/reading.service';
 import { TariffService } from '../../../core/services/tariff.service';
-import { SupabaseService } from '../../../core/services/supabase.service';
+import { ApiService } from '../../../core/services/api.service';
 import { GAS_DEFAULTS } from '../../../core/constants/gas.constants';
 import { OcrService, OcrResult } from '../../../core/services/ocr.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -53,7 +53,7 @@ export class ReadingsForm {
   private readonly meterService = inject(MeterService);
   public readonly readingService = inject(ReadingService);
   private readonly tariffService = inject(TariffService);
-  private readonly supabaseService = inject(SupabaseService);
+  private readonly apiService = inject(ApiService);
   private readonly ocrService = inject(OcrService);
   private readonly route = inject(ActivatedRoute);
   private readonly snackBar = inject(MatSnackBar);
@@ -118,7 +118,7 @@ export class ReadingsForm {
         this.existingPhotoPath.set(this.originalReading.photo);
         const isStoragePath = !this.originalReading.photo.startsWith('http');
         if (isStoragePath) {
-          this.supabaseService.getSignedPhotoUrl(this.originalReading.photo)
+          this.apiService.getSignedPhotoUrl(this.originalReading.photo)
             .then(url => this.existingPhotoSignedUrl.set(url))
             .catch(() => { });
         } else {
@@ -327,47 +327,38 @@ export class ReadingsForm {
     }
 
     try {
-      // ── Foto verarbeiten ──────────────────────────────────────
-      let photoPath: string | null | undefined = undefined; // undefined = keine Änderung
-
-      if (this.selectedPhotoFile()) {
-        this.isUploading.set(true);
-        // Altes Foto aus Storage löschen (nur Pfade, keine alten URLs)
-        const oldPath = this.existingPhotoPath();
-        if (oldPath && !oldPath.startsWith('http')) {
-          try { await this.supabaseService.deletePhoto(oldPath); } catch { /* ignorieren */ }
-        }
-        photoPath = await this.supabaseService.uploadPhoto(this.selectedPhotoFile()!);
-        this.isUploading.set(false);
-      } else if (this.existingPhotoRemoved()) {
-        const oldPath = this.existingPhotoPath();
-        if (oldPath && !oldPath.startsWith('http')) {
-          try { await this.supabaseService.deletePhoto(oldPath); } catch { /* ignorieren */ }
-        }
-        photoPath = null; // explizit auf null setzen = Foto entfernen
-      } else if (this.hasExistingPhoto()) {
-        photoPath = this.existingPhotoPath(); // unverändert übernehmen
-      }
-
+      // ── Reading speichern, dann Foto ──────────────────────────
+      // Der REST-Foto-Endpunkt setzt `reading.photo` serverseitig und braucht
+      // die Reading-ID, daher: erst speichern, dann Foto hochladen.
+      // (Foto-Entfernen im Edit-Modus wird vom Backend noch nicht unterstützt.)
+      let readingId: string;
       if (this.isEditMode && this.originalReading) {
         const changes: Partial<MeterReading> = {
           value: numericValue,
           date: rawValue.date!,
           note: rawValue.note ?? undefined,
-          ...(photoPath !== undefined && { photo: photoPath ?? undefined }),
         };
-        await this.readingService.updateReading(
-          this.originalReading.id,
-          changes
-        );
+        await this.readingService.updateReading(this.originalReading.id, changes);
+        readingId = this.originalReading.id;
       } else {
-        await this.readingService.addReading({
+        const saved = await this.readingService.addReading({
           meterId: rawValue.meterId!,
           value: numericValue,
           date: rawValue.date!,
           note: rawValue.note ?? undefined,
-          ...(photoPath ? { photo: photoPath } : {}),
         });
+        readingId = saved.id;
+      }
+
+      if (this.selectedPhotoFile()) {
+        this.isUploading.set(true);
+        try {
+          await this.apiService.uploadPhoto(this.selectedPhotoFile()!, readingId);
+        } catch (e) {
+          console.error('Photo upload failed:', e);
+        } finally {
+          this.isUploading.set(false);
+        }
       }
 
       this.snackBar.open($localize`:@@readingsForm.saved:Ablesung gespeichert`, 'OK', { duration: 3000 });

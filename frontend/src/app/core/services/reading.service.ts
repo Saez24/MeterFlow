@@ -1,6 +1,6 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { MeterReading, MeterConfig } from '../models/energy.models';
-import { SupabaseService } from './supabase.service';
+import { ApiService } from './api.service';
 import { MeterService } from './meter.service';
 import { TariffService } from './tariff.service';
 import { GAS_DEFAULTS } from '../constants/gas.constants';
@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class ReadingService {
-  private readonly supabase = inject(SupabaseService);
+  private readonly supabase = inject(ApiService);
   private readonly meterService = inject(MeterService);
   private readonly tariffService = inject(TariffService);
   private readonly router = inject(Router);
@@ -41,9 +41,13 @@ export class ReadingService {
 
   async loadReadings(): Promise<void> {
     this.loading.set(true);
-    const readings = await this.supabase.getReadings();
-    this.readings.set(readings);
-    this.loading.set(false);
+    try {
+      this.readings.set(await this.supabase.getReadings());
+    } catch {
+      this.readings.set([]);
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   getReading(id: string): MeterReading | undefined {

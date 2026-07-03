@@ -1,10 +1,10 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { MeterConfig, TariffPeriod } from '../models/energy.models';
-import { SupabaseService } from './supabase.service';
+import { ApiService } from './api.service';
 
 @Injectable({ providedIn: 'root' })
 export class MeterService {
-  private readonly supabase = inject(SupabaseService);
+  private readonly supabase = inject(ApiService);
 
   readonly meters = signal<MeterConfig[]>([]);
   readonly loading = signal(true);
@@ -17,9 +17,13 @@ export class MeterService {
 
   async loadMeters(): Promise<void> {
     this.loading.set(true);
-    const meters = await this.supabase.getMeters();
-    this.meters.set(meters);
-    this.loading.set(false);
+    try {
+      this.meters.set(await this.supabase.getMeters());
+    } catch {
+      this.meters.set([]);
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   getMeter(id: string): MeterConfig | undefined {

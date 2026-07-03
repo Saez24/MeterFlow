@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ApiService } from '../../../core/services/api.service';
+import { apiServiceMock } from '../../../core/services/api.service.mock';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter, ActivatedRoute } from '@angular/router';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -45,6 +47,7 @@ describe('MeterForm', () => {
       imports: [MeterForm, NoopAnimationsModule],
       providers: [
         provideZonelessChangeDetection(),
+        { provide: ApiService, useValue: apiServiceMock() },
         provideRouter([]),
         {
           provide: ActivatedRoute,

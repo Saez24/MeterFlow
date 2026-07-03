@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ApiService } from '../../../core/services/api.service';
+import { apiServiceMock } from '../../../core/services/api.service.mock';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TariffHistory } from './tariff-history';
@@ -38,7 +40,8 @@ describe('TariffHistory', () => {
 
     await TestBed.configureTestingModule({
       imports: [TariffHistory, NoopAnimationsModule],
-      providers: [provideZonelessChangeDetection()],
+      providers: [
+        { provide: ApiService, useValue: apiServiceMock() },provideZonelessChangeDetection()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TariffHistory);

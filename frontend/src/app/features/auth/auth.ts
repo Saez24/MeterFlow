@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { SupabaseService } from '../../core/services/supabase.service';
+import { ApiService } from '../../core/services/api.service';
 
 type AuthMode = 'login' | 'register';
 
@@ -22,7 +22,7 @@ type AuthMode = 'login' | 'register';
 
 })
 export class Auth {
-  private readonly supabase = inject(SupabaseService);
+  private readonly supabase = inject(ApiService);
   private readonly router = inject(Router);
   private readonly snackBar = inject(MatSnackBar);
   private readonly fb = inject(FormBuilder);

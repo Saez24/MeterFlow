@@ -1,9 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { Dashboard } from './dashboard';
 import { provideRouter, ActivatedRoute } from '@angular/router';
 import { vi } from 'vitest';
-import { SupabaseService } from '../../core/services/supabase.service';
+import { ApiService } from '../../core/services/api.service';
+import { apiServiceMock } from '../../core/services/api.service.mock';
 import { EnergyService } from '../../core/services/energy.service';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -30,8 +33,10 @@ describe('Dashboard', () => {
       imports: [Dashboard, NoopAnimationsModule],
       providers: [
         provideZonelessChangeDetection(),
+        provideHttpClient(),
+        provideHttpClientTesting(),
         provideRouter([]),
-        SupabaseService,
+        { provide: ApiService, useValue: apiServiceMock() },
         EnergyService,
         {
           provide: ActivatedRoute,

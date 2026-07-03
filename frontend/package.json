@@ -24,7 +24,6 @@
     "@angular/platform-browser": "^22.0.4",
     "@angular/router": "^22.0.4",
     "@angular/service-worker": "^22.0.4",
-    "@supabase/supabase-js": "^2.110.0",
     "@types/papaparse": "^5.5.2",
     "chart.js": "^4.5.1",
     "heic-to": "^1.5.2",

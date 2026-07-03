@@ -1,4 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { signal, computed } from '@angular/core';
@@ -8,7 +10,8 @@ import { ReadingsForm } from './readings-form';
 import { MeterService } from '../../../core/services/meter.service';
 import { ReadingService } from '../../../core/services/reading.service';
 import { TariffService } from '../../../core/services/tariff.service';
-import { SupabaseService } from '../../../core/services/supabase.service';
+import { ApiService } from '../../../core/services/api.service';
+import { apiServiceMock } from '../../../core/services/api.service.mock';
 import { MeterConfig, MeterReading, EnergyType, TariffPeriod } from '../../../core/models/energy.models';
 import { vi } from 'vitest';
 
@@ -81,7 +84,7 @@ const mockTariffService = {
   },
 };
 
-const mockSupabaseService = {
+const mockApiService = {
   getSignedPhotoUrl: vi.fn().mockResolvedValue(null),
   uploadPhoto: vi.fn().mockResolvedValue('path/photo.jpg'),
   deletePhoto: vi.fn().mockResolvedValue(undefined),
@@ -100,11 +103,13 @@ describe('ReadingsForm', () => {
       imports: [ReadingsForm, NoopAnimationsModule],
       providers: [
         provideZonelessChangeDetection(),
+        provideHttpClient(),
+        provideHttpClientTesting(),
         provideRouter([]),
         { provide: MeterService, useValue: mockMeterService },
         { provide: ReadingService, useValue: mockReadingService },
         { provide: TariffService, useValue: mockTariffService },
-        { provide: SupabaseService, useValue: mockSupabaseService },
+        { provide: ApiService, useValue: mockApiService },
         {
           provide: ActivatedRoute,
           useValue: {

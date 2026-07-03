@@ -23,7 +23,7 @@ const isoDate = (d: Date | string): string =>
  * REST data layer against the Django backend (contract). Cookie-based JWT auth
  * (the credentials interceptor handles withCredentials + 401 refresh). The API
  * speaks camelCase, so response bodies map almost 1:1 — only dates and
- * decimal-strings need conversion. Drop-in replacement for SupabaseService.
+ * decimal-strings need conversion.
  */
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -44,9 +44,7 @@ export class ApiService {
 
   private async initSession(): Promise<void> {
     try {
-      const user = await firstValueFrom(
-        this.http.get<AppUser>(`${this.base}/auth/me`),
-      );
+      const user = await firstValueFrom(this.http.get<AppUser>(`${this.base}/auth/me`));
       this.currentUser.set(user);
       this.connectionStatus.set('connected');
     } catch {
@@ -109,9 +107,7 @@ export class ApiService {
 
   // ── Meters ──────────────────────────────────────────────────────────────
   async getMeters(): Promise<MeterConfig[]> {
-    const data = await firstValueFrom(
-      this.http.get<unknown[]>(`${this.base}/meters/`),
-    );
+    const data = await firstValueFrom(this.http.get<unknown[]>(`${this.base}/meters/`));
     return (data ?? []).map(this.mapMeter);
   }
 
@@ -123,9 +119,7 @@ export class ApiService {
   }
 
   async updateMeter(id: string, changes: Partial<MeterConfig>): Promise<void> {
-    await firstValueFrom(
-      this.http.patch(`${this.base}/meters/${id}/`, this.meterBody(changes)),
-    );
+    await firstValueFrom(this.http.patch(`${this.base}/meters/${id}/`, this.meterBody(changes)));
   }
 
   async deleteMeter(id: string): Promise<void> {
@@ -134,9 +128,7 @@ export class ApiService {
 
   // ── Readings ────────────────────────────────────────────────────────────
   async getReadings(): Promise<MeterReading[]> {
-    const data = await firstValueFrom(
-      this.http.get<unknown[]>(`${this.base}/readings/`),
-    );
+    const data = await firstValueFrom(this.http.get<unknown[]>(`${this.base}/readings/`));
     return (data ?? []).map(this.mapReading);
   }
 
@@ -147,9 +139,7 @@ export class ApiService {
       value: reading.value,
       note: reading.note ?? null,
     };
-    const data = await firstValueFrom(
-      this.http.post<unknown>(`${this.base}/readings/`, body),
-    );
+    const data = await firstValueFrom(this.http.post<unknown>(`${this.base}/readings/`, body));
     return this.mapReading(data);
   }
 
@@ -178,10 +168,7 @@ export class ApiService {
     const formData = new FormData();
     formData.append('file', file);
     const data = await firstValueFrom(
-      this.http.post<{ photo: string }>(
-        `${this.base}/readings/${readingId}/photo/`,
-        formData,
-      ),
+      this.http.post<{ photo: string }>(`${this.base}/readings/${readingId}/photo/`, formData),
     );
     return data.photo;
   }
@@ -199,9 +186,7 @@ export class ApiService {
   // ── CO₂ factors ─────────────────────────────────────────────────────────
   async getCo2Factors(): Promise<{ data: unknown[] | null; error: unknown }> {
     try {
-      const data = await firstValueFrom(
-        this.http.get<unknown[]>(`${this.base}/co2-factors/`),
-      );
+      const data = await firstValueFrom(this.http.get<unknown[]>(`${this.base}/co2-factors/`));
       return { data, error: null };
     } catch (error) {
       return { data: null, error };
@@ -233,9 +218,7 @@ export class ApiService {
     await Promise.all(meters.map((m) => this.deleteMeter(m.id)));
 
     const { data } = await this.getCo2Factors();
-    await Promise.all(
-      (data ?? []).map((f) => this.deleteCo2Factor((f as { id: string }).id)),
-    );
+    await Promise.all((data ?? []).map((f) => this.deleteCo2Factor((f as { id: string }).id)));
   }
 
   async checkConnection(): Promise<void> {

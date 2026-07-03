@@ -1,13 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { MeterService } from './meter.service';
 import { ReadingService } from './reading.service';
-import { SupabaseService } from './supabase.service';
+import { ApiService } from './api.service';
 
 @Injectable({ providedIn: 'root' })
 export class DataSyncService {
   private readonly meterService = inject(MeterService);
   private readonly readingService = inject(ReadingService);
-  private readonly supabase = inject(SupabaseService);
+  private readonly supabase = inject(ApiService);
 
   exportData(): string {
     return JSON.stringify(

@@ -77,7 +77,7 @@ Empfehlung: **Contract-First** — REST-Endpunkt-Liste zuerst fixieren, dann WS2
 
 ## 6. Aktueller Stand
 
-**WS3 (Datenschicht) — Fundament steht.** 🟡 · **WS3b (Design)** 🟢 · **WS2 (Backend)** ✅ · **Contract-First** ✅ · **WS1** ✅
+**WS3 (Datenschicht Supabase→REST) — fertig.** ✅ · **WS3b (Design)** 🟢 · **WS2 (Backend)** ✅ · **Contract-First** ✅ · **WS1** ✅
 
 **WS3 — Frontend-Datenschicht Supabase → REST (Schritt A: Fundament):**
 - [x] **`ApiService`** (`core/services/api.service.ts`) — REST-Client gegen das Django-Backend,
@@ -91,14 +91,15 @@ Empfehlung: **Contract-First** — REST-Endpunkt-Liste zuerst fixieren, dann WS2
       (`/api`,`/health` → `:8000`) + `angular.json`-Serve-Proxy. Supabase-Felder bleiben vorerst
       (Koexistenz). Build grün.
 
-Noch offen in WS3 (Schritt B):
-- [ ] **11 Konsumenten** von `SupabaseService` → `ApiService` umstellen (meist nur Import/Inject-Swap,
-      da signaturgleich): services (meter/reading/co2-factor/energy/data-sync), guard, auth, app, settings.
-- [ ] **Foto-Flow** anpassen (Upload braucht jetzt `readingId`: erst Reading speichern, dann Foto) in
-      `readings-form` + `meter-readings`.
-- [ ] **CO₂-Mapping** in `co2-factor.service` auf camelCase-Response umstellen.
-- [ ] `supabase.service.ts`/`.spec` löschen, `@supabase/supabase-js` aus `package.json`, Supabase-
-      Felder aus Environments. Vitest-Service-Specs anpassen.
+**WS3 — Schritt B (Konsumenten + Supabase raus) — fertig:**
+- [x] **Alle 11 Konsumenten** auf `ApiService` umgestellt (services/guard/auth/app/settings).
+- [x] **Foto-Flow invertiert** (`readings-form`): erst Reading speichern → dann Foto mit `readingId`
+      hochladen (Backend setzt `photo` serverseitig). Foto-Entfernen im Edit noch nicht backend-seitig.
+- [x] **CO₂-Mapping** in `co2-factor.service` auf camelCase-Response umgestellt.
+- [x] **Supabase entfernt**: `supabase.service.ts`/`.spec` gelöscht, `@supabase/supabase-js` raus,
+      Supabase-Env-Felder raus. grep über `src/`: **keine** Supabase/CDN-Referenzen mehr.
+- [x] **Robustheit**: `MeterService`/`ReadingService`-Loader fangen Fehler ab (kein unhandled reject
+      bei 401). Component-Specs mit `ApiService`-Mock (`api.service.mock.ts`). **Build + 60 Vitest grün.**
 
 **WS3b (Design) — Fundament + Apple-Feinschliff fertig:**
 - [x] MeterFlow-Angular-App (Angular 22, 7 Feature-Module) nach `frontend/` übernommen
@@ -209,14 +210,13 @@ Noch **nicht** gemacht (bewusst, für spätere Workstreams):
 
 ## 7. Nächster Schritt
 
-**WS3 Schritt A (REST-Fundament) steht** — `ApiService` + Interceptor + Environments/Proxy, Build grün,
-Supabase koexistiert.
+**WS3 komplett** — Supabase vollständig durch die REST-/Django-Datenschicht ersetzt, Build + 60 Vitest grün.
 
-**WS3 Schritt B**: Konsumenten umstellen (`SupabaseService` → `ApiService`, meist Import/Inject-Swap),
-**Foto-Flow** (Upload mit `readingId`) + **CO₂-camelCase-Mapping** anpassen, dann `supabase.service`
-+ `@supabase/supabase-js` + Supabase-Env-Felder **entfernen**. Danach Build + Vitest grün ziehen.
-
-Parallel möglich: **WS4** (Docker/CI inkl. Redis).
+Nächster großer Strang: **WS4 — Deployment & CI** (Niko): 3 Dockerfiles (frontend/backend/fullstack) +
+nginx-Configs (CSP `default-src 'self'` jetzt möglich, da CDN-frei), `docker-compose` (Postgres +
+**Redis** fürs Rate-Limiting) + GH-Actions (test-backend/-frontend, build-and-push, Trivy). Danach
+**WS5** Security-Gate (Elena). Optional vorab: lokaler End-to-End-Durchklick (docker compose up,
+Registrierung→Zähler→Ablesung+Foto→Dashboard).
 
 ## 8. Referenz-Quellen (aus den Altprojekten)
 
@@ -267,4 +267,7 @@ Parallel möglich: **WS4** (Docker/CI inkl. Redis).
   externer Font/CDN-Ref mehr in `src/`.
 - (WS3/Kilian, Schritt A) **REST-Fundament**: `ApiService` (camelCase, signaturgleich zu Supabase),
   `credentialsInterceptor` (Cookies + 401-Refresh), `apiUrl`-Environments + `proxy.conf.json`, in
-  `app.config` verdrahtet. Build grün, Supabase koexistiert. Schritt B (Konsumenten + Supabase raus) offen.
+  `app.config` verdrahtet. Build grün, Supabase koexistiert.
+- (WS3/Kilian, Schritt B) **Supabase → REST vollzogen**: 11 Konsumenten umgestellt, Foto-Flow invertiert
+  (`readingId`), CO₂-camelCase-Mapping, Loader-Fehler abgefangen, `supabase.service`+`@supabase/supabase-js`
+  +Env-Felder entfernt, Component-Specs gemockt. **WS3 done — Build + 60 Vitest grün, keine Supabase/CDN-Refs.**

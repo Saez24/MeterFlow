@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ApiService } from '../../core/services/api.service';
+import { apiServiceMock } from '../../core/services/api.service.mock';
 import { CostPreview } from './cost-preview';
 
 describe('CostPreview', () => {

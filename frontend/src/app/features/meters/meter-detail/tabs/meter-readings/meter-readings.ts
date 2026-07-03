@@ -9,7 +9,7 @@ import { firstValueFrom } from 'rxjs';
 import { ReadingService } from '../../../../../core/services/reading.service';
 import { MeterDetailStateService } from '../../../../../core/services/meter-detail-state.service';
 import { ConfirmDialogComponent } from '../../../../../shared/components/confirm-dialog/confirm-dialog';
-import { SupabaseService } from '../../../../../core/services/supabase.service';
+import { ApiService } from '../../../../../core/services/api.service';
 
 @Component({
   selector: 'app-meter-readings',
@@ -25,7 +25,7 @@ export class MeterReadings {
   private readonly dialog = inject(MatDialog);
   private readonly datePipe = inject(DatePipe);
   private readonly state = inject(MeterDetailStateService);
-  private readonly supabaseService = inject(SupabaseService);
+  private readonly supabaseService = inject(ApiService);
 
   meter = this.state.meter;
   readings = this.state.readings;

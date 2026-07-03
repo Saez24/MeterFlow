@@ -1,6 +1,6 @@
 import { Injectable, inject, resource, signal } from '@angular/core';
 import { EnergyType, CO2_FACTORS, ENERGY_META } from '../models/energy.models';
-import { SupabaseService } from './supabase.service';
+import { ApiService } from './api.service';
 
 export interface Co2FactorRow {
     id: string;
@@ -34,16 +34,25 @@ export const CO2_SUPPORTED_TYPES: EnergyType[] = [
 
 @Injectable({ providedIn: 'root' })
 export class Co2FactorService {
-    private readonly supabase = inject(SupabaseService);
+    private readonly api = inject(ApiService);
     private readonly reloadTrigger = signal(0);
 
     readonly factors = resource<Co2FactorRow[], { uid: string | undefined; _: number }>({
-        params: () => ({ uid: this.supabase.currentUser()?.id, _: this.reloadTrigger() }),
+        params: () => ({ uid: this.api.currentUser()?.id, _: this.reloadTrigger() }),
         loader: async ({ params }): Promise<Co2FactorRow[]> => {
             if (!params.uid) return [];
-            const { data, error } = await this.supabase.getCo2Factors();
+            const { data, error } = await this.api.getCo2Factors();
             if (error || !data) return [];
-            return data as Co2FactorRow[];
+            // API returns camelCase; map to the snake_case Co2FactorRow shape.
+            return (data as Record<string, unknown>[]).map((d) => ({
+                id: d['id'] as string,
+                energy_type: d['energyType'] as string,
+                factor_kg_per_unit: Number(d['factorKgPerUnit']),
+                unit: d['unit'] as string,
+                source: (d['source'] as string) ?? '',
+                source_url: (d['sourceUrl'] as string) ?? null,
+                valid_from: d['validFrom'] as string,
+            }));
         },
         defaultValue: [],
     });
@@ -84,12 +93,12 @@ export class Co2FactorService {
     }
 
     async upsert(row: Omit<Co2FactorRow, 'id'>): Promise<void> {
-        await this.supabase.upsertCo2Factor(row);
+        await this.api.upsertCo2Factor(row);
         this.reloadTrigger.update(v => v + 1);
     }
 
     async remove(id: string): Promise<void> {
-        await this.supabase.deleteCo2Factor(id);
+        await this.api.deleteCo2Factor(id);
         this.reloadTrigger.update(v => v + 1);
     }
 }
