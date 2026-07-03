@@ -12,11 +12,13 @@ class BaseTest:
     """Common assertion helpers shared by all API test classes."""
 
     @staticmethod
-    def assert_status(response: Response, expected: int) -> dict[str, Any] | list[Any]:
+    def assert_status(response: Response, expected: int) -> Any:
+        """Assert the status and return the parsed JSON body (``Any`` so tests can
+        index dicts or lists without narrowing at every call site)."""
         with allure.step(f"Expect HTTP {expected}"):
             assert (
                 response.status_code == expected
             ), f"expected {expected}, got {response.status_code}: {response.content!r}"
         if response.status_code == 204:
             return {}
-        return response.json()
+        return response.json()  # type: ignore[attr-defined]

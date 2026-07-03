@@ -35,4 +35,4 @@ class ApiFacade:
         request: RegisterRequest = data.register_request()
         response = self.auth.register(request)
         assert response.status_code == 201, response.content
-        return UserResponse.model_validate(response.json())
+        return UserResponse.model_validate(response.json())  # type: ignore[attr-defined]

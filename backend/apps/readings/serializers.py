@@ -5,11 +5,14 @@ from __future__ import annotations
 
 from rest_framework import serializers
 
+from apps.meters.models import Meter
 from apps.readings.models import Reading
 
 
 class ReadingSerializer(serializers.ModelSerializer[Reading]):
-    meter_id = serializers.PrimaryKeyRelatedField(source="meter", read_only=True)
+    meter_id: serializers.PrimaryKeyRelatedField[Meter] = (
+        serializers.PrimaryKeyRelatedField(source="meter", read_only=True)
+    )
 
     class Meta:
         model = Reading

@@ -25,6 +25,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.accounts.models import User
+from apps.common.auth import request_user
 from apps.meters.models import Meter
 from apps.readings.models import Reading
 
@@ -226,16 +227,15 @@ class ImportView(APIView):
                 {"detail": "Too many requests"},
                 status=status.HTTP_429_TOO_MANY_REQUESTS,
             )
+        user = request_user(request)
         serializer = ImportPayloadSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
 
         with transaction.atomic():
-            id_map, meters_added, meters_skipped = _import_meters(
-                request.user, data["meters"]
-            )
+            id_map, meters_added, meters_skipped = _import_meters(user, data["meters"])
             readings_added, readings_skipped = _import_readings(
-                request.user, data["readings"], id_map
+                user, data["readings"], id_map
             )
 
         return Response(

@@ -3,7 +3,7 @@ renderer/parser converts at the API boundary."""
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 from rest_framework import serializers
 
@@ -48,6 +48,8 @@ class MeterSerializer(serializers.ModelSerializer[Meter]):
         request = self.context.get("request")
         if request is not None and request.user.is_authenticated:
             # Prevent linking to another user's meter (ownership, contract §1).
-            self.fields["linked_water_meter_id"].queryset = Meter.objects.filter(
-                user=request.user
+            field = cast(
+                "serializers.PrimaryKeyRelatedField[Meter]",
+                self.fields["linked_water_meter_id"],
             )
+            field.queryset = Meter.objects.filter(user=request.user)

@@ -119,9 +119,7 @@ class ReadingViewSet(viewsets.ModelViewSet[Reading]):
             return Response(
                 {"detail": "Meter not found"}, status=status.HTTP_404_NOT_FOUND
             )
-        readings = list(
-            Reading.objects.filter(meter=meter, user=user)[:_MAX_LIMIT]
-        )
+        readings = list(Reading.objects.filter(meter=meter, user=user)[:_MAX_LIMIT])
         updated = recalculate_readings(meter, readings)
         Reading.objects.bulk_update(
             updated,

@@ -27,7 +27,8 @@ class Co2FactorUpsertSerializer(serializers.Serializer[dict[str, object]]):
     energy_type = serializers.CharField()
     factor_kg_per_unit = serializers.DecimalField(max_digits=12, decimal_places=6)
     unit = serializers.CharField()
-    source = serializers.CharField(default="", allow_blank=True)
+    # 'source' collides with DRF's Field.source attribute name; safe here.
+    source = serializers.CharField(default="", allow_blank=True)  # type: ignore[assignment]
     source_url = serializers.CharField(required=False, allow_null=True)
     valid_from = serializers.DateField()
 
@@ -36,4 +37,4 @@ class Co2DefaultSerializer(serializers.Serializer[dict[str, object]]):
     energy_type = serializers.CharField()
     factor_kg_per_unit = serializers.FloatField()
     unit = serializers.CharField()
-    source = serializers.CharField()
+    source = serializers.CharField()  # type: ignore[assignment]

@@ -21,5 +21,5 @@ class DecimalAsStringEncoder(JSONEncoder):
         return super().default(obj)
 
 
-class CamelCaseDecimalRenderer(CamelCaseJSONRenderer):
+class CamelCaseDecimalRenderer(CamelCaseJSONRenderer):  # type: ignore[misc]
     encoder_class = DecimalAsStringEncoder

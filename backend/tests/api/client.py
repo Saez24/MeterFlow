@@ -29,7 +29,7 @@ class HttpClient:
 
     def _attach(self, method: str, path: str, response: Response) -> None:
         try:
-            body = json.dumps(response.json(), indent=2, ensure_ascii=False)
+            body = json.dumps(response.json(), indent=2, ensure_ascii=False)  # type: ignore[attr-defined]
         except (ValueError, TypeError):
             body = response.content.decode(errors="replace")
         allure.attach(

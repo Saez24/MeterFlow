@@ -120,8 +120,13 @@ Empfehlung: **Contract-First** — REST-Endpunkt-Liste zuerst fixieren, dann WS2
 - [x] **Stats-Decimals vereinheitlicht**: Custom-Renderer `CamelCaseDecimalRenderer` rendert
       `Decimal` global als String → Stats-Endpunkte konsistent mit CRUD (keine Float-Präzisionsverluste).
 
-Noch offen in WS2 (nächste Iteration):
-- [ ] **mypy strict** (braucht `django-stubs`/`djangorestframework-stubs`) — noch nicht ausgeführt.
+- [x] **mypy strict clean** über **84 Dateien** (apps + config + tests) mit `django-stubs` +
+      `djangorestframework-stubs`. Typed-User-Helfer `request_user()` (narrowt `request.user`),
+      `ClassVar`/`Literal`-Fixes, gezielte Overrides für untypisierte Libs (allure/ratelimit/
+      camel-case). **Voller `/verify`-Gate grün: ruff · black · mypy · pytest 38 (91 %) · bandit
+      0 Issues · pip-audit 0 CVEs.**
+
+Noch offen in WS2 (Infra, → WS4/Deployment):
 - [ ] Rate-Limiting nutzt Default-LocMemCache → in Prod auf Redis.
 
 **Contract-First (nach WS1):**
@@ -149,15 +154,16 @@ Noch **nicht** gemacht (bewusst, für spätere Workstreams):
 
 ## 7. Nächster Schritt
 
-Zwei parallele Stränge:
+**WS2 ist funktional abgeschlossen** (alle 26 Endpunkte, Foto-Upload, voller `/verify`-Gate grün;
+einziger Rest: Redis-Cache fürs Rate-Limiting → WS4).
 
-- **WS2 abschließen** (Ben/Sascha): pytest-django-Test-Suite (strikt OOP, Allure, Ownership-/Auth-/
-  Berechnungs-Tests), Import-Endpunkt (§8), Foto-Upload (§12.4), mypy-strict-Lauf, Stats-Decimal-
-  Vereinheitlichung.
-- **WS3b starten** (Isabel/Kilian/Jelena): Design-Token-Fundament (`frontend/src/styles.scss`
-  Light/Dark aus DataForge), Theme-Service, Basis-Komponenten — unabhängig vom Backend.
+Nächster Strang: **WS3b — Design-System-Fundament** (Isabel/Kilian/Jelena), unabhängig vom Backend:
+- Angular-App aus `../MeterFlow/src` nach `frontend/` übernehmen (falls noch nicht geschehen).
+- Design-Tokens `frontend/src/styles.scss` (Light/Dark aus DataForge), Theme-Service (`data-theme`
+  + Signal-`effect`, `prefers-color-scheme`), Basis-Komponenten (Button/Input/Dialog/Icon).
 
-Danach **WS3** (Frontend-Datenschicht Supabase→REST) gegen das laufende Backend.
+Danach **WS3** (Frontend-Datenschicht Supabase→REST + Angular-22-Idiome) gegen das laufende Backend,
+und **WS4** (Docker/CI, inkl. Redis).
 
 ## 8. Referenz-Quellen (aus den Altprojekten)
 
@@ -193,3 +199,7 @@ Danach **WS3** (Frontend-Datenschicht Supabase→REST) gegen das laufende Backen
 - (WS2/Sascha) **Import-Endpunkt** `POST /api/v1/import/` aus FastAPI portiert (ID-Mapping,
   Idempotenz, Ownership→403, atomic, Rate-Limit) + 4 Tests. Suite jetzt **34 Tests, 90 % Coverage**.
   Alle 26 Contract-Endpunkte implementiert. Offen: Foto-Upload, mypy-strict, Stats-Decimal-Format.
+- (WS2) **Foto-Upload** (`POST /readings/{id}/photo/`, multipart, Validierung, Storage local/S3),
+  **Stats-Decimal-Renderer** (Decimal→String global), **mypy strict clean** (84 Dateien) +
+  **bandit 0 / pip-audit 0**. Backend-`/verify`-Gate vollständig grün. **38 Tests, 91 % Coverage.**
+  Einziger WS2-Restpunkt: Rate-Limit-Cache → Redis (Infra, WS4).

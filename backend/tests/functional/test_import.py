@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import uuid
+from decimal import Decimal
 
 import allure
 import pytest
@@ -33,7 +34,7 @@ def _payload(meter_id: uuid.UUID) -> ImportPayloadRequest:
             ImportReadingModel(
                 id=uuid.uuid4(),
                 meter_id=str(meter_id),
-                value="1000",
+                value=Decimal("1000"),
                 date="2026-01-01",
             )
         ],

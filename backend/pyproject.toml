@@ -61,8 +61,15 @@ plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
 exclude = ["migrations/"]
 
 [[tool.mypy.overrides]]
-module = ["django_ratelimit.*", "djangorestframework_camel_case.*"]
+module = ["django_ratelimit.*", "djangorestframework_camel_case.*", "allure.*"]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# allure's decorators are untyped (no py.typed); relax only that strictness for
+# tests. Everything else stays strict.
+module = "tests.*"
+disallow_untyped_decorators = false
+disallow_untyped_calls = false
 
 [tool.django-stubs]
 django_settings_module = "config.settings.dev"

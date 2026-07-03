@@ -47,18 +47,19 @@ class DashboardView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
+        user = request_user(request)
         today = date.today()
         year, month = today.year, today.month
 
-        meters = list(Meter.objects.filter(user=request.user, active=True))
-        user_factors = list(Co2Factor.objects.filter(user=request.user))
+        meters = list(Meter.objects.filter(user=user, active=True))
+        user_factors = list(Co2Factor.objects.filter(user=user))
         meter_map = _meter_map(meters)
 
         stats_this = build_year_stats(
-            year, _readings_for_year(request.user.id, year), meter_map
+            year, _readings_for_year(user.id, year), meter_map
         )
         stats_prev = build_year_stats(
-            year - 1, _readings_for_year(request.user.id, year - 1), meter_map
+            year - 1, _readings_for_year(user.id, year - 1), meter_map
         )
 
         current_month = next(
@@ -96,9 +97,10 @@ class BudgetAlertsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
+        user = request_user(request)
         today = date.today()
-        meters = list(Meter.objects.filter(user=request.user, active=True))
-        readings = _readings_for_year(request.user.id, today.year)
+        meters = list(Meter.objects.filter(user=user, active=True))
+        readings = _readings_for_year(user.id, today.year)
         stats = build_year_stats(today.year, readings, _meter_map(meters))
         current_month = next(
             (m for m in stats["months"] if m["month"] == today.month), None

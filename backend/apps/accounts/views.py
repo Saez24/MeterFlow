@@ -27,6 +27,7 @@ from apps.accounts.tokens import (
     revoke_refresh_token,
     rotate_refresh_token,
 )
+from apps.common.auth import request_user
 
 logger = logging.getLogger(__name__)
 
@@ -136,4 +137,4 @@ class MeView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
-        return Response(UserSerializer(request.user).data)
+        return Response(UserSerializer(request_user(request)).data)
