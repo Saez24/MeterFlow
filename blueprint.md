@@ -77,9 +77,30 @@ Empfehlung: **Contract-First** — REST-Endpunkt-Liste zuerst fixieren, dann WS2
 
 ## 6. Aktueller Stand
 
-**WS3b (Design-Fundament) — gestartet.** 🟡 · **WS2 (Backend) — funktional fertig.** ✅ · **Contract-First** ✅ · **WS1** ✅
+**WS3 (Datenschicht) — Fundament steht.** 🟡 · **WS3b (Design)** 🟢 · **WS2 (Backend)** ✅ · **Contract-First** ✅ · **WS1** ✅
 
-**WS3b — Design-System-Fundament (dieser Schritt):**
+**WS3 — Frontend-Datenschicht Supabase → REST (Schritt A: Fundament):**
+- [x] **`ApiService`** (`core/services/api.service.ts`) — REST-Client gegen das Django-Backend,
+      **signaturgleich zu `SupabaseService`** (signIn/Up/Out, getSession, get/add/update/delete für
+      Meters+Readings, recalculate, CO₂, Foto-Upload, clearAllUserData, checkConnection). API spricht
+      camelCase → nur Date/Decimal-String-Konvertierung, kein snake↔camel-Mapper. Trailing-Slashes
+      gemäß DRF-Router.
+- [x] **`credentialsInterceptor`** (Cookies via `withCredentials`, 401 → einmaliger Refresh mit
+      Request-Queue, sonst → `/auth`). In `app.config` via `withInterceptors` registriert.
+- [x] **Environments** auf `apiUrl` umgestellt (`/api/v1`, same-origin), **`proxy.conf.json`**
+      (`/api`,`/health` → `:8000`) + `angular.json`-Serve-Proxy. Supabase-Felder bleiben vorerst
+      (Koexistenz). Build grün.
+
+Noch offen in WS3 (Schritt B):
+- [ ] **11 Konsumenten** von `SupabaseService` → `ApiService` umstellen (meist nur Import/Inject-Swap,
+      da signaturgleich): services (meter/reading/co2-factor/energy/data-sync), guard, auth, app, settings.
+- [ ] **Foto-Flow** anpassen (Upload braucht jetzt `readingId`: erst Reading speichern, dann Foto) in
+      `readings-form` + `meter-readings`.
+- [ ] **CO₂-Mapping** in `co2-factor.service` auf camelCase-Response umstellen.
+- [ ] `supabase.service.ts`/`.spec` löschen, `@supabase/supabase-js` aus `package.json`, Supabase-
+      Felder aus Environments. Vitest-Service-Specs anpassen.
+
+**WS3b (Design) — Fundament + Apple-Feinschliff fertig:**
 - [x] MeterFlow-Angular-App (Angular 22, 7 Feature-Module) nach `frontend/` übernommen
       (`src/`, `angular.json`, `package.json`, tsconfig). `npm install` (Node 26) + `npm run build`
       **grün** (nur bekannte CommonJS-Warnungen von tesseract/jspdf/papaparse).
@@ -188,14 +209,14 @@ Noch **nicht** gemacht (bewusst, für spätere Workstreams):
 
 ## 7. Nächster Schritt
 
-**WS3b weitgehend fertig**: App im Monorepo, DataForge-artiges Material-Theme, token-getriebene
-Overrides, self-hosted Fonts (CDN-frei), Basis-Komponenten — Build + Vitest grün. Rest = optische
-Sichtung pro Modul (Light/Dark durchklicken).
+**WS3 Schritt A (REST-Fundament) steht** — `ApiService` + Interceptor + Environments/Proxy, Build grün,
+Supabase koexistiert.
 
-Empfohlen als nächster großer Strang: **WS3 — Frontend-Datenschicht Supabase → REST** gegen das
-laufende Django-Backend (`ApiService` statt `supabase.service.ts`, Cookie-Interceptor, `httpResource`
-für Lesezugriffe, Signal Forms, `apiUrl`-Environments, `proxy.conf.json`). Parallel **WS4** (Docker/CI
-inkl. Redis) möglich.
+**WS3 Schritt B**: Konsumenten umstellen (`SupabaseService` → `ApiService`, meist Import/Inject-Swap),
+**Foto-Flow** (Upload mit `readingId`) + **CO₂-camelCase-Mapping** anpassen, dann `supabase.service`
++ `@supabase/supabase-js` + Supabase-Env-Felder **entfernen**. Danach Build + Vitest grün ziehen.
+
+Parallel möglich: **WS4** (Docker/CI inkl. Redis).
 
 ## 8. Referenz-Quellen (aus den Altprojekten)
 
@@ -244,3 +265,6 @@ inkl. Redis) möglich.
   Selects/Dialog/Snackbar/Toggle/Tabs) + **Fonts self-hosted** (DM Sans/Mono/Material-Icons WOFF2),
   **CDN-Font-Links aus index.html entfernt** (Kein-CDN-Regel). Build grün, 5 Vitest grün, kein
   externer Font/CDN-Ref mehr in `src/`.
+- (WS3/Kilian, Schritt A) **REST-Fundament**: `ApiService` (camelCase, signaturgleich zu Supabase),
+  `credentialsInterceptor` (Cookies + 401-Refresh), `apiUrl`-Environments + `proxy.conf.json`, in
+  `app.config` verdrahtet. Build grün, Supabase koexistiert. Schritt B (Konsumenten + Supabase raus) offen.
