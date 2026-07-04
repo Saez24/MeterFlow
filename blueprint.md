@@ -343,3 +343,13 @@ Deployment (3 Images + Compose), CI/CD (Trivy-Gate), Security-Gate bestanden.
 - (Abschluss) **Foto-Entfernen-Endpunkt** `DELETE /readings/{id}/photo/` (ownership, Audit) + Test +
   Frontend-Verdrahtung (readings-form Edit-Modus). **Release-Kandidat** dokumentiert:
   `docs/RELEASE_CANDIDATE.md`. Voller `/verify`: Backend 42 Tests, Frontend 69 Tests, alle Gates grün.
+- (Import-Fixes) Frontend-Import über `/import/` (statt per-Zähler `addMeter`); Backend: linked-Meter
+  reihenfolge-unabhängig (Zwei-Pass), Zahlenfelder `FloatField` (Float-Rauschen), `allow_blank` auf
+  Text-Felder. Echte Export-JSON (4 Zähler/76 Ablesungen) importiert sauber. Backend 44 Tests.
+- (Design/Isabel) **Apple-Politur wirkt jetzt wirklich**: Ursache war, dass die Komponenten das alte
+  MeterFlow-Farbsystem nutzten und die DataForge-Tokens kaum. Fix: Legacy-Variablen (`--apple-blue`,
+  `--text-primary/secondary`, `--bg-surface`, `--border-color`, `--hover-bg`) in `styles.scss` auf die
+  DataForge-Tokens umgebogen → Palette app-weit vereinheitlicht. Plus globaler Pass: gestufte
+  `--shadow-*` auf `.card`/Shell, Token-Radien, Frosted-Glass via `--blur`/`--bg-nav`, **Ambient-Glow**
+  (`.app-shell::before`), **Pill-Nav-Aktivstate** (`--accent-glow`). Kein Layout-Umbau, Material bleibt.
+  Build + 69 Vitest + prettier grün.

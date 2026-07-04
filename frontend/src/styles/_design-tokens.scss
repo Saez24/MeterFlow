@@ -36,6 +36,7 @@
   --amber: #ff9f0a;
   --danger: #ff453a;
   --on-accent: #ffffff;
+  --hover: rgba(0, 0, 0, 0.05); // neutral hover tint
 
   // Typography — self-hosted DM Sans / DM Mono (see _fonts.scss), system fallback
   --font: 'DM Sans', -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, sans-serif;
@@ -77,6 +78,7 @@
   --accent: #0a84ff;
   --accent-text: #0a84ff;
   --accent-glow: rgba(10, 132, 255, 0.18);
+  --hover: rgba(255, 255, 255, 0.06);
 
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.04);
   --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);

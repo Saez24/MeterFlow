@@ -4,8 +4,20 @@
   height: 100vh;
   overflow: hidden;
   background: var(--bg);
-  color: var(--text-primary);
+  color: var(--text-1);
   position: relative;
+}
+
+/* Ambient depth glow (Apple/DataForge signature) — sits behind the content. */
+.app-shell::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 30% at 15% -10%, var(--accent-glow), transparent 100%),
+    radial-gradient(ellipse 40% 30% at 85% 110%, rgba(48, 209, 88, 0.05), transparent 100%);
 }
 
 /* ── Sidebar ── */
@@ -18,8 +30,10 @@
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   flex-shrink: 0;
   overflow: hidden;
+  position: relative;
+  z-index: 1;
 
-  border-right: 1px solid var(--border-color);
+  border-right: 1px solid var(--border);
 }
 
 .sidebar--collapsed {
@@ -48,7 +62,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .sidebar-toggle mat-icon {
@@ -142,8 +156,8 @@
   align-items: center;
   gap: 12px;
   padding: 10px 12px;
-  border-radius: 12px;
-  color: var(--text-secondary);
+  border-radius: var(--r-md);
+  color: var(--text-2);
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 500;
@@ -153,13 +167,13 @@
 }
 
 .nav-item:hover {
-  background: var(--hover-bg);
-  color: var(--text-primary);
+  background: var(--hover);
+  color: var(--text-1);
 }
 
 .nav-item--active {
-  background: rgba(var(--apple-blue-rgb), 0.15) !important;
-  color: var(--apple-blue) !important;
+  background: var(--accent-glow) !important;
+  color: var(--accent-text) !important;
 }
 
 /* ── Footer (Logout) ── */
@@ -190,6 +204,8 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 1;
 }
 
 /* ── Mobile Header ── */

@@ -1,9 +1,9 @@
 <div class="app-shell">
   @if (!isAuthPage()) {
     <button
-      class="sidebar-toggle"
+      type="button"
+      class="sidebar-toggle df-icon-btn"
       [style.left]="toggleBtnLeft()"
-      mat-icon-button
       (click)="sidebarCollapsed.set(!sidebarCollapsed())"
       [attr.aria-label]="sidebarCollapsed() ? 'Seitenleiste aufklappen' : 'Seitenleiste einklappen'"
       [matTooltip]="sidebarCollapsed() ? 'Aufklappen' : 'Einklappen'"
@@ -54,10 +54,9 @@
 
       <div class="sidebar__footer">
         <button
-          mat-stroked-button
-          color="warn"
+          type="button"
+          class="logout-btn df-btn df-btn-secondary"
           (click)="logout()"
-          class="logout-btn"
           aria-label="Abmelden"
           [matTooltip]="sidebarCollapsed() ? 'Abmelden' : ''"
           matTooltipPosition="right"
@@ -87,7 +86,8 @@
         </div>
         <div class="mobile-header__actions">
           <button
-            mat-icon-button
+            type="button"
+            class="df-icon-btn"
             (click)="themeService.toggle()"
             [attr.aria-label]="
               themeService.isDark() ? 'Helles Design aktivieren' : 'Dunkles Design aktivieren'
@@ -95,7 +95,12 @@
           >
             <mat-icon>{{ themeService.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
           </button>
-          <button mat-icon-button color="warn" (click)="logout()" aria-label="Abmelden">
+          <button
+            type="button"
+            class="df-icon-btn"
+            (click)="logout()"
+            aria-label="Abmelden"
+          >
             <mat-icon>logout</mat-icon>
           </button>
         </div>

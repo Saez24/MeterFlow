@@ -28,62 +28,63 @@
 
     <!-- Form -->
     <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
-      <mat-form-field appearance="outline" class="auth-field">
-        <mat-label i18n="@@auth.field.email">E-Mail</mat-label>
+      <div class="df-field auth-field">
+        <label for="email" i18n="@@auth.field.email">E-Mail</label>
         <input
-          matInput
           id="email"
+          class="df-input"
           type="email"
           formControlName="email"
           placeholder="deine@email.de"
           autocomplete="email"
           i18n-placeholder="@@auth.placeholder.email"
         />
-        <mat-icon matPrefix>mail</mat-icon>
-        <mat-error i18n="@@auth.error.email">Gültige E-Mail erforderlich</mat-error>
-      </mat-form-field>
+        @if (form.get('email')?.touched && form.get('email')?.invalid) {
+          <span class="df-error" i18n="@@auth.error.email">Gültige E-Mail erforderlich</span>
+        }
+      </div>
 
-      <mat-form-field appearance="outline" class="auth-field">
-        <mat-label i18n="@@auth.field.password">Passwort</mat-label>
-        <input
-          matInput
-          id="password"
-          [type]="showPassword() ? 'text' : 'password'"
-          formControlName="password"
-          placeholder="Mindestens 6 Zeichen"
-          autocomplete="current-password"
-          i18n-placeholder="@@auth.placeholder.password"
-        />
-        <mat-icon matPrefix>lock</mat-icon>
-        <button
-          type="button"
-          mat-icon-button
-          matSuffix
-          (click)="showPassword.set(!showPassword())"
-          [attr.aria-label]="showPassword() ? 'Passwort verbergen' : 'Passwort anzeigen'"
-        >
-          <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
-        </button>
-        <mat-error i18n="@@auth.error.password">Mindestens 6 Zeichen</mat-error>
-      </mat-form-field>
+      <div class="df-field auth-field">
+        <label for="password" i18n="@@auth.field.password">Passwort</label>
+        <div class="df-input-wrap">
+          <input
+            id="password"
+            class="df-input"
+            [type]="showPassword() ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Mindestens 6 Zeichen"
+            autocomplete="current-password"
+            i18n-placeholder="@@auth.placeholder.password"
+          />
+          <button
+            type="button"
+            class="df-icon-btn df-icon-btn--sm df-input-suffix"
+            (click)="showPassword.set(!showPassword())"
+            [attr.aria-label]="showPassword() ? 'Passwort verbergen' : 'Passwort anzeigen'"
+          >
+            <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </div>
+        @if (form.get('password')?.touched && form.get('password')?.invalid) {
+          <span class="df-error" i18n="@@auth.error.password">Mindestens 6 Zeichen</span>
+        }
+      </div>
 
       @if (mode() === 'register') {
-        <mat-form-field appearance="outline" class="auth-field">
-          <mat-label i18n="@@auth.field.confirmPassword">Passwort bestätigen</mat-label>
+        <div class="df-field auth-field">
+          <label for="confirmPassword" i18n="@@auth.field.confirmPassword"
+            >Passwort bestätigen</label
+          >
           <input
-            matInput
             id="confirmPassword"
+            class="df-input"
             [type]="showPassword() ? 'text' : 'password'"
             formControlName="confirmPassword"
             placeholder="Passwort wiederholen"
             autocomplete="new-password"
             i18n-placeholder="@@auth.placeholder.confirmPassword"
           />
-          <mat-icon matPrefix>lock_outline</mat-icon>
-          <mat-error i18n="@@auth.error.confirmPassword"
-            >Passwörter stimmen nicht überein</mat-error
-          >
-        </mat-form-field>
+        </div>
       }
 
       @if (errorMessage()) {
@@ -95,25 +96,19 @@
 
       <button
         type="submit"
-        mat-flat-button
-        color="primary"
-        class="auth-submit-btn"
+        class="df-btn df-btn-primary df-btn--block auth-submit-btn"
         [disabled]="form.invalid || loading()"
       >
         @if (loading()) {
           <span class="loading-spinner"></span>
           <span i18n="@@auth.loading">Bitte warten...</span>
         } @else {
-          <ng-container>
-            <div class="submit-btn">
-              <mat-icon>{{ mode() === 'login' ? 'login' : 'person_add' }}</mat-icon>
-              @if (mode() === 'login') {
-                <span i18n="@@auth.submit.login">Anmelden</span>
-              } @else {
-                <span i18n="@@auth.submit.register">Registrieren</span>
-              }
-            </div>
-          </ng-container>
+          <mat-icon>{{ mode() === 'login' ? 'login' : 'person_add' }}</mat-icon>
+          @if (mode() === 'login') {
+            <span i18n="@@auth.submit.login">Anmelden</span>
+          } @else {
+            <span i18n="@@auth.submit.register">Registrieren</span>
+          }
         }
       </button>
     </form>
@@ -125,7 +120,7 @@
       } @else {
         <span i18n="@@auth.switch.toLogin">Bereits registriert?</span>
       }
-      <button type="button" mat-button color="primary" (click)="toggleMode()">
+      <button type="button" class="df-btn df-btn-ghost df-btn--sm" (click)="toggleMode()">
         @if (mode() === 'login') {
           <span i18n="@@auth.switch.registerBtn">Jetzt registrieren</span>
         } @else {
