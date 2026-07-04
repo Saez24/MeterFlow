@@ -7,7 +7,7 @@ import { ApiService } from './api.service';
 export class DataSyncService {
   private readonly meterService = inject(MeterService);
   private readonly readingService = inject(ReadingService);
-  private readonly supabase = inject(ApiService);
+  private readonly api = inject(ApiService);
 
   exportData(): string {
     return JSON.stringify(
@@ -32,20 +32,15 @@ export class DataSyncService {
       throw new Error('Ungültige Datenstruktur');
     }
     const data = parsed as Record<string, unknown>;
-    if (Array.isArray(data['meters'])) {
-      for (const m of data['meters']) {
-        await this.supabase.addMeter(m as never);
-      }
-    }
-    if (Array.isArray(data['readings'])) {
-      for (const r of data['readings'] as Record<string, unknown>[]) {
-        const reading = r as Omit<Parameters<typeof this.supabase.addReading>[0], 'date'> & {
-          date: unknown;
-        };
-        await this.supabase.addReading({ ...reading, date: new Date(reading.date as string) });
-      }
-    }
-    // Reload all data after import
+    const meters = Array.isArray(data['meters']) ? data['meters'] : [];
+    const readings = Array.isArray(data['readings']) ? data['readings'] : [];
+
+    // Route through the bulk import endpoint: it preserves ids and resolves
+    // linked-meter / reading references atomically (looping addMeter would
+    // reassign ids and break linkedWaterMeterId — the cause of the 400).
+    await this.api.importData({ meters, readings });
+
+    // Reload all data after import.
     await Promise.all([this.meterService.loadMeters(), this.readingService.loadReadings()]);
   }
 }

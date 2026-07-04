@@ -13,6 +13,12 @@ from pathlib import Path
 
 import dj_database_url
 
+from config.env import load_env
+
+# Load the repo-root .env before reading any variable (covers pytest, which
+# imports settings directly without going through manage.py).
+load_env()
+
 # backend/ (contains manage.py)
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 

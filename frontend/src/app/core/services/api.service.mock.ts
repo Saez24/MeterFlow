@@ -23,6 +23,12 @@ export function apiServiceMock(): ApiService {
     updateReading: async () => {},
     deleteReading: async () => {},
     recalculateReadings: async () => [],
+    importData: async () => ({
+      metersAdded: 0,
+      metersSkipped: 0,
+      readingsAdded: 0,
+      readingsSkipped: 0,
+    }),
     uploadPhoto: async () => '',
     getSignedPhotoUrl: async (p: string) => p,
     deletePhoto: async () => {},

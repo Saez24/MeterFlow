@@ -92,6 +92,11 @@ class ImportReadingModel(CamelModel):
     value: Decimal
     date: str
     note: str | None = None
+    consumption: float | None = None
+    kwh: float | None = None
+    cost: float | None = None
+    wastewater_cost: float | None = None
+    total_cost: float | None = None
 
 
 class ImportPayloadRequest(CamelModel):

@@ -7,6 +7,9 @@ import sys
 
 def main() -> None:
     """Run administrative tasks."""
+    from config.env import load_env
+
+    load_env()
     env = os.environ.get("DJANGO_ENV", "development").lower()
     default_settings = (
         "config.settings.prod" if env == "production" else "config.settings.dev"

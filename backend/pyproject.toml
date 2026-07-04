@@ -21,6 +21,7 @@ dependencies = [
     "django-storages",
     "psycopg[binary]",
     "dj-database-url",
+    "python-dotenv",
     "pydantic-settings",
     "pyjwt",
     "argon2-cffi",

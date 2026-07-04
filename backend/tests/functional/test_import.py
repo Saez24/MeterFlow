@@ -56,6 +56,74 @@ class TestImport(BaseTest):
         assert body["readingsAdded"] == 1
         assert len(self.assert_status(auth_api.meters.list(), 200)) == 1
 
+    @allure.story("Linked meters")
+    @allure.severity(allure.severity_level.CRITICAL)
+    def test_import_resolves_linked_water_meter_any_order(
+        self, auth_api: ApiFacade
+    ) -> None:
+        # Arrange — garden meter references a water meter listed AFTER it
+        water_id = uuid.uuid4()
+        garden_id = uuid.uuid4()
+        payload = ImportPayloadRequest(
+            meters=[
+                ImportMeterModel(
+                    id=garden_id,
+                    name="Garten",
+                    type="garden_water",
+                    unit="m³",
+                    icon="yard",
+                    color="#30d158",
+                    linked_water_meter_id=water_id,
+                ),
+                ImportMeterModel(
+                    id=water_id,
+                    name="Wasser",
+                    type="water",
+                    unit="m³",
+                    icon="water_drop",
+                    color="#0a84ff",
+                ),
+            ],
+        )
+        # Act
+        body = self.assert_status(auth_api.imports.run(payload), 200)
+        # Assert — both created, link resolved despite the order
+        assert body["metersAdded"] == 2
+        garden = self.assert_status(auth_api.meters.get(garden_id), 200)
+        assert garden["linkedWaterMeterId"] == str(water_id)
+
+    @allure.story("Robustness")
+    @allure.severity(allure.severity_level.CRITICAL)
+    def test_import_tolerates_float_rounding_noise(self, auth_api: ApiFacade) -> None:
+        # Arrange — client-computed values with >6 decimal places (float noise)
+        meter_id = uuid.uuid4()
+        payload = ImportPayloadRequest(
+            meters=[
+                ImportMeterModel(
+                    id=meter_id,
+                    name="Strom",
+                    type="electricity",
+                    unit="kWh",
+                    icon="bolt",
+                    color="#000",
+                )
+            ],
+            readings=[
+                ImportReadingModel(
+                    id=uuid.uuid4(),
+                    meter_id=str(meter_id),
+                    value=Decimal("1200"),
+                    date="2026-02-01",
+                    consumption=200.00000000000003,
+                    cost=89.30000000000001,
+                    total_cost=89.30000000000001,
+                )
+            ],
+        )
+        # Act / Assert — no 400, value quantized to the numeric(20,6) column
+        body = self.assert_status(auth_api.imports.run(payload), 200)
+        assert body["readingsAdded"] == 1
+
     @allure.story("Idempotency")
     @allure.severity(allure.severity_level.NORMAL)
     def test_reimport_skips_existing_rows(self, auth_api: ApiFacade) -> None:

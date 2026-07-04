@@ -41,18 +41,16 @@ class ImportMeterSerializer(serializers.Serializer[dict[str, Any]]):
     icon = serializers.CharField()
     color = serializers.CharField()
     active = serializers.BooleanField(default=True)
-    meter_number = serializers.CharField(required=False, allow_null=True)
-    provider = serializers.CharField(required=False, allow_null=True)
-    notes = serializers.CharField(required=False, allow_null=True)
-    calorific_value = serializers.DecimalField(
-        max_digits=20, decimal_places=6, required=False, allow_null=True
+    meter_number = serializers.CharField(
+        required=False, allow_null=True, allow_blank=True
     )
-    z_number = serializers.DecimalField(
-        max_digits=20, decimal_places=6, required=False, allow_null=True
-    )
-    connected_load_kw = serializers.DecimalField(
-        max_digits=20, decimal_places=6, required=False, allow_null=True
-    )
+    provider = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    notes = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    # FloatField (not DecimalField): imported data carries float rounding noise
+    # (>6 decimals). The model's numeric(20,6) column quantizes on save.
+    calorific_value = serializers.FloatField(required=False, allow_null=True)
+    z_number = serializers.FloatField(required=False, allow_null=True)
+    connected_load_kw = serializers.FloatField(required=False, allow_null=True)
     linked_water_meter_id = serializers.UUIDField(required=False, allow_null=True)
     tariff_history = serializers.ListField(default=list)
     budget = serializers.DictField(required=False, allow_null=True)
@@ -61,25 +59,17 @@ class ImportMeterSerializer(serializers.Serializer[dict[str, Any]]):
 class ImportReadingSerializer(serializers.Serializer[dict[str, Any]]):
     id = serializers.UUIDField(required=False, allow_null=True)
     meter_id = serializers.CharField()
-    value = serializers.DecimalField(max_digits=20, decimal_places=6)
+    # FloatField tolerates client-computed float noise; the DB rounds to 6 places.
+    value = serializers.FloatField()
     date = serializers.CharField()
-    consumption = serializers.DecimalField(
-        max_digits=20, decimal_places=6, required=False, allow_null=True
-    )
-    kwh = serializers.DecimalField(
-        max_digits=20, decimal_places=6, required=False, allow_null=True
-    )
-    cost = serializers.DecimalField(
-        max_digits=20, decimal_places=6, required=False, allow_null=True
-    )
-    wastewater_cost = serializers.DecimalField(
-        max_digits=20, decimal_places=6, required=False, allow_null=True
-    )
-    total_cost = serializers.DecimalField(
-        max_digits=20, decimal_places=6, required=False, allow_null=True
-    )
-    note = serializers.CharField(required=False, allow_null=True)
-    photo = serializers.CharField(required=False, allow_null=True)
+    consumption = serializers.FloatField(required=False, allow_null=True)
+    kwh = serializers.FloatField(required=False, allow_null=True)
+    cost = serializers.FloatField(required=False, allow_null=True)
+    wastewater_cost = serializers.FloatField(required=False, allow_null=True)
+    total_cost = serializers.FloatField(required=False, allow_null=True)
+    # Exports carry empty-string notes → allow blank, not just null.
+    note = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    photo = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
 
 class ImportPayloadSerializer(serializers.Serializer[dict[str, Any]]):
@@ -118,6 +108,9 @@ def _import_meters(
     id_map: dict[str, uuid.UUID] = {}
     added = 0
     skipped = 0
+    # (meter db_id, linked original id) — resolved in a second pass so the link
+    # target may appear anywhere in the batch (order-independent).
+    pending_links: list[tuple[uuid.UUID, str]] = []
 
     for m in meters:
         original_id = str(m["id"]) if m.get("id") else None
@@ -132,15 +125,7 @@ def _import_meters(
             skipped += 1
             continue
 
-        linked_id = m.get("linked_water_meter_id")
-        if (
-            linked_id is not None
-            and not Meter.objects.filter(id=linked_id, user=user).exists()
-        ):
-            raise PermissionDenied(
-                "Verlinkter Wasserzähler nicht gefunden oder kein Zugriff"
-            )
-
+        # Link is applied in the second pass; create without it for now.
         Meter.objects.create(
             id=db_id,
             user=user,
@@ -157,13 +142,25 @@ def _import_meters(
             calorific_value=m.get("calorific_value"),
             z_number=m.get("z_number"),
             connected_load_kw=m.get("connected_load_kw"),
-            linked_water_meter_id=linked_id,
+            linked_water_meter_id=None,
             tariff_history=m.get("tariff_history", []),
             budget=m.get("budget"),
         )
         if original_id:
             id_map[original_id] = db_id
+        linked_id = m.get("linked_water_meter_id")
+        if linked_id is not None:
+            pending_links.append((db_id, str(linked_id)))
         added += 1
+
+    # Second pass: resolve linked water meters (mapped id or an existing own one).
+    for meter_db_id, linked_original in pending_links:
+        target = id_map.get(linked_original, linked_original)
+        if not Meter.objects.filter(id=target, user=user).exists():
+            raise PermissionDenied(
+                "Verlinkter Wasserzähler nicht gefunden oder kein Zugriff"
+            )
+        Meter.objects.filter(id=meter_db_id).update(linked_water_meter_id=target)
 
     return id_map, added, skipped
 

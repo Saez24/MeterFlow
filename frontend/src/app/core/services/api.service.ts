@@ -13,6 +13,13 @@ interface AuthResult {
   error: { message: string } | null;
 }
 
+export interface ImportResult {
+  metersAdded: number;
+  metersSkipped: number;
+  readingsAdded: number;
+  readingsSkipped: number;
+}
+
 const num = (v: unknown): number | undefined =>
   v !== null && v !== undefined ? Number(v) : undefined;
 
@@ -160,6 +167,16 @@ export class ApiService {
       this.http.post<unknown[]>(`${this.base}/readings/recalculate/${meterId}/`, {}),
     );
     return (data ?? []).map(this.mapReading);
+  }
+
+  // ── Bulk import ─────────────────────────────────────────────────────────
+  /**
+   * Bulk-import meters + readings via the dedicated endpoint, which preserves
+   * ids and resolves linked-meter / reading references atomically. Do NOT loop
+   * over addMeter/addReading for imports — that reassigns ids and breaks links.
+   */
+  async importData(payload: { meters: unknown[]; readings: unknown[] }): Promise<ImportResult> {
+    return await firstValueFrom(this.http.post<ImportResult>(`${this.base}/import/`, payload));
   }
 
   // ── Photos ──────────────────────────────────────────────────────────────
