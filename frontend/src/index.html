@@ -19,7 +19,10 @@
     <link rel="manifest" href="manifest.webmanifest" />
   </head>
   <body class="light-theme">
-    <app-root></app-root>
+    <!-- nginx replaces __CSP_NONCE__ with the per-request $request_id (sub_filter);
+         Angular reads ngCspNonce and stamps it on all runtime-injected <style> tags,
+         matching the CSP `style-src 'nonce-…'` (security-standards §7). -->
+    <app-root ngCspNonce="__CSP_NONCE__"></app-root>
     <noscript>Please enable JavaScript to continue using this application.</noscript>
   </body>
 </html>

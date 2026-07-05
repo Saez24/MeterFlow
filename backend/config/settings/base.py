@@ -40,6 +40,12 @@ def _env_list(key: str, default: str = "") -> list[str]:
 SECRET_KEY = _env("DJANGO_SECRET_KEY", "insecure-dev-key-change-me")
 DEBUG = _env_bool("DJANGO_DEBUG", default=False)
 ALLOWED_HOSTS = _env_list("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1")
+# gunicorn binds to loopback and the in-container health check hits it via nginx,
+# so always allow loopback — otherwise `/health` 400s (DisallowedHost) when
+# DJANGO_ALLOWED_HOSTS lists only the public host. Loopback is not a security risk.
+for _loopback in ("127.0.0.1", "localhost"):
+    if _loopback not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(_loopback)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
