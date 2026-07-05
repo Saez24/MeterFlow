@@ -69,7 +69,11 @@ class ImportReadingSerializer(serializers.Serializer[dict[str, Any]]):
     total_cost = serializers.FloatField(required=False, allow_null=True)
     # Exports carry empty-string notes → allow blank, not just null.
     note = serializers.CharField(required=False, allow_null=True, allow_blank=True)
-    photo = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    # NOTE: `photo` is intentionally NOT accepted on import. The storage key is
+    # server-generated on upload (readings/{id}/{uuid}{ext}); trusting a client
+    # string here would let an attacker point a reading at an arbitrary storage
+    # key that is later streamed to them (security-standards §3/§4). Re-upload
+    # photos via the authenticated POST /readings/{id}/photo/ endpoint instead.
 
 
 class ImportPayloadSerializer(serializers.Serializer[dict[str, Any]]):
@@ -205,7 +209,7 @@ def _import_readings(
             wastewater_cost=r.get("wastewater_cost"),
             total_cost=r.get("total_cost"),
             note=r.get("note") or None,
-            photo=r.get("photo"),
+            # photo deliberately omitted — see ImportReadingSerializer.
         )
         added += 1
 

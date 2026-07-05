@@ -36,7 +36,18 @@ export class OcrService {
       });
     }
 
-    const worker = await createWorker('deu');
+    // Self-hosted assets only (no CDN — security-standards §7/§8). The core
+    // WASM + worker are copied from node_modules to /tesseract by angular.json;
+    // deu.traineddata.gz lives in public/tessdata. workerBlobURL:false loads the
+    // worker directly from workerPath so it satisfies CSP `worker-src 'self'`
+    // (a blob: worker would be blocked). Requires `'wasm-unsafe-eval'` in the
+    // CSP `script-src` for WASM instantiation (set in the nginx configs).
+    const worker = await createWorker('deu', 1, {
+      workerPath: '/tesseract/worker.min.js',
+      corePath: '/tesseract',
+      langPath: '/tessdata',
+      workerBlobURL: false,
+    });
     await worker.setParameters({
       tessedit_pageseg_mode: PSM.SINGLE_BLOCK,
       tessedit_char_whitelist: '0123456789, ',

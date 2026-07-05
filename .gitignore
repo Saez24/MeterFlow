@@ -2,6 +2,8 @@
 .env
 *.env
 !.env.example
+# Data exports contain real meter/tariff PII — never commit them.
+meterflow-export-*.json
 
 # ── Node / Angular (frontend) ─────────────────────────────────────────────────
 node_modules/

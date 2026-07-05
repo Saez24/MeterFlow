@@ -8,6 +8,7 @@ import uuid
 from datetime import date as date_cls
 from pathlib import Path
 
+from django.core.exceptions import SuspiciousFileOperation
 from django.core.files.storage import default_storage
 from django.db.models import QuerySet
 from django.http import FileResponse, HttpResponseBase
@@ -179,7 +180,7 @@ class ReadingViewSet(viewsets.ModelViewSet[Reading]):
         if reading.photo:
             try:
                 default_storage.delete(reading.photo)
-            except OSError as exc:
+            except (OSError, SuspiciousFileOperation) as exc:
                 logger.warning("photo.delete_failed key=%s err=%s", reading.photo, exc)
             reading.photo = None
             reading.save(update_fields=["photo"])
@@ -196,7 +197,9 @@ class ReadingViewSet(viewsets.ModelViewSet[Reading]):
             return Response({"detail": "No photo"}, status=status.HTTP_404_NOT_FOUND)
         try:
             handle = default_storage.open(reading.photo, "rb")
-        except FileNotFoundError:
+        except (FileNotFoundError, SuspiciousFileOperation):
+            # SuspiciousFileOperation guards against a malformed/traversal key on
+            # any legacy row — treat as "no photo" rather than a 500.
             return Response({"detail": "No photo"}, status=status.HTTP_404_NOT_FOUND)
         content_type = (
             mimetypes.guess_type(reading.photo)[0] or "application/octet-stream"
@@ -227,7 +230,7 @@ class ReadingViewSet(viewsets.ModelViewSet[Reading]):
         if reading.photo:
             try:
                 default_storage.delete(reading.photo)
-            except OSError as exc:
+            except (OSError, SuspiciousFileOperation) as exc:
                 logger.warning("photo.delete_failed key=%s err=%s", reading.photo, exc)
 
         name = f"readings/{reading.id}/{uuid.uuid4().hex}{extension}"

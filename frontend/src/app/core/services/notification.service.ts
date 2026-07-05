@@ -4,13 +4,21 @@ const STORAGE_KEY_ENABLED = 'mf_reminder_enabled';
 const STORAGE_KEY_LAST = 'mf_reminder_last';
 const REMINDER_INTERVAL_DAYS = 28;
 
+// Guard localStorage access (robustness; matches ThemeService). Values are
+// non-sensitive reminder prefs — no tokens/PII (security-standards §8).
+const safeGet = (key: string): string | null =>
+  typeof localStorage !== 'undefined' ? localStorage.getItem(key) : null;
+const safeSet = (key: string, value: string): void => {
+  if (typeof localStorage !== 'undefined') localStorage.setItem(key, value);
+};
+
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
   readonly permission = signal<NotificationPermission>(
     typeof Notification !== 'undefined' ? Notification.permission : 'denied',
   );
 
-  readonly enabled = signal(localStorage.getItem(STORAGE_KEY_ENABLED) === 'true');
+  readonly enabled = signal(safeGet(STORAGE_KEY_ENABLED) === 'true');
 
   async requestPermission(): Promise<void> {
     if (typeof Notification === 'undefined') return;
@@ -25,7 +33,7 @@ export class NotificationService {
 
   setEnabled(value: boolean): void {
     this.enabled.set(value);
-    localStorage.setItem(STORAGE_KEY_ENABLED, String(value));
+    safeSet(STORAGE_KEY_ENABLED, String(value));
     if (value && this.permission() !== 'granted') {
       void this.requestPermission();
     }
@@ -34,7 +42,7 @@ export class NotificationService {
   /** Beim App-Start prüfen ob ein Reminder fällig ist (>= 28 Tage seit letztem) */
   checkAndShowReminder(): void {
     if (!this.enabled() || this.permission() !== 'granted') return;
-    const lastStr = localStorage.getItem(STORAGE_KEY_LAST);
+    const lastStr = safeGet(STORAGE_KEY_LAST);
     const now = Date.now();
     const lastMs = lastStr ? new Date(lastStr).getTime() : 0;
     const daysSinceLast = (now - lastMs) / 86_400_000;
@@ -70,6 +78,6 @@ export class NotificationService {
       new Notification(title, options);
     }
 
-    localStorage.setItem(STORAGE_KEY_LAST, new Date().toISOString());
+    safeSet(STORAGE_KEY_LAST, new Date().toISOString());
   }
 }

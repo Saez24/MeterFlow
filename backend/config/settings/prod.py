@@ -11,7 +11,17 @@ DEBUG = False
 
 if not os.environ.get("DATABASE_URL"):
     raise RuntimeError("DATABASE_URL must be set in production.")
-if os.environ.get("DJANGO_SECRET_KEY") in {None, "", "insecure-dev-key-change-me"}:
+if not os.environ.get("REDIS_URL"):
+    # Without Redis the cache falls back to per-process LocMemCache, which makes
+    # the auth rate limits ineffective across gunicorn workers (security-standards §2).
+    raise RuntimeError("REDIS_URL must be set in production (shared rate-limit cache).")
+# Reject empty, the dev placeholder, and any build-time placeholder that could leak
+# in from the image build (Dockerfile collectstatic) — otherwise JWT cookies signed
+# with a repo-readable key would be forgeable (security-standards §12).
+_secret_key = os.environ.get("DJANGO_SECRET_KEY") or ""
+if _secret_key in {"", "insecure-dev-key-change-me"} or _secret_key.startswith(
+    "build-time-"
+):
     raise RuntimeError("DJANGO_SECRET_KEY must be set to a strong value in production.")
 
 # HTTPS is terminated by the reverse proxy; trust its forwarded scheme.

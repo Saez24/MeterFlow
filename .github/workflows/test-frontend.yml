@@ -1,5 +1,5 @@
-# SECURITY (security-standards §11): pin every `uses:` action to a commit SHA
-# before production (WS5/Elena hardening task).
+# SECURITY (security-standards §11): every `uses:` action is pinned by commit SHA
+# (tag kept as a comment). Bump via Dependabot / pin-github-action.
 name: test-frontend
 
 on:
@@ -26,9 +26,9 @@ jobs:
       run:
         working-directory: frontend
     steps:
-      - uses: actions/checkout@v4 # TODO(§11): pin by SHA
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
-      - uses: actions/setup-node@v4 # TODO(§11): pin by SHA
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: "24"
           cache: npm

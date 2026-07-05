@@ -220,8 +220,22 @@ export class ReadingsForm {
   }
 
   onPhotoSelected(event: Event): void {
-    const file = (event.target as HTMLInputElement).files?.[0];
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
     if (!file) return;
+    // Client-side guard (the `accept` attribute is only a hint). The server
+    // enforces type/size independently (security-standards §3).
+    const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'];
+    const maxBytes = 10 * 1024 * 1024;
+    if ((file.type && !allowed.includes(file.type)) || file.size > maxBytes) {
+      input.value = '';
+      this.snackBar.open(
+        $localize`:@@readingsForm.photo.invalidFile:Bild muss JPG/PNG/WebP/HEIC und ≤ 10 MB sein.`,
+        'OK',
+        { duration: 5000 },
+      );
+      return;
+    }
     const prev = this.photoPreviewUrl();
     if (prev) URL.revokeObjectURL(prev);
     this.selectedPhotoFile.set(file);

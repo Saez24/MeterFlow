@@ -16,6 +16,7 @@ import jwt
 from django.conf import settings
 
 from apps.accounts.models import RefreshToken, User
+from apps.common.audit import record_audit
 
 
 def create_access_token(user: User) -> str:
@@ -59,18 +60,35 @@ def rotate_refresh_token(raw_token: str) -> tuple[str, User]:
     """Revoke the presented token and issue a fresh one.
 
     Raises ``ValueError`` if the token is unknown, revoked or expired.
+
+    Reuse (replay) detection (security-standards §2): if a *known but already
+    revoked* token is presented — the classic stolen-then-rotated case — every
+    refresh token for that user is revoked and an audit event is written, so
+    both attacker and victim are forced to re-authenticate.
     """
     token_hash = _hash_token(raw_token)
     stored = (
         RefreshToken.objects.select_related("user")
-        .filter(
-            token_hash=token_hash,
-            revoked=False,
-            expires_at__gt=datetime.now(UTC),
-        )
+        .filter(token_hash=token_hash)
         .first()
     )
     if stored is None:
+        raise ValueError("Invalid or expired refresh token")
+
+    now = datetime.now(UTC)
+    if stored.revoked:
+        # Replay of an already-rotated token → treat as breach: nuke the family.
+        RefreshToken.objects.filter(user=stored.user, revoked=False).update(
+            revoked=True
+        )
+        record_audit(
+            action="user.refresh_reuse_detected",
+            resource_type="user",
+            actor=stored.user,
+            resource_id=stored.user_id,
+        )
+        raise ValueError("Refresh token reuse detected")
+    if stored.expires_at <= now:
         raise ValueError("Invalid or expired refresh token")
 
     stored.revoked = True
@@ -80,7 +98,7 @@ def rotate_refresh_token(raw_token: str) -> tuple[str, User]:
     RefreshToken.objects.create(
         user=stored.user,
         token_hash=_hash_token(new_raw),
-        expires_at=datetime.now(UTC) + settings.REFRESH_TOKEN_LIFETIME,
+        expires_at=now + settings.REFRESH_TOKEN_LIFETIME,
     )
     return new_raw, stored.user
 

@@ -21,9 +21,14 @@ logger = logging.getLogger(__name__)
 def _client_ip(request: Request | None) -> str | None:
     if request is None:
         return None
+    # Behind exactly one trusted reverse proxy: the RIGHTMOST X-Forwarded-For hop
+    # is the address the proxy actually observed. The leftmost entry is
+    # client-supplied and spoofable, so trusting it would let anyone forge the IP
+    # recorded in the immutable audit trail (security-standards §9). Fall back to
+    # REMOTE_ADDR when there is no forwarding header.
     forwarded = request.META.get("HTTP_X_FORWARDED_FOR")
-    if isinstance(forwarded, str) and forwarded:
-        return forwarded.split(",")[0].strip()
+    if isinstance(forwarded, str) and forwarded.strip():
+        return forwarded.split(",")[-1].strip()
     remote = request.META.get("REMOTE_ADDR")
     return remote if isinstance(remote, str) else None
 

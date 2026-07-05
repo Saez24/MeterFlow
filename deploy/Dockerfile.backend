@@ -12,14 +12,20 @@ RUN groupadd --system appuser && \
 
 WORKDIR /app
 
-COPY backend/pyproject.toml ./
-RUN pip install --no-cache-dir .
+# Install pinned runtime deps from the lockfile (reproducible + scannable).
+# pyproject keeps open ranges; requirements.lock pins the resolved versions.
+COPY backend/requirements.lock ./
+RUN pip install --no-cache-dir -r requirements.lock
 
 COPY backend/ ./
 
 ENV DJANGO_SETTINGS_MODULE=config.settings.prod
-ENV DJANGO_SECRET_KEY=build-time-only-not-used-at-runtime
-RUN DATABASE_URL=sqlite:///tmp/build.sqlite3 python manage.py collectstatic --noinput
+# collectstatic only needs Django to import + the WhiteNoise manifest storage
+# (defined in base). Run it under dev settings with throwaway env so the prod
+# guards don't fire and — crucially — NO secret key persists into the image
+# (security-standards §12; a baked, repo-readable key would forge JWT cookies).
+RUN DJANGO_SETTINGS_MODULE=config.settings.dev DATABASE_URL=sqlite:///tmp/build.sqlite3 \
+    python manage.py collectstatic --noinput
 
 RUN mkdir -p /app/media && chown -R appuser:appuser /app
 

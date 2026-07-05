@@ -107,6 +107,25 @@ class TestAuth(BaseTest):
         assert "access_token" in response.cookies
 
     @allure.story("Session")
+    @allure.severity(allure.severity_level.CRITICAL)
+    def test_refresh_reuse_revokes_token_family(
+        self, api: ApiFacade, data: DataGenerator
+    ) -> None:
+        # Arrange — authenticate, capture the original refresh token, rotate once.
+        api.authenticate(data)
+        original = api.client.cookies["refresh_token"].value
+        self.assert_status(api.auth.refresh(), 200)
+        rotated = api.client.cookies["refresh_token"].value
+        # Act — replay the now-revoked original token (stolen-token scenario).
+        api.client.cookies["refresh_token"] = original
+        replay = api.auth.refresh()
+        # Assert — replay rejected AND the whole family is revoked, so even the
+        # freshly-issued token no longer works (reuse detection, §2).
+        self.assert_status(replay, 401)
+        api.client.cookies["refresh_token"] = rotated
+        self.assert_status(api.auth.refresh(), 401)
+
+    @allure.story("Session")
     @allure.severity(allure.severity_level.NORMAL)
     def test_logout_returns_no_content(
         self, api: ApiFacade, data: DataGenerator

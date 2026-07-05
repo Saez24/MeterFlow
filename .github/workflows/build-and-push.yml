@@ -59,6 +59,10 @@ jobs:
         with:
           image-ref: ${{ steps.img.outputs.ref }}:${{ github.sha }}
           severity: CRITICAL,HIGH
+          # ACCEPTED TRADEOFF (security-standards §12): ignore-unfixed keeps the
+          # push from being blocked by CVEs with no upstream fix (noise). Routine
+          # builds still block on any fixable HIGH/CRITICAL. Consider a scheduled
+          # non-ignore-unfixed scan that only alerts, to keep unfixed CVEs visible.
           ignore-unfixed: true
           exit-code: '1'
 

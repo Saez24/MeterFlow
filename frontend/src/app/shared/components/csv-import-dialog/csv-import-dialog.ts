@@ -75,6 +75,12 @@ export class CsvImportDialogComponent {
   }
 
   private async loadFile(file: File): Promise<void> {
+    if (file.size > 10 * 1024 * 1024) {
+      this.snackBar.open($localize`:@@csv.tooLarge:CSV-Datei zu groß (max. 10 MB).`, 'OK', {
+        duration: 4000,
+      });
+      return;
+    }
     try {
       const result = await this.csvImport.parseFile(file);
       this.parseResult.set(result);

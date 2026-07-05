@@ -5,11 +5,11 @@ import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export const authGuard: CanActivateFn = () => {
-  const supabase = inject(ApiService);
+  const api = inject(ApiService);
   const router = inject(Router);
 
-  // Erst Session von Supabase laden, dann entscheiden
-  return from(supabase.getSession()).pipe(
+  // Session vom Backend prüfen, dann entscheiden.
+  return from(api.getSession()).pipe(
     map((user) => (user ? true : router.createUrlTree(['/auth']))),
   );
 };

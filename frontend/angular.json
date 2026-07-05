@@ -28,6 +28,16 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "*.{wasm,js}",
+                "input": "node_modules/tesseract.js-core",
+                "output": "tesseract"
+              },
+              {
+                "glob": "worker.min.js",
+                "input": "node_modules/tesseract.js/dist",
+                "output": "tesseract"
               }
             ],
             "styles": ["src/styles.scss"],

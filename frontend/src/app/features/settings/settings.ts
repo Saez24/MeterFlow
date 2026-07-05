@@ -138,8 +138,17 @@ export class Settings {
   }
 
   importData(event: Event): void {
-    const file = (event.target as HTMLInputElement).files?.[0];
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
     if (!file) return;
+    // Cap import size to avoid reading an oversized file into memory.
+    if (file.size > 20 * 1024 * 1024) {
+      input.value = '';
+      this.snackBar.open($localize`:@@settings.importTooLarge:Datei zu groß (max. 20 MB).`, 'OK', {
+        duration: 4000,
+      });
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (e) => {
       try {

@@ -94,7 +94,9 @@ class LoginView(APIView):
 
         user = User.objects.filter(email=data["email"]).first()
         if user is None or not user.check_password(data["password"]):
-            logger.warning("auth.login.failed email=%s", data["email"])
+            # No PII (email) in logs — the audit row is the record of truth
+            # (security-standards §6). Log only that a failure occurred.
+            logger.warning("auth.login.failed")
             record_audit(
                 action="user.login_failed", resource_type="user", request=request
             )
@@ -115,11 +117,16 @@ class LoginView(APIView):
         return response
 
 
+@method_decorator(
+    ratelimit(key="ip", rate="10/m", method="POST", block=False), name="post"
+)
 class RefreshView(APIView):
     authentication_classes: list[type] = []
     permission_classes = [AllowAny]
 
     def post(self, request: Request) -> Response:
+        if getattr(request, "limited", False):
+            return _RATE_LIMITED
         raw = request.COOKIES.get(settings.AUTH_COOKIE_REFRESH)
         if not raw:
             return Response(
@@ -138,11 +145,21 @@ class RefreshView(APIView):
         return response
 
 
+@method_decorator(
+    ratelimit(key="ip", rate="10/m", method="POST", block=False), name="post"
+)
 class LogoutView(APIView):
     authentication_classes: list[type] = []
     permission_classes = [AllowAny]
 
     def post(self, request: Request) -> Response:
+        if getattr(request, "limited", False):
+            return _RATE_LIMITED
+        # Logout revokes the refresh token server-side (below) and clears cookies.
+        # The stateless access JWT stays valid until it expires (≤15 min,
+        # ACCESS_TOKEN_LIFETIME) — an accepted residual risk (security-standards
+        # §2). A jti denylist would close it but adds a per-request cache lookup
+        # for little gain given the short lifetime.
         raw = request.COOKIES.get(settings.AUTH_COOKIE_REFRESH)
         if raw:
             revoke_refresh_token(raw)

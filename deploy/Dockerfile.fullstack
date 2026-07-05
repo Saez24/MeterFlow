@@ -24,9 +24,10 @@ RUN groupadd --system appuser && \
 
 WORKDIR /app
 
-# Install Python dependencies from pyproject (no app packaging — py-modules=[]).
-COPY backend/pyproject.toml ./
-RUN pip install --no-cache-dir .
+# Install pinned runtime deps from the lockfile (reproducible + scannable).
+# pyproject keeps open ranges; requirements.lock pins the resolved versions.
+COPY backend/requirements.lock ./
+RUN pip install --no-cache-dir -r requirements.lock
 
 # Django project source.
 COPY backend/ ./
@@ -35,8 +36,11 @@ COPY --from=frontend-builder /app/dist/MeterFlow/browser /usr/share/nginx/html
 
 # Collect Django admin static (served by WhiteNoise via gunicorn).
 ENV DJANGO_SETTINGS_MODULE=config.settings.prod
-ENV DJANGO_SECRET_KEY=build-time-only-not-used-at-runtime
-RUN DATABASE_URL=sqlite:///tmp/build.sqlite3 python manage.py collectstatic --noinput
+# Run collectstatic under dev settings with throwaway env so the prod guards
+# don't fire and NO secret key persists into the image (security-standards §12;
+# a baked, repo-readable key would forge JWT cookies).
+RUN DJANGO_SETTINGS_MODULE=config.settings.dev DATABASE_URL=sqlite:///tmp/build.sqlite3 \
+    python manage.py collectstatic --noinput
 
 RUN mkdir -p /app/media && chown -R appuser:appuser /app
 
