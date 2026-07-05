@@ -8,6 +8,13 @@ node_modules/
 frontend/node_modules/
 frontend/dist/
 frontend/.angular/
+
+# Angular environment config holds only apiUrl (no secrets) and is required at
+# build time. A global gitignore rule (`*environments`) would exclude it, so
+# re-include the directory explicitly — otherwise CI checkout misses these files
+# and the production build fails to resolve `environments/environment`.
+!frontend/src/environments/
+!frontend/src/environments/*.ts
 frontend/coverage/
 frontend/test-results/
 frontend/playwright-report/

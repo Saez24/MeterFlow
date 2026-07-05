@@ -1,28 +1,9 @@
-# Local full stack (deploy modes A+B together): Postgres + Redis + Django API +
-# Angular/nginx. App on http://localhost:8080.  `docker compose up --build`
+# Local app stack: Django API + Angular/nginx.
+# Postgres and Redis are NOT part of this stack — they run as separate/external
+# containers. Point DATABASE_URL and REDIS_URL (in .env) at them: use a routable
+# host/IP, or attach this stack to their docker network (see the networks note
+# at the bottom). App on http://localhost:8080.  `docker compose up --build`
 services:
-  postgres:
-    image: postgres:17-alpine
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-meterflow}
-      POSTGRES_USER: ${POSTGRES_USER:-meterflow}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-meterflow}"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
-  redis:
-    image: redis:7-alpine
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
   backend:
     build:
       context: .
@@ -33,19 +14,15 @@ services:
       DJANGO_DEBUG: "0"
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-local-dev-secret-change-me-0123456789abcdef}
       DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,backend
-      DATABASE_URL: postgres://${POSTGRES_USER:-meterflow}:${POSTGRES_PASSWORD:-changeme}@postgres:5432/${POSTGRES_DB:-meterflow}
-      REDIS_URL: redis://redis:6379/0
+      # External Postgres / Redis — fail fast if not set in .env.
+      DATABASE_URL: ${DATABASE_URL:?set DATABASE_URL to your external Postgres in .env}
+      REDIS_URL: ${REDIS_URL:?set REDIS_URL to your external Redis in .env}
       CORS_ALLOWED_ORIGINS: http://localhost:8080
       CSRF_TRUSTED_ORIGINS: http://localhost:8080
       STORAGE_BACKEND: local
       LOCAL_STORAGE_PATH: /app/media
     volumes:
       - media:/app/media
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
 
   frontend:
     build:
@@ -59,5 +36,12 @@ services:
       - backend
 
 volumes:
-  pgdata:
   media:
+# If your external Postgres/Redis containers live on a named docker network,
+# attach the backend to it instead of using a routable IP, e.g.:
+#   services:
+#     backend:
+#       networks: [meterflow-data]
+#   networks:
+#     meterflow-data:
+#       external: true
