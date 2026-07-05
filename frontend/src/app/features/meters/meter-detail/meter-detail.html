@@ -1,7 +1,7 @@
 <div class="page-container">
   @if (meter(); as m) {
     <div class="page-header">
-      <button class="back-btn" mat-icon-button routerLink="/meters">
+      <button type="button" class="back-btn df-icon-btn" routerLink="/meters">
         <mat-icon>arrow_back</mat-icon>
       </button>
       <div class="header-main">
@@ -17,13 +17,14 @@
       </div>
       <div class="header-actions">
         <button
-          mat-stroked-button
+          type="button"
+          class="df-btn df-btn-secondary"
           [routerLink]="['/readings/new']"
           [queryParams]="{ meterId: m.id }"
         >
           <mat-icon>add</mat-icon>Ablesung
         </button>
-        <button class="edit-btn" mat-icon-button [routerLink]="['edit']">
+        <button type="button" class="edit-btn df-icon-btn" [routerLink]="['edit']">
           <mat-icon>edit</mat-icon>
         </button>
       </div>
@@ -142,7 +143,7 @@
     <div class="not-found">
       <mat-icon>search_off</mat-icon>
       <h3>Zähler nicht gefunden</h3>
-      <button mat-flat-button color="primary" routerLink="/meters">Zurück</button>
+      <button type="button" class="df-btn df-btn-primary" routerLink="/meters">Zurück</button>
     </div>
   }
 </div>

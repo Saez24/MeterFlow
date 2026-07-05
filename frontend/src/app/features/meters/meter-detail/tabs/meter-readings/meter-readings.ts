@@ -2,7 +2,6 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { firstValueFrom } from 'rxjs';
@@ -13,14 +12,7 @@ import { ApiService } from '../../../../../core/services/api.service';
 
 @Component({
   selector: 'app-meter-readings',
-  imports: [
-    CommonModule,
-    RouterModule,
-    MatIconModule,
-    MatButtonModule,
-    MatSnackBarModule,
-    MatDialogModule,
-  ],
+  imports: [CommonModule, RouterModule, MatIconModule, MatSnackBarModule, MatDialogModule],
   providers: [DatePipe],
   templateUrl: './meter-readings.html',
   styleUrl: './meter-readings.scss',

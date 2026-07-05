@@ -8,18 +8,14 @@ import {
   FormGroup,
 } from '@angular/forms';
 
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TariffPeriod, MeterConfig } from '../../../core/models/energy.models';
 import { TariffService } from '../../../core/services/tariff.service';
 import { MeterService } from '../../../core/services/meter.service';
 import { ReadingService } from '../../../core/services/reading.service';
+import { toDateInputValue, parseDateInput } from '../../../core/utils/date-input.util';
 
 export interface TariffFormData {
   meter: MeterConfig;
@@ -28,18 +24,7 @@ export interface TariffFormData {
 
 @Component({
   selector: 'app-tariff-form',
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatDatepickerModule,
-    MatSnackBarModule,
-    MatDividerModule,
-  ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatIconModule, MatSnackBarModule],
   templateUrl: './tariff-form.html',
   styleUrls: ['./tariff-form.scss'],
 })
@@ -61,7 +46,7 @@ export class TariffFormComponent {
   form: FormGroup = this.fb.group({
     pricePerUnit: [0, [Validators.required, Validators.min(0)]],
     baseCharge: [0, [Validators.required, Validators.min(0)]],
-    validFrom: [new Date(), Validators.required],
+    validFrom: [toDateInputValue(new Date()), Validators.required],
     emissionPrice: [undefined as number | undefined],
     basePricePerKw: [undefined as number | undefined],
     connectedLoadKw: [
@@ -90,7 +75,10 @@ export class TariffFormComponent {
     }
 
     if (this.isEdit() && this.originalTariff) {
-      this.form.patchValue(this.originalTariff);
+      this.form.patchValue({
+        ...this.originalTariff,
+        validFrom: toDateInputValue(new Date(this.originalTariff.validFrom)),
+      });
     } else {
       // Set defaults for new tariffs
       const lastTariff = this.tariffService.getActiveTariff(this.meter());
@@ -124,7 +112,7 @@ export class TariffFormComponent {
     const tariffData: Partial<TariffPeriod> = {
       pricePerUnit: formValue.pricePerUnit,
       baseCharge: this.isLinkedGardenWater() || this.isDistrictHeating() ? 0 : formValue.baseCharge,
-      validFrom: formValue.validFrom,
+      validFrom: parseDateInput(formValue.validFrom),
       note: formValue.note,
     };
 

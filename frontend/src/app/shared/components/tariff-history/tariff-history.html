@@ -18,7 +18,7 @@
           Beim Speichern einer Ablesung wird automatisch der zum Datum passende Tarif verwendet.
         </p>
       </div>
-      <button mat-stroked-button (click)="addTariff.emit()" class="add-btn">
+      <button type="button" class="add-btn df-btn df-btn-secondary" (click)="addTariff.emit()">
         <mat-icon>add</mat-icon>
         Neuer Tarif
       </button>
@@ -58,18 +58,18 @@
               </div>
               <div class="tariff-card-actions">
                 <button
-                  mat-icon-button
+                  type="button"
+                  class="edit-btn df-icon-btn df-icon-btn--sm"
                   (click)="editTariff.emit(period.id)"
                   [matTooltip]="'Tarif bearbeiten'"
-                  class="edit-btn"
                 >
                   <mat-icon>edit</mat-icon>
                 </button>
                 <button
-                  mat-icon-button
+                  type="button"
+                  class="delete-btn df-icon-btn df-icon-btn--sm"
                   (click)="delete(period)"
                   [matTooltip]="'Tarif löschen'"
-                  class="delete-btn"
                 >
                   <mat-icon>delete_outline</mat-icon>
                 </button>

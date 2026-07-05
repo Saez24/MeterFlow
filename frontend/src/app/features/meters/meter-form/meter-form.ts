@@ -10,14 +10,8 @@ import {
 } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Observable, startWith } from 'rxjs';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { ENERGY_META, EnergyType, MeterConfig } from '../../../core/models/energy.models';
@@ -31,14 +25,8 @@ import { GAS_DEFAULTS } from '../../../core/constants/gas.constants';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatButtonModule,
     MatIconModule,
-    MatSlideToggleModule,
     MatSnackBarModule,
-    MatDividerModule,
     MatTooltipModule,
   ],
   templateUrl: './meter-form.html',

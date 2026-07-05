@@ -191,6 +191,28 @@
   }
 }
 
+// Native date input: keep the Apple-clean look, make the picker glyph
+// legible in both themes.
+.df-input[type='date'] {
+  // iOS/Safari renders date inputs as inline blocks that ignore height without this.
+  appearance: none;
+  -webkit-appearance: none;
+
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.55;
+    transition: opacity var(--dur) var(--ease);
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+[data-theme='dark'] .df-input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
 // Input with a trailing action (e.g. password toggle, search clear).
 .df-input-wrap {
   position: relative;

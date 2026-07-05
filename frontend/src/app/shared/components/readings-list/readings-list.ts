@@ -1,14 +1,13 @@
 import { Component, input, output, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ENERGY_META, ReadingRow } from '../../../core/models/energy.models';
 import { MeterService } from '../../../core/services/meter.service';
 
 @Component({
   selector: 'app-readings-list',
-  imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, RouterModule, MatIconModule],
   templateUrl: './readings-list.html',
   styleUrl: './readings-list.scss',
 })

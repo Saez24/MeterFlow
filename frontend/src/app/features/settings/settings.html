@@ -88,7 +88,7 @@
             Alle Zähler und Ablesungen unwiderruflich löschen
           </div>
         </div>
-        <button mat-stroked-button color="warn" (click)="clearAll()">
+        <button type="button" class="df-btn df-btn-danger" (click)="clearAll()">
           <mat-icon>delete_forever</mat-icon>
           <span i18n="@@settings.deleteBtn">Löschen</span>
         </button>
@@ -211,41 +211,60 @@
         @if (editingType() === type) {
           <div class="market-price-form">
             <div class="market-price-form-row">
-              <mat-form-field appearance="outline" class="mp-field mp-field--price">
-                <mat-label i18n="@@settings.co2Factors.factor"
-                  >Faktor (kg CO₂/{{ entry.unit }})</mat-label
+              <div class="df-field mp-field mp-field--price">
+                <label [attr.for]="'co2-factor-' + type" i18n="@@settings.co2Factors.factor"
+                  >Faktor (kg CO₂/{{ entry.unit }})</label
                 >
-                <input matInput type="number" step="0.001" [(ngModel)]="editFactor" />
-                <mat-hint i18n="@@settings.co2Factors.factorHint"
-                  >Negative Werte = Gutschrift (Solar)</mat-hint
+                <input
+                  [id]="'co2-factor-' + type"
+                  class="df-input"
+                  type="number"
+                  step="0.001"
+                  [(ngModel)]="editFactor"
+                />
+                <span class="df-hint" i18n="@@settings.co2Factors.factorHint"
+                  >Negative Werte = Gutschrift (Solar)</span
                 >
-              </mat-form-field>
-              <mat-form-field appearance="outline" class="mp-field mp-field--source">
-                <mat-label i18n="@@settings.co2Factors.source">Quelle</mat-label>
-                <input matInput type="text" [(ngModel)]="editSource" />
-              </mat-form-field>
+              </div>
+              <div class="df-field mp-field mp-field--source">
+                <label [attr.for]="'co2-source-' + type" i18n="@@settings.co2Factors.source"
+                  >Quelle</label
+                >
+                <input
+                  [id]="'co2-source-' + type"
+                  class="df-input"
+                  type="text"
+                  [(ngModel)]="editSource"
+                />
+              </div>
             </div>
-            <mat-form-field appearance="outline" class="mp-field mp-field--url">
-              <mat-label i18n="@@settings.co2Factors.sourceUrl"
-                >Link zur Quelle (optional)</mat-label
+            <div class="df-field mp-field mp-field--url">
+              <label [attr.for]="'co2-url-' + type" i18n="@@settings.co2Factors.sourceUrl"
+                >Link zur Quelle (optional)</label
               >
               <input
-                matInput
+                [id]="'co2-url-' + type"
+                class="df-input"
                 type="url"
                 [(ngModel)]="editSourceUrl"
                 placeholder="https://www.umweltbundesamt.de/..."
               />
-              <mat-hint i18n="@@settings.co2Factors.sourceUrlHint"
-                >z.B. UBA-Emissionsfaktoren, AGFW-Statistik</mat-hint
+              <span class="df-hint" i18n="@@settings.co2Factors.sourceUrlHint"
+                >z.B. UBA-Emissionsfaktoren, AGFW-Statistik</span
               >
-            </mat-form-field>
+            </div>
             <div class="market-price-form-actions">
-              <button mat-stroked-button (click)="cancelEdit()" i18n="@@settings.co2Factors.cancel">
+              <button
+                type="button"
+                class="df-btn df-btn-secondary"
+                (click)="cancelEdit()"
+                i18n="@@settings.co2Factors.cancel"
+              >
                 Abbrechen
               </button>
               <button
-                mat-flat-button
-                color="primary"
+                type="button"
+                class="df-btn df-btn-primary"
                 (click)="saveEdit(type, entry.unit)"
                 [disabled]="editFactor === null"
                 i18n="@@settings.co2Factors.save"
@@ -254,8 +273,8 @@
               </button>
               @if (!entry.isDefault) {
                 <button
-                  mat-stroked-button
-                  color="warn"
+                  type="button"
+                  class="df-btn df-btn-danger"
                   (click)="resetToDefault(type)"
                   i18n="@@settings.co2Factors.reset"
                 >
@@ -337,7 +356,7 @@
     <p class="about-version" i18n="@@settings.version">Version 1.0</p>
   </div>
 
-  <button mat-stroked-button color="warn" (click)="logout()" class="logout-btn">
+  <button type="button" class="logout-btn df-btn df-btn-danger" (click)="logout()">
     <mat-icon>logout</mat-icon>
     <span i18n="@@settings.logout">Abmelden</span>
   </button>

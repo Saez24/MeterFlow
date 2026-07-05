@@ -155,7 +155,7 @@ describe('ReadingsForm', () => {
     it('calculates consumption and cost against last reading', () => {
       metersSignal.set([ELEC_METER]);
       readingsSignal.set([makeReading('r1', 'meter-1', '2024-03-01', 1000)]);
-      component.form.patchValue({ meterId: 'meter-1', value: 1100, date: new Date('2024-04-01') });
+      component.form.patchValue({ meterId: 'meter-1', value: 1100, date: '2024-04-01' });
       const preview = component.consumptionPreview();
       expect(preview?.consumption).toBe(100);
       expect(preview?.cost).toBeCloseTo(30); // 100 kWh × 0.30 €
@@ -164,14 +164,14 @@ describe('ReadingsForm', () => {
     it('returns null when new value is less than last reading (negative consumption)', () => {
       metersSignal.set([ELEC_METER]);
       readingsSignal.set([makeReading('r1', 'meter-1', '2024-03-01', 1000)]);
-      component.form.patchValue({ meterId: 'meter-1', value: 900, date: new Date('2024-04-01') });
+      component.form.patchValue({ meterId: 'meter-1', value: 900, date: '2024-04-01' });
       expect(component.consumptionPreview()).toBeNull();
     });
 
     it('returns zero consumption when there is no previous reading', () => {
       metersSignal.set([ELEC_METER]);
       readingsSignal.set([]);
-      component.form.patchValue({ meterId: 'meter-1', value: 500, date: new Date('2024-04-01') });
+      component.form.patchValue({ meterId: 'meter-1', value: 500, date: '2024-04-01' });
       const preview = component.consumptionPreview();
       expect(preview?.consumption).toBe(0);
     });
@@ -179,7 +179,7 @@ describe('ReadingsForm', () => {
     it('returns { cost: 0 } when no active tariff is found', () => {
       const meterNoTariff: MeterConfig = { ...ELEC_METER, tariffHistory: [] };
       metersSignal.set([meterNoTariff]);
-      component.form.patchValue({ meterId: 'meter-1', value: 500, date: new Date('2020-01-01') });
+      component.form.patchValue({ meterId: 'meter-1', value: 500, date: '2020-01-01' });
       const preview = component.consumptionPreview();
       expect(preview?.cost).toBe(0);
     });
@@ -198,14 +198,14 @@ describe('ReadingsForm', () => {
         makeReading('r2', 'meter-1', '2024-03-01', 1000),
         makeReading('r3', 'meter-1', '2024-05-01', 1200), // AFTER selected date
       ]);
-      component.form.patchValue({ meterId: 'meter-1', date: new Date('2024-04-01') });
+      component.form.patchValue({ meterId: 'meter-1', date: '2024-04-01' });
       expect(component.previousReading()?.id).toBe('r2');
     });
 
     it('returns null when all readings are after the selected date', () => {
       metersSignal.set([ELEC_METER]);
       readingsSignal.set([makeReading('r1', 'meter-1', '2024-06-01', 1200)]);
-      component.form.patchValue({ meterId: 'meter-1', date: new Date('2024-01-01') });
+      component.form.patchValue({ meterId: 'meter-1', date: '2024-01-01' });
       expect(component.previousReading()).toBeNull();
     });
   });
@@ -215,28 +215,28 @@ describe('ReadingsForm', () => {
     it('minValue defaults to 0 when no previous reading', () => {
       metersSignal.set([ELEC_METER]);
       readingsSignal.set([]);
-      component.form.patchValue({ meterId: 'meter-1', date: new Date('2024-04-01') });
+      component.form.patchValue({ meterId: 'meter-1', date: '2024-04-01' });
       expect(component.minValue()).toBe(0);
     });
 
     it('minValue is the value of the previous reading', () => {
       metersSignal.set([ELEC_METER]);
       readingsSignal.set([makeReading('r1', 'meter-1', '2024-03-01', 1000)]);
-      component.form.patchValue({ meterId: 'meter-1', date: new Date('2024-04-01') });
+      component.form.patchValue({ meterId: 'meter-1', date: '2024-04-01' });
       expect(component.minValue()).toBe(1000);
     });
 
     it('maxValue is null when no next reading', () => {
       metersSignal.set([ELEC_METER]);
       readingsSignal.set([makeReading('r1', 'meter-1', '2024-01-01', 500)]);
-      component.form.patchValue({ meterId: 'meter-1', date: new Date('2024-04-01') });
+      component.form.patchValue({ meterId: 'meter-1', date: '2024-04-01' });
       expect(component.maxValue()).toBeNull();
     });
 
     it('maxValue is the value of the next reading', () => {
       metersSignal.set([ELEC_METER]);
       readingsSignal.set([makeReading('r1', 'meter-1', '2024-06-01', 1500)]);
-      component.form.patchValue({ meterId: 'meter-1', date: new Date('2024-04-01') });
+      component.form.patchValue({ meterId: 'meter-1', date: '2024-04-01' });
       expect(component.maxValue()).toBe(1500);
     });
   });
@@ -256,14 +256,14 @@ describe('ReadingsForm', () => {
 
     it('is false when form is valid and meter exists', () => {
       metersSignal.set([ELEC_METER]);
-      component.form.patchValue({ meterId: 'meter-1', value: 500, date: new Date('2024-04-01') });
+      component.form.patchValue({ meterId: 'meter-1', value: 500, date: '2024-04-01' });
       expect(component.isSaveDisabled()).toBe(false);
     });
 
     it('is true when value exceeds maxValue (next reading)', () => {
       metersSignal.set([ELEC_METER]);
       readingsSignal.set([makeReading('r1', 'meter-1', '2024-06-01', 800)]);
-      component.form.patchValue({ meterId: 'meter-1', value: 900, date: new Date('2024-04-01') });
+      component.form.patchValue({ meterId: 'meter-1', value: 900, date: '2024-04-01' });
       expect(component.isSaveDisabled()).toBe(true);
     });
   });

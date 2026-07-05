@@ -5,14 +5,19 @@
       <p class="page-subtitle">Detaillierte Berechnung der prognostizierten Jahreskosten</p>
     </div>
     <div class="page-header__actions">
-      <mat-form-field appearance="outline" class="year-select">
-        <mat-label>Jahr</mat-label>
-        <mat-select [value]="selectedYear()" (selectionChange)="selectedYear.set($event.value)">
+      <div class="df-field year-select">
+        <label for="cp-year">Jahr</label>
+        <select
+          id="cp-year"
+          class="df-select"
+          [value]="selectedYear()"
+          (change)="selectedYear.set(+$any($event.target).value)"
+        >
           @for (y of state.availableYears(); track y) {
-            <mat-option [value]="y">{{ y }}</mat-option>
+            <option [value]="y">{{ y }}</option>
           }
-        </mat-select>
-      </mat-form-field>
+        </select>
+      </div>
     </div>
   </div>
 

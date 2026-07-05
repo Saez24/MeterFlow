@@ -5,7 +5,7 @@
       <span i18n="@@readingsForm.saving">Wird gespeichert…</span>
     </div>
   }
-  <button class="back-btn" mat-icon-button (click)="this.readingService.goBack()">
+  <button type="button" class="back-btn df-icon-btn" (click)="this.readingService.goBack()">
     <mat-icon>arrow_back</mat-icon>
   </button>
   <div class="page-header">
@@ -58,7 +58,7 @@
     }
 
     @if (selectedMeter(); as meter) {
-      <mat-divider class="section-divider"></mat-divider>
+      <hr class="section-divider" />
 
       <!-- Reading Value -->
       <div class="form-section">
@@ -85,26 +85,28 @@
         </div>
 
         <div class="form-row form-row--2">
-          <mat-form-field appearance="outline" class="form-field value-field">
-            <mat-label i18n="@@readingsForm.field.value">Zählerstand</mat-label>
-            <input
-              matInput
-              type="text"
-              inputmode="decimal"
-              formControlName="value"
-              placeholder="0.000"
-              class="reading-input"
-            />
-            <span matSuffix class="unit-suffix">{{ meter.unit }}</span>
-            <mat-error>{{ getValueError() }}</mat-error>
-          </mat-form-field>
+          <div class="df-field form-field value-field">
+            <label for="rf-value" i18n="@@readingsForm.field.value">Zählerstand</label>
+            <div class="df-input-wrap">
+              <input
+                id="rf-value"
+                class="df-input reading-input"
+                type="text"
+                inputmode="decimal"
+                formControlName="value"
+                placeholder="0.000"
+              />
+              <span class="df-input-suffix unit-suffix">{{ meter.unit }}</span>
+            </div>
+            @if (form.get('value')?.touched && getValueError()) {
+              <span class="df-error">{{ getValueError() }}</span>
+            }
+          </div>
 
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label i18n="@@readingsForm.field.date">Datum</mat-label>
-            <input matInput [matDatepicker]="datePicker" formControlName="date" />
-            <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
-            <mat-datepicker #datePicker></mat-datepicker>
-          </mat-form-field>
+          <div class="df-field form-field">
+            <label for="rf-date" i18n="@@readingsForm.field.date">Datum</label>
+            <input id="rf-date" class="df-input" type="date" formControlName="date" />
+          </div>
         </div>
 
         <!-- Live Preview -->
@@ -143,24 +145,24 @@
         }
       </div>
 
-      <mat-divider class="section-divider"></mat-divider>
+      <hr class="section-divider" />
 
       <!-- Note -->
       <div class="form-section">
         <h3 class="section-title" i18n="@@readingsForm.note.title">Notiz (optional)</h3>
-        <mat-form-field appearance="outline" class="form-field form-field--full">
-          <mat-label i18n="@@readingsForm.note.label">Anmerkung zur Ablesung</mat-label>
+        <div class="df-field form-field form-field--full">
+          <label for="rf-note" i18n="@@readingsForm.note.label">Anmerkung zur Ablesung</label>
           <textarea
-            matInput
+            id="rf-note"
+            class="df-textarea"
             formControlName="note"
             rows="2"
             placeholder="z.B. Zähler abgelesen nach Urlaub..."
             i18n-placeholder="@@readingsForm.note.placeholder"
           ></textarea>
-          <mat-icon matSuffix>notes</mat-icon>
-        </mat-form-field>
+        </div>
       </div>
-      <mat-divider class="section-divider"></mat-divider>
+      <hr class="section-divider" />
 
       <!-- Foto -->
       <div class="form-section">
@@ -177,10 +179,8 @@
             />
             <button
               type="button"
-              mat-button
-              color="warn"
+              class="photo-remove-btn df-btn df-btn-danger df-btn--sm"
               (click)="removeExistingPhoto()"
-              class="photo-remove-btn"
               i18n="@@readingsForm.photo.remove"
             >
               <mat-icon>delete_outline</mat-icon> Foto entfernen
@@ -198,8 +198,7 @@
             <div class="photo-preview-actions">
               <button
                 type="button"
-                mat-stroked-button
-                class="ocr-btn"
+                class="ocr-btn df-btn df-btn-secondary df-btn--sm"
                 [class.ocr-btn--running]="ocrRunning()"
                 [disabled]="ocrRunning()"
                 (click)="runOcr()"
@@ -215,10 +214,8 @@
               </button>
               <button
                 type="button"
-                mat-button
-                color="warn"
+                class="photo-remove-btn df-btn df-btn-ghost df-btn--sm"
                 (click)="clearPhoto()"
-                class="photo-remove-btn"
                 i18n="@@readingsForm.photo.clear"
               >
                 <mat-icon>close</mat-icon> Auswahl aufheben
@@ -246,8 +243,7 @@
                     <div class="ocr-result-actions">
                       <button
                         type="button"
-                        mat-flat-button
-                        class="ocr-apply-btn"
+                        class="ocr-apply-btn df-btn df-btn-primary df-btn--sm"
                         (click)="applyOcrValue()"
                         i18n="@@readingsForm.ocr.apply"
                       >
@@ -255,7 +251,7 @@
                       </button>
                       <button
                         type="button"
-                        mat-icon-button
+                        class="df-icon-btn df-icon-btn--sm"
                         (click)="dismissOcr()"
                         i18n-aria-label="@@readingsForm.ocr.dismiss"
                         aria-label="Ergebnis verwerfen"
@@ -277,7 +273,7 @@
                     </div>
                     <button
                       type="button"
-                      mat-icon-button
+                      class="df-icon-btn df-icon-btn--sm"
                       (click)="dismissOcr()"
                       i18n-aria-label="@@readingsForm.ocr.dismiss"
                       aria-label="Ergebnis verwerfen"
@@ -317,19 +313,13 @@
     <div class="form-actions">
       <button
         type="button"
-        mat-button
+        class="df-btn df-btn-secondary"
         (click)="this.readingService.goBack()"
         i18n="@@readingsForm.cancel"
       >
         Abbrechen
       </button>
-      <button
-        type="submit"
-        mat-flat-button
-        color="primary"
-        [disabled]="isSaveDisabled()"
-        class="save-btn"
-      >
+      <button type="submit" class="save-btn df-btn df-btn-primary" [disabled]="isSaveDisabled()">
         <mat-icon>check</mat-icon>
         <span i18n="@@readingsForm.save">Ablesung speichern</span>
       </button>

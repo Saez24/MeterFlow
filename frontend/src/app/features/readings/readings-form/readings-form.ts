@@ -2,15 +2,8 @@ import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@a
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatDividerModule } from '@angular/material/divider';
 import { ENERGY_META, MeterReading } from '../../../core/models/energy.models';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MeterService } from '../../../core/services/meter.service';
@@ -21,6 +14,7 @@ import { GAS_DEFAULTS } from '../../../core/constants/gas.constants';
 import { OcrService, OcrResult } from '../../../core/services/ocr.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { maxDecimalPlaces } from '../../../core/validators/decimal-places.validator';
+import { toDateInputValue, parseDateInput } from '../../../core/utils/date-input.util';
 
 @Component({
   selector: 'app-readings-form',
@@ -29,15 +23,8 @@ import { maxDecimalPlaces } from '../../../core/validators/decimal-places.valida
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatButtonModule,
     MatIconModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
     MatSnackBarModule,
-    MatDividerModule,
     MatProgressSpinnerModule,
   ],
   templateUrl: './readings-form.html',
@@ -81,7 +68,7 @@ export class ReadingsForm {
   form = this.fb.group({
     meterId: ['', Validators.required],
     value: [null as number | null, [Validators.required, Validators.min(0), maxDecimalPlaces(3)]],
-    date: [new Date(), Validators.required],
+    date: [toDateInputValue(new Date()), Validators.required],
     note: [''],
   });
 
@@ -102,7 +89,10 @@ export class ReadingsForm {
     });
 
     if (this.isEditMode && this.originalReading) {
-      this.form.patchValue(this.originalReading);
+      this.form.patchValue({
+        ...this.originalReading,
+        date: toDateInputValue(new Date(this.originalReading.date)),
+      });
       this.formSignal.set(this.form.getRawValue());
       this.form.controls.meterId.disable();
       if (this.originalReading.photo) {
@@ -157,7 +147,7 @@ export class ReadingsForm {
 
     if (!meter || value === null || !date) return null;
 
-    const tariff = this.tariffService.getActiveTariffForDate(meter, date);
+    const tariff = this.tariffService.getActiveTariffForDate(meter, parseDateInput(date));
     if (!tariff) return { consumption: 0, kwh: 0, cost: 0 };
 
     const consumption = last ? value - last.value : 0;
@@ -328,7 +318,7 @@ export class ReadingsForm {
       if (this.isEditMode && this.originalReading) {
         const changes: Partial<MeterReading> = {
           value: numericValue,
-          date: rawValue.date!,
+          date: parseDateInput(rawValue.date!),
           note: rawValue.note ?? undefined,
         };
         await this.readingService.updateReading(this.originalReading.id, changes);
@@ -337,7 +327,7 @@ export class ReadingsForm {
         const saved = await this.readingService.addReading({
           meterId: rawValue.meterId!,
           value: numericValue,
-          date: rawValue.date!,
+          date: parseDateInput(rawValue.date!),
           note: rawValue.note ?? undefined,
         });
         readingId = saved.id;

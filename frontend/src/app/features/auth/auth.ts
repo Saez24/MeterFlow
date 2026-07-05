@@ -11,13 +11,7 @@ type AuthMode = 'login' | 'register';
 
 @Component({
   selector: 'app-auth',
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatIconModule,
-    MatSnackBarModule,
-  ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatIconModule, MatSnackBarModule],
   templateUrl: './auth.html',
   styleUrl: './auth.scss',
 })

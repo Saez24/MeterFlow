@@ -130,7 +130,7 @@
   <section class="meters-section">
     <div class="section-header">
       <h2 i18n="@@dashboard.yourMeters">Deine Zähler</h2>
-      <button mat-button routerLink="/meters" class="see-all-btn">
+      <button type="button" class="see-all-btn df-btn df-btn-ghost df-btn--sm" routerLink="/meters">
         <span i18n="@@dashboard.manageAll">Alle verwalten</span> <mat-icon>arrow_forward</mat-icon>
       </button>
     </div>
@@ -140,7 +140,7 @@
         <mat-icon>add_circle_outline</mat-icon>
         <h3 i18n="@@dashboard.empty.title">Noch keine Zähler angelegt</h3>
         <p i18n="@@dashboard.empty.desc">Füge deinen ersten Zähler hinzu, um zu beginnen.</p>
-        <button mat-flat-button color="primary" routerLink="/meters/new">
+        <button type="button" class="df-btn df-btn-primary" routerLink="/meters/new">
           <span i18n="@@dashboard.addMeter">Zähler hinzufügen</span>
         </button>
       </div>
@@ -247,7 +247,11 @@
   <section class="recent-section">
     <div class="section-header">
       <h2 i18n="@@dashboard.recentReadings">Letzte Ablesungen</h2>
-      <button mat-button routerLink="/readings" class="see-all-btn">
+      <button
+        type="button"
+        class="see-all-btn df-btn df-btn-ghost df-btn--sm"
+        routerLink="/readings"
+      >
         <span i18n="@@dashboard.showAll">Alle anzeigen</span> <mat-icon>arrow_forward</mat-icon>
       </button>
     </div>

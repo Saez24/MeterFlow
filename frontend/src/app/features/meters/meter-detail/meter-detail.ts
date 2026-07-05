@@ -1,14 +1,13 @@
 import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ENERGY_META, MeterConfig } from '../../../core/models/energy.models';
 import { MeterDetailStateService } from '../../../core/services/meter-detail-state.service';
 
 @Component({
   selector: 'app-meter-detail',
-  imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, RouterModule, MatIconModule],
   templateUrl: './meter-detail.html',
   styleUrl: './meter-detail.scss',
 

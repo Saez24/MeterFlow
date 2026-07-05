@@ -1,30 +1,36 @@
 <div class="preview-form">
   <div class="input-row">
-    <mat-form-field appearance="outline" class="preview-field">
-      @if (meter().type === 'gas') {
-        <mat-label>Jahresverbrauch (kWh)</mat-label>
-      } @else {
-        <mat-label>Jahresverbrauch ({{ meter().unit }})</mat-label>
-      }
-      <mat-icon matPrefix>bolt</mat-icon>
-      <input matInput type="number" [(ngModel)]="estimatedConsumption" />
-    </mat-form-field>
+    <div class="df-field preview-field">
+      <label for="cp-consumption">
+        @if (meter().type === 'gas') {
+          Jahresverbrauch (kWh)
+        } @else {
+          Jahresverbrauch ({{ meter().unit }})
+        }
+      </label>
+      <input
+        id="cp-consumption"
+        class="df-input"
+        type="number"
+        [(ngModel)]="estimatedConsumption"
+      />
+    </div>
 
-    <mat-form-field appearance="outline" class="preview-field">
-      <mat-label>Monatlicher Abschlag</mat-label>
-      <mat-icon matPrefix>payments</mat-icon>
-      <input matInput type="number" [(ngModel)]="monthlyPayment" />
-      <span matSuffix>€</span>
-    </mat-form-field>
+    <div class="df-field preview-field">
+      <label for="cp-payment">Monatlicher Abschlag</label>
+      <div class="df-input-wrap">
+        <input id="cp-payment" class="df-input" type="number" [(ngModel)]="monthlyPayment" />
+        <span class="df-input-suffix">€</span>
+      </div>
+    </div>
 
-    <mat-form-field appearance="outline" class="preview-field">
-      <mat-label>Anzahl Abschläge</mat-label>
-      <mat-icon matPrefix>tag</mat-icon>
-      <input matInput type="number" [(ngModel)]="paymentCount" />
-    </mat-form-field>
+    <div class="df-field preview-field">
+      <label for="cp-count">Anzahl Abschläge</label>
+      <input id="cp-count" class="df-input" type="number" [(ngModel)]="paymentCount" />
+    </div>
   </div>
 
-  <button mat-flat-button class="calculate-btn" (click)="calculatePreview()">
+  <button type="button" class="calculate-btn df-btn df-btn-primary" (click)="calculatePreview()">
     <mat-icon>calculate</mat-icon>
     Vorschau berechnen
   </button>

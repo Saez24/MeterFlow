@@ -9,106 +9,169 @@
 <form [formGroup]="form" (ngSubmit)="save()" class="tariff-form">
   <div class="dialog-content">
     @if (isDistrictHeating()) {
-      <mat-form-field appearance="outline" class="form-field--full">
-        <mat-label>Arbeitspreis pro {{ meter().unit }}</mat-label>
-        <input matInput type="number" formControlName="pricePerUnit" placeholder="0.30" />
-        <span matSuffix>€</span>
-        <mat-error>
-          @if (form.get('pricePerUnit')?.hasError('required')) {
-            Preis ist ein Pflichtfeld.
-          }
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="form-field--full">
-        <mat-label>Emissionspreis / CO₂-Bepreisung pro {{ meter().unit }}</mat-label>
-        <input matInput type="number" formControlName="emissionPrice" placeholder="0.005" />
-        <span matSuffix>€</span>
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="form-field--full">
-        <mat-label>Bereitstellungspreis (Grundgebühr) pro kW/Jahr</mat-label>
-        <input matInput type="number" formControlName="basePricePerKw" placeholder="51.54" />
-        <span matSuffix>€</span>
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="form-field--full">
-        <mat-label>Anschlussleistung</mat-label>
-        <input matInput type="number" formControlName="connectedLoadKw" placeholder="10" />
-        <span matSuffix>kW</span>
-      </mat-form-field>
+      <div class="df-field form-field--full">
+        <label for="tf-price">Arbeitspreis pro {{ meter().unit }}</label>
+        <div class="df-input-wrap">
+          <input
+            id="tf-price"
+            class="df-input"
+            type="number"
+            formControlName="pricePerUnit"
+            placeholder="0.30"
+          />
+          <span class="df-input-suffix">€</span>
+        </div>
+        @if (form.get('pricePerUnit')?.touched && form.get('pricePerUnit')?.hasError('required')) {
+          <span class="df-error">Preis ist ein Pflichtfeld.</span>
+        }
+      </div>
+      <div class="df-field form-field--full">
+        <label for="tf-emission">Emissionspreis / CO₂-Bepreisung pro {{ meter().unit }}</label>
+        <div class="df-input-wrap">
+          <input
+            id="tf-emission"
+            class="df-input"
+            type="number"
+            formControlName="emissionPrice"
+            placeholder="0.005"
+          />
+          <span class="df-input-suffix">€</span>
+        </div>
+      </div>
+      <div class="df-field form-field--full">
+        <label for="tf-basekw">Bereitstellungspreis (Grundgebühr) pro kW/Jahr</label>
+        <div class="df-input-wrap">
+          <input
+            id="tf-basekw"
+            class="df-input"
+            type="number"
+            formControlName="basePricePerKw"
+            placeholder="51.54"
+          />
+          <span class="df-input-suffix">€</span>
+        </div>
+      </div>
+      <div class="df-field form-field--full">
+        <label for="tf-load">Anschlussleistung</label>
+        <div class="df-input-wrap">
+          <input
+            id="tf-load"
+            class="df-input"
+            type="number"
+            formControlName="connectedLoadKw"
+            placeholder="10"
+          />
+          <span class="df-input-suffix">kW</span>
+        </div>
+      </div>
     } @else {
       <div class="form-row form-row--2">
-        <mat-form-field appearance="outline">
-          <mat-label>Preis pro {{ meter().unit }}</mat-label>
-          <input matInput type="number" formControlName="pricePerUnit" placeholder="0.30" />
-          <span matSuffix>€</span>
-          <mat-error>
-            @if (form.get('pricePerUnit')?.hasError('required')) {
-              Preis ist ein Pflichtfeld.
-            }
-          </mat-error>
-        </mat-form-field>
+        <div class="df-field">
+          <label for="tf-price2">Preis pro {{ meter().unit }}</label>
+          <div class="df-input-wrap">
+            <input
+              id="tf-price2"
+              class="df-input"
+              type="number"
+              formControlName="pricePerUnit"
+              placeholder="0.30"
+            />
+            <span class="df-input-suffix">€</span>
+          </div>
+          @if (
+            form.get('pricePerUnit')?.touched && form.get('pricePerUnit')?.hasError('required')
+          ) {
+            <span class="df-error">Preis ist ein Pflichtfeld.</span>
+          }
+        </div>
         @if (!isLinkedGardenWater()) {
-          <mat-form-field appearance="outline">
-            <mat-label>Grundgebühr pro Monat</mat-label>
-            <input matInput type="number" formControlName="baseCharge" placeholder="12.50" />
-            <span matSuffix>€</span>
-            <mat-error>
-              @if (form.get('baseCharge')?.hasError('required')) {
-                Grundgebühr ist ein Pflichtfeld.
-              }
-            </mat-error>
-          </mat-form-field>
+          <div class="df-field">
+            <label for="tf-base">Grundgebühr pro Monat</label>
+            <div class="df-input-wrap">
+              <input
+                id="tf-base"
+                class="df-input"
+                type="number"
+                formControlName="baseCharge"
+                placeholder="12.50"
+              />
+              <span class="df-input-suffix">€</span>
+            </div>
+            @if (form.get('baseCharge')?.touched && form.get('baseCharge')?.hasError('required')) {
+              <span class="df-error">Grundgebühr ist ein Pflichtfeld.</span>
+            }
+          </div>
         }
       </div>
       @if (isWater()) {
-        <mat-form-field appearance="outline" class="form-field--full">
-          <mat-label>Abwassergebühr pro m³</mat-label>
-          <input matInput type="number" formControlName="wastewaterPrice" placeholder="2.50" />
-          <span matSuffix>€</span>
-        </mat-form-field>
+        <div class="df-field form-field--full">
+          <label for="tf-waste">Abwassergebühr pro m³</label>
+          <div class="df-input-wrap">
+            <input
+              id="tf-waste"
+              class="df-input"
+              type="number"
+              formControlName="wastewaterPrice"
+              placeholder="2.50"
+            />
+            <span class="df-input-suffix">€</span>
+          </div>
+        </div>
       }
     }
 
-    <mat-form-field appearance="outline" class="form-field--full">
-      <mat-label>Gültig ab</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="validFrom" />
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-      <mat-error>
-        @if (form.get('validFrom')?.hasError('required')) {
-          Datum ist ein Pflichtfeld.
-        }
-      </mat-error>
-    </mat-form-field>
+    <div class="df-field form-field--full">
+      <label for="tf-validfrom">Gültig ab</label>
+      <input id="tf-validfrom" class="df-input" type="date" formControlName="validFrom" />
+      @if (form.get('validFrom')?.touched && form.get('validFrom')?.hasError('required')) {
+        <span class="df-error">Datum ist ein Pflichtfeld.</span>
+      }
+    </div>
 
     @if (isGas()) {
-      <mat-divider class="section-divider"></mat-divider>
+      <hr class="section-divider" />
       <h3 class="section-title">Gas Umrechnung</h3>
       <div class="form-row form-row--2">
-        <mat-form-field appearance="outline">
-          <mat-label>Brennwert</mat-label>
-          <input matInput type="number" formControlName="calorificValue" placeholder="10.55" />
-          <span matSuffix>kWh/m³</span>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Zustandszahl</mat-label>
-          <input matInput type="number" formControlName="zNumber" placeholder="0.9672" />
-        </mat-form-field>
+        <div class="df-field">
+          <label for="tf-calorific">Brennwert</label>
+          <div class="df-input-wrap">
+            <input
+              id="tf-calorific"
+              class="df-input"
+              type="number"
+              formControlName="calorificValue"
+              placeholder="10.55"
+            />
+            <span class="df-input-suffix">kWh/m³</span>
+          </div>
+        </div>
+        <div class="df-field">
+          <label for="tf-znumber">Zustandszahl</label>
+          <input
+            id="tf-znumber"
+            class="df-input"
+            type="number"
+            formControlName="zNumber"
+            placeholder="0.9672"
+          />
+        </div>
       </div>
     }
 
-    <mat-form-field appearance="outline" class="form-field--full">
-      <mat-label>Notiz (optional)</mat-label>
+    <div class="df-field form-field--full">
+      <label for="tf-note">Notiz (optional)</label>
       <textarea
-        matInput
+        id="tf-note"
+        class="df-textarea"
         formControlName="note"
         placeholder="z.B. Preisanpassung zum Jahreswechsel"
       ></textarea>
-    </mat-form-field>
+    </div>
   </div>
 
   <div class="dialog-actions">
-    <button mat-button type="button" (click)="cancel()">Abbrechen</button>
-    <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+    <button type="button" class="df-btn df-btn-secondary" (click)="cancel()">Abbrechen</button>
+    <button type="submit" class="df-btn df-btn-primary" [disabled]="form.invalid">
       <mat-icon>check</mat-icon>
       {{ isEdit() ? 'Änderungen speichern' : 'Tarif anlegen' }}
     </button>

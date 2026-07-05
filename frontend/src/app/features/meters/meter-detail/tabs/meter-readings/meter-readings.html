@@ -28,9 +28,9 @@
               <div class="reading-card-actions">
                 @if (reading.photo) {
                   <button
-                    mat-icon-button
+                    type="button"
+                    class="photo-btn df-icon-btn df-icon-btn--sm"
                     (click)="showPhoto(reading.photo!)"
-                    class="photo-btn"
                     [attr.aria-label]="
                       'Foto vom ' + (reading.date | date: 'dd.MM.yyyy') + ' anzeigen'
                     "
@@ -39,7 +39,8 @@
                   </button>
                 }
                 <button
-                  mat-icon-button
+                  type="button"
+                  class="df-icon-btn df-icon-btn--sm"
                   [routerLink]="['/readings', reading.id, 'edit']"
                   [attr.aria-label]="
                     'Ablesung vom ' + (reading.date | date: 'dd.MM.yyyy') + ' bearbeiten'
@@ -48,9 +49,9 @@
                   <mat-icon>edit</mat-icon>
                 </button>
                 <button
-                  mat-icon-button
+                  type="button"
+                  class="delete-btn df-icon-btn df-icon-btn--sm"
                   (click)="deleteReading(reading.id)"
-                  class="delete-btn"
                   [attr.aria-label]="
                     'Ablesung vom ' + (reading.date | date: 'dd.MM.yyyy') + ' löschen'
                   "
@@ -102,8 +103,8 @@
   <div class="photo-modal-backdrop" (click)="closePhoto()">
     <div class="photo-modal" (click)="$event.stopPropagation()">
       <button
-        mat-icon-button
-        class="photo-modal-close"
+        type="button"
+        class="photo-modal-close df-icon-btn"
         (click)="closePhoto()"
         aria-label="Foto schließen"
         i18n-aria-label="@@meterReadings.photo.close"

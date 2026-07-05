@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 export interface ConfirmDialogData {
@@ -11,17 +10,22 @@ export interface ConfirmDialogData {
 
 @Component({
   selector: 'app-confirm-dialog',
-  imports: [MatButtonModule, MatDialogModule],
+  imports: [MatDialogModule],
   template: `
     <h2 mat-dialog-title>{{ data.title }}</h2>
     <mat-dialog-content>
       <p>{{ data.message }}</p>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-      <button mat-button (click)="dialogRef.close(false)">
+      <button type="button" class="df-btn df-btn-secondary" (click)="dialogRef.close(false)">
         {{ data.cancelLabel ?? 'Abbrechen' }}
       </button>
-      <button mat-flat-button color="warn" cdkFocusInitial (click)="dialogRef.close(true)">
+      <button
+        type="button"
+        class="df-btn df-btn-danger"
+        cdkFocusInitial
+        (click)="dialogRef.close(true)"
+      >
         {{ data.confirmLabel ?? 'Bestätigen' }}
       </button>
     </mat-dialog-actions>

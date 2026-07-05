@@ -4,7 +4,7 @@
       <h1 class="page-title" i18n="@@meters.title">Zähler</h1>
       <p class="page-subtitle" i18n="@@meters.subtitle">Verwalte deine Energie- und Wasserzähler</p>
     </div>
-    <button mat-flat-button color="primary" routerLink="new" class="action-btn">
+    <button type="button" class="action-btn df-btn df-btn-primary" routerLink="new">
       <mat-icon>add</mat-icon>
       <span i18n="@@meters.newMeter">Neuer Zähler</span>
     </button>
@@ -17,7 +17,7 @@
       </div>
       <h3 i18n="@@meters.empty.title">Noch keine Zähler</h3>
       <p i18n="@@meters.empty.desc">Füge deinen ersten Zähler hinzu, um Ablesungen zu erfassen.</p>
-      <button mat-flat-button color="primary" routerLink="new">
+      <button type="button" class="df-btn df-btn-primary" routerLink="new">
         <span i18n="@@meters.empty.btn">Ersten Zähler hinzufügen</span>
       </button>
     </div>
@@ -98,9 +98,9 @@
           ></mat-slide-toggle>
 
           <button
-            mat-icon-button
+            type="button"
+            class="menu-btn df-icon-btn"
             [matMenuTriggerFor]="meterMenu"
-            class="menu-btn"
             (click)="$event.stopPropagation()"
           >
             <mat-icon>more_vert</mat-icon>

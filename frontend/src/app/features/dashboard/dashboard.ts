@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatRippleModule } from '@angular/material/core';
@@ -15,7 +14,6 @@ import { ReadingsList } from '../../shared/components/readings-list/readings-lis
     CommonModule,
     RouterModule,
     MatCardModule,
-    MatButtonModule,
     MatIconModule,
     MatChipsModule,
     MatRippleModule,

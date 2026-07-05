@@ -4,7 +4,7 @@
       <h1 class="page-title" i18n="@@readings.title">Ablesungen</h1>
       <p class="page-subtitle" i18n="@@readings.subtitle">Alle erfassten Zählerstände</p>
     </div>
-    <button mat-flat-button color="primary" routerLink="new" class="action-btn">
+    <button type="button" class="action-btn df-btn df-btn-primary" routerLink="new">
       <mat-icon>add</mat-icon>
       <span i18n="@@readings.addBtn">Ablesung erfassen</span>
     </button>
@@ -12,15 +12,20 @@
 
   <!-- Filter -->
   <div class="filter-bar">
-    <mat-form-field appearance="outline" class="filter-select">
-      <mat-label i18n="@@readings.filter.label">Zähler filtern</mat-label>
-      <mat-select [value]="filterMeterId()" (selectionChange)="filterMeterId.set($event.value)">
-        <mat-option value="" i18n="@@readings.filter.all">Alle Zähler</mat-option>
+    <div class="df-field filter-select">
+      <label for="rd-filter" i18n="@@readings.filter.label">Zähler filtern</label>
+      <select
+        id="rd-filter"
+        class="df-select"
+        [value]="filterMeterId()"
+        (change)="filterMeterId.set($any($event.target).value)"
+      >
+        <option value="" i18n="@@readings.filter.all">Alle Zähler</option>
         @for (meter of meters(); track meter.id) {
-          <mat-option [value]="meter.id">{{ meter.name }}</mat-option>
+          <option [value]="meter.id">{{ meter.name }}</option>
         }
-      </mat-select>
-    </mat-form-field>
+      </select>
+    </div>
   </div>
 
   @if (filteredReadings().length === 0) {
@@ -28,7 +33,7 @@
       <mat-icon>history</mat-icon>
       <h3 i18n="@@readings.empty.title">Keine Ablesungen gefunden</h3>
       <p i18n="@@readings.empty.desc">Füge deine erste Ablesung hinzu.</p>
-      <button mat-flat-button color="primary" routerLink="new">
+      <button type="button" class="df-btn df-btn-primary" routerLink="new">
         <span i18n="@@readings.empty.btn">Ablesung erfassen</span>
       </button>
     </div>

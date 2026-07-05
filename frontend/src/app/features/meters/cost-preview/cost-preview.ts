@@ -1,22 +1,12 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { MeterConfig } from '../../../core/models/energy.models';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-cost-preview',
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-  ],
+  imports: [CommonModule, FormsModule, MatIconModule],
   templateUrl: './cost-preview.html',
   styleUrl: './cost-preview.scss',
 })

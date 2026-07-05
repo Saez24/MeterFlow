@@ -119,8 +119,20 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button (click)="dialogRef.close(0)" i18n="@@csv.cancel">Abbrechen</button>
-  <button mat-flat-button [disabled]="!canImport()" (click)="import()" class="import-btn">
+  <button
+    type="button"
+    class="df-btn df-btn-secondary"
+    (click)="dialogRef.close(0)"
+    i18n="@@csv.cancel"
+  >
+    Abbrechen
+  </button>
+  <button
+    type="button"
+    class="import-btn df-btn df-btn-primary"
+    [disabled]="!canImport()"
+    (click)="import()"
+  >
     <mat-icon>file_download</mat-icon>
     <ng-container i18n="@@csv.importBtn"
       >{{ importableCount() }} Ablesungen importieren</ng-container

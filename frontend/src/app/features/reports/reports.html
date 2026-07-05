@@ -7,20 +7,22 @@
       </p>
     </div>
     <div class="page-header__actions">
-      <mat-form-field appearance="outline" class="year-select">
-        <mat-label i18n="@@reports.yearLabel">Jahr</mat-label>
-        <mat-select
+      <div class="df-field year-select">
+        <label for="rp-year" i18n="@@reports.yearLabel">Jahr</label>
+        <select
+          id="rp-year"
+          class="df-select"
           [value]="state.selectedYear()"
-          (selectionChange)="state.selectedYear.set($event.value)"
+          (change)="state.selectedYear.set(+$any($event.target).value)"
         >
           @for (y of state.availableYears(); track y) {
-            <mat-option [value]="y">{{ y }}</mat-option>
+            <option [value]="y">{{ y }}</option>
           }
-        </mat-select>
-      </mat-form-field>
+        </select>
+      </div>
       <button
-        mat-flat-button
-        class="pdf-btn"
+        type="button"
+        class="pdf-btn df-btn df-btn-primary"
         (click)="exportPdf()"
         aria-label="PDF exportieren"
         i18n-aria-label="@@reports.pdfBtn.aria"

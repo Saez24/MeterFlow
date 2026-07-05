@@ -1,6 +1,6 @@
 <div class="page-container">
   <div class="page-header">
-    <button mat-icon-button (click)="goBack()" class="back-btn">
+    <button type="button" class="back-btn df-icon-btn" (click)="goBack()">
       <mat-icon>arrow_back</mat-icon>
     </button>
     <div>
@@ -41,44 +41,46 @@
       </div>
 
       <div class="form-row form-row--2">
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label i18n="@@meterForm.field.name">Name des Zählers</mat-label>
+        <div class="df-field form-field">
+          <label for="mf-name" i18n="@@meterForm.field.name">Name des Zählers</label>
           <input
-            matInput
+            id="mf-name"
+            class="df-input"
             formControlName="name"
             placeholder="z.B. Haushaltsstrom"
             i18n-placeholder="@@meterForm.placeholder.name"
           />
-          <mat-icon matSuffix>label</mat-icon>
-          <mat-error i18n="@@meterForm.error.name">Bitte einen Namen eingeben</mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label i18n="@@meterForm.field.provider">Anbieter</mat-label>
+          @if (form.get('name')?.touched && form.get('name')?.invalid) {
+            <span class="df-error" i18n="@@meterForm.error.name">Bitte einen Namen eingeben</span>
+          }
+        </div>
+        <div class="df-field form-field">
+          <label for="mf-provider" i18n="@@meterForm.field.provider">Anbieter</label>
           <input
-            matInput
+            id="mf-provider"
+            class="df-input"
             formControlName="provider"
             placeholder="z.B. Stadtwerke"
             i18n-placeholder="@@meterForm.placeholder.provider"
           />
-          <mat-icon matSuffix>business</mat-icon>
-        </mat-form-field>
+        </div>
       </div>
 
-      <mat-form-field appearance="outline" class="form-field">
-        <mat-label i18n="@@meterForm.field.meterNumber">Zählernummer</mat-label>
+      <div class="df-field form-field">
+        <label for="mf-number" i18n="@@meterForm.field.meterNumber">Zählernummer</label>
         <input
-          matInput
+          id="mf-number"
+          class="df-input"
           formControlName="meterNumber"
           placeholder="z.B. 12345678"
           i18n-placeholder="@@meterForm.placeholder.meterNumber"
         />
-        <mat-icon matSuffix>tag</mat-icon>
-      </mat-form-field>
+      </div>
     </div>
 
     <!-- Gartenwasser -->
     @if (isGardenWater()) {
-      <mat-divider class="section-divider"></mat-divider>
+      <hr class="section-divider" />
       <div class="form-section garden-section">
         <div class="garden-header">
           <h3 class="section-title">
@@ -92,17 +94,18 @@
         </p>
 
         @if (waterMeters().length > 0) {
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label i18n="@@meterForm.garden.mainMeter">Hauptwasserzähler</mat-label>
-            <mat-select formControlName="linkedWaterMeterId">
-              <mat-option value="" i18n="@@meterForm.garden.noLink">Keine Verknüpfung</mat-option>
+          <div class="df-field form-field">
+            <label for="mf-mainmeter" i18n="@@meterForm.garden.mainMeter">Hauptwasserzähler</label>
+            <select id="mf-mainmeter" class="df-select" formControlName="linkedWaterMeterId">
+              <option value="" i18n="@@meterForm.garden.noLink">Keine Verknüpfung</option>
               @for (wm of waterMeters(); track wm.id) {
-                <mat-option [value]="wm.id">{{ wm.name }}</mat-option>
+                <option [value]="wm.id">{{ wm.name }}</option>
               }
-            </mat-select>
-            <mat-icon matSuffix>water_drop</mat-icon>
-            <mat-hint i18n="@@meterForm.garden.hint">Abwasser wird automatisch berechnet</mat-hint>
-          </mat-form-field>
+            </select>
+            <span class="df-hint" i18n="@@meterForm.garden.hint"
+              >Abwasser wird automatisch berechnet</span
+            >
+          </div>
 
           @if (form.get('linkedWaterMeterId')?.value) {
             <div class="link-preview">
@@ -125,7 +128,7 @@
 
     <!-- Gas -->
     @if (isGas()) {
-      <mat-divider class="section-divider"></mat-divider>
+      <hr class="section-divider" />
       <div class="form-section gas-section">
         <div class="gas-header">
           <h3 class="section-title">
@@ -136,17 +139,32 @@
         </div>
 
         <div class="form-row form-row--2">
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label i18n="@@meterForm.gas.calorificValue">Brennwert (Hs)</mat-label>
-            <input matInput type="number" formControlName="calorificValue" step="0.01" min="0" />
-            <span matSuffix>kWh/m³</span>
-            <mat-hint i18n="@@meterForm.gas.calorificHint">Steht auf deiner Gasrechnung</mat-hint>
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label i18n="@@meterForm.gas.zNumber">Z-Zahl (Zustandszahl)</mat-label>
-            <input matInput type="number" formControlName="zNumber" step="0.0001" min="0" />
-            <mat-hint i18n="@@meterForm.gas.zNumberHint">Üblicherweise 0.90–1.10</mat-hint>
-          </mat-form-field>
+          <div class="df-field form-field">
+            <label for="mf-hs" i18n="@@meterForm.gas.calorificValue">Brennwert Hs (kWh/m³)</label>
+            <input
+              id="mf-hs"
+              class="df-input"
+              type="number"
+              formControlName="calorificValue"
+              step="0.01"
+              min="0"
+            />
+            <span class="df-hint" i18n="@@meterForm.gas.calorificHint"
+              >Steht auf deiner Gasrechnung</span
+            >
+          </div>
+          <div class="df-field form-field">
+            <label for="mf-z" i18n="@@meterForm.gas.zNumber">Z-Zahl (Zustandszahl)</label>
+            <input
+              id="mf-z"
+              class="df-input"
+              type="number"
+              formControlName="zNumber"
+              step="0.0001"
+              min="0"
+            />
+            <span class="df-hint" i18n="@@meterForm.gas.zNumberHint">Üblicherweise 0.90–1.10</span>
+          </div>
         </div>
 
         <div class="gas-preview">
@@ -159,11 +177,11 @@
     }
 
     <!-- Notizen -->
-    <mat-divider class="section-divider"></mat-divider>
+    <hr class="section-divider" />
 
     <!-- Fernwärme -->
     @if (isFernwarme()) {
-      <mat-divider class="section-divider"></mat-divider>
+      <hr class="section-divider" />
       <div class="form-section">
         <div class="gas-header">
           <h3 class="section-title">
@@ -174,10 +192,13 @@
             >Anschlussleistung laut Versorgungsvertrag</span
           >
         </div>
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label i18n="@@meterForm.fernwarme.connectedLoad">Bereitstellungsleistung</mat-label>
+        <div class="df-field form-field">
+          <label for="mf-load" i18n="@@meterForm.fernwarme.connectedLoad"
+            >Bereitstellungsleistung (kW)</label
+          >
           <input
-            matInput
+            id="mf-load"
+            class="df-input"
             type="number"
             formControlName="connectedLoadKw"
             step="0.01"
@@ -185,34 +206,32 @@
             placeholder="7.99"
             i18n-placeholder="@@meterForm.fernwarme.connectedLoadPlaceholder"
           />
-          <span matSuffix>kW</span>
-          <mat-hint i18n="@@meterForm.fernwarme.connectedLoadHint"
-            >Festgeschriebene Leistung je Zähler</mat-hint
+          <span class="df-hint" i18n="@@meterForm.fernwarme.connectedLoadHint"
+            >Festgeschriebene Leistung je Zähler</span
           >
-        </mat-form-field>
+        </div>
       </div>
     }
 
     <div class="form-section">
       <h3 class="section-title" i18n="@@meterForm.notes.title">Notizen</h3>
-      <mat-form-field appearance="outline" class="form-field form-field--full">
-        <mat-label i18n="@@meterForm.notes.label">Optionale Notizen</mat-label>
-        <textarea matInput formControlName="notes" rows="3"></textarea>
-      </mat-form-field>
+      <div class="df-field form-field form-field--full">
+        <label for="mf-notes" i18n="@@meterForm.notes.label">Optionale Notizen</label>
+        <textarea id="mf-notes" class="df-textarea" formControlName="notes" rows="3"></textarea>
+      </div>
     </div>
 
     <!-- Aktionen -->
     <div class="form-actions">
-      <button type="button" mat-button (click)="goBack()" i18n="@@meterForm.cancel">
+      <button
+        type="button"
+        class="df-btn df-btn-secondary"
+        (click)="goBack()"
+        i18n="@@meterForm.cancel"
+      >
         Abbrechen
       </button>
-      <button
-        type="submit"
-        mat-flat-button
-        color="primary"
-        [disabled]="form.invalid"
-        class="save-btn"
-      >
+      <button type="submit" class="df-btn df-btn-primary save-btn" [disabled]="form.invalid">
         <mat-icon>{{ isEdit() ? 'save' : 'add' }}</mat-icon>
         @if (isEdit()) {
           <span i18n="@@meterForm.save">Speichern</span>
