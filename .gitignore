@@ -38,7 +38,9 @@ backend/allure-results/
 .coverage
 
 # ── Docker / data ─────────────────────────────────────────────────────────────
-data/
+# Anchored to repo root — a bare `data/` would also ignore backend/tests/data/
+# (test fixtures), which broke mypy/pytest in CI (module tests.data.generator).
+/data/
 *.sqlite3
 
 # ── Editor / OS ───────────────────────────────────────────────────────────────

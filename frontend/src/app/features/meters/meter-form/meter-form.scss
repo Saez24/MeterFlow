@@ -98,6 +98,7 @@
 .form-row--2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  padding-bottom: 20px;
 }
 
 @media (max-width: 600px) {
