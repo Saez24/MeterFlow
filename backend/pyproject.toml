@@ -11,6 +11,7 @@ py-modules = []
 name = "meterflow-backend"
 version = "0.1.0"
 description = "MeterFlow Django + DRF backend (replaces the FastAPI/Supabase stack)"
+license = "MIT"
 requires-python = ">=3.12"
 dependencies = [
     "django",
