@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
 
 import allure
@@ -60,15 +60,17 @@ class TestStats(BaseTest):
     def test_dashboard_aggregates_current_year(
         self, auth_api: ApiFacade, data: DataGenerator
     ) -> None:
-        # Arrange — a reading in the current month (2026-07) plus its predecessor
+        # Arrange — a reading in the current month plus its predecessor 30 days
+        # earlier (kept relative to "today" so the test doesn't expire).
+        today = date.today()
         self._seed_meter_with_readings(
             auth_api,
             data,
-            readings=[("1000", date(2026, 6, 1)), ("1200", date(2026, 7, 1))],
+            readings=[("1000", today - timedelta(days=30)), ("1200", today)],
         )
         # Act
         body = self.assert_status(auth_api.stats.dashboard(), 200)
-        # Assert — 200 kWh * 0.40 + 9.00 * 30/30 = 89.00 (Jun 1 -> Jul 1 is 30 days)
+        # Assert — 200 kWh * 0.40 + 9.00 * 30/30 = 89.00 (30-day gap)
         assert "budgetAlerts" in body
         assert isinstance(body["currentYearCost"], str)
         assert Decimal(body["currentYearCost"]) == Decimal("89.00")
@@ -78,11 +80,12 @@ class TestStats(BaseTest):
     def test_budget_alert_triggers_when_over_limit(
         self, auth_api: ApiFacade, data: DataGenerator
     ) -> None:
-        # Arrange — monthly limit 50 €, current-month cost ~89.30 € -> critical
+        # Arrange — monthly limit 50 €, current-month cost ~89.00 € -> critical
+        today = date.today()
         self._seed_meter_with_readings(
             auth_api,
             data,
-            readings=[("1000", date(2026, 6, 1)), ("1200", date(2026, 7, 1))],
+            readings=[("1000", today - timedelta(days=30)), ("1200", today)],
             budget={"monthlyLimit": "50", "alertAt": "80"},
         )
         # Act
