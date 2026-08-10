@@ -79,7 +79,8 @@ class ReadingViewSet(viewsets.ModelViewSet[Reading]):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        meter_id = request.data.get("meter_id") if isinstance(request.data, dict) else None
+        raw_data = request.data
+        meter_id = raw_data.get("meter_id") if isinstance(raw_data, dict) else None
         if not meter_id:
             return Response(
                 {"detail": "meter_id is required"},
