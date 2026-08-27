@@ -15,12 +15,15 @@ WORKDIR /app
 
 # Install pinned runtime deps from the lockfile (reproducible + scannable).
 # pyproject keeps open ranges; requirements.lock pins the resolved versions.
-# pip/setuptools bump first: the base image's preinstalled pip vendors an
-# outdated msgpack/setuptools that Trivy flags even though we never depend on
-# them directly.
-RUN pip install --no-cache-dir --upgrade pip setuptools
 COPY backend/requirements.lock ./
-RUN pip install --no-cache-dir -r requirements.lock
+RUN pip install --no-cache-dir --upgrade pip setuptools && \
+    pip install --no-cache-dir -r requirements.lock && \
+    # pip is a build-time tool only — Django/gunicorn never import it — and its
+    # own wheel vendors an outdated msgpack that Trivy flags regardless of the
+    # pip version installed. ensurepip's bundled setuptools wheel is likewise
+    # dead weight, never invoked once deps are already installed.
+    pip uninstall -y pip && \
+    rm -rf /usr/local/lib/python3.13/ensurepip
 
 COPY backend/ ./
 
