@@ -12,6 +12,7 @@ RUN npm run build -- --configuration=production
 
 # ── Stage 2: nginx ────────────────────────────────────────────────────────────
 FROM nginx:1-alpine
+RUN apk update && apk upgrade --no-cache
 RUN nginx -V 2>&1 | grep -q http_sub_module || (echo "nginx lacks sub_module" && exit 1)
 
 COPY --from=frontend-builder /app/dist/MeterFlow/browser /usr/share/nginx/html
