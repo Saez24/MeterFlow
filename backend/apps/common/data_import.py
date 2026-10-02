@@ -97,7 +97,7 @@ def _fix_encoding(text: str) -> str:
     """Repair legacy latin-1/utf-8 mojibake in imported units."""
     try:
         return text.encode("latin-1").decode("utf-8")
-    except (UnicodeEncodeError, UnicodeDecodeError):
+    except UnicodeEncodeError, UnicodeDecodeError:
         return text
 
 

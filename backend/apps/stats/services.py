@@ -112,7 +112,7 @@ def _decimal_or_none(raw: Any) -> Decimal | None:
         return None
     try:
         return Decimal(str(raw))
-    except (ArithmeticError, ValueError, TypeError):
+    except ArithmeticError, ValueError, TypeError:
         return None
 
 

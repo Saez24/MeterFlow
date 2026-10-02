@@ -51,7 +51,7 @@ und ein Django/DRF-Backend als Monorepo, **getrennt oder gemeinsam** deploybar.
   Chart.js · Tesseract.js · jsPDF · PapaParse
 - **Backend:** Django 6 + Django REST Framework · PostgreSQL (psycopg 3) · Redis · Gunicorn ·
   Argon2 · WhiteNoise
-- **Laufzeiten:** Python 3.13 · Node 24 · nginx
+- **Laufzeiten:** Python 3.14 · Node 24 · nginx
 
 ## Struktur
 

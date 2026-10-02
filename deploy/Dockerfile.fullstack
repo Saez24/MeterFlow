@@ -11,8 +11,8 @@ COPY frontend/ .
 RUN npm run build -- --configuration=production
 
 # ── Stage 2: Runtime ──────────────────────────────────────────────────────────
-# 3.13 is verified against our deps; bump to 3.14-slim once all wheels ship.
-FROM python:3.13-slim
+# Python 3.14 — all binary deps ship cp314 wheels (checked 2026-10-02).
+FROM python:3.14-slim
 
 RUN apt-get update && \
     apt-get upgrade -y && \
@@ -35,7 +35,7 @@ RUN pip install --no-cache-dir --upgrade pip setuptools && \
     # pip version installed. ensurepip's bundled setuptools wheel is likewise
     # dead weight, never invoked once deps are already installed.
     pip uninstall -y pip && \
-    rm -rf /usr/local/lib/python3.13/ensurepip
+    rm -rf /usr/local/lib/python3.14/ensurepip
 
 # Django project source.
 COPY backend/ ./

@@ -33,7 +33,7 @@ class HttpClient:
         else:
             try:
                 body = json.dumps(response.json(), indent=2, ensure_ascii=False)  # type: ignore[attr-defined]
-            except (ValueError, TypeError):
+            except ValueError, TypeError:
                 body = response.content.decode(errors="replace")
         allure.attach(
             f"{method} {path} -> {response.status_code}\n{body}",

@@ -42,7 +42,7 @@ _MAX_PHOTO_BYTES = 10 * 1024 * 1024  # 10 MiB
 def _clamp_limit(raw: str | None) -> int:
     try:
         value = int(raw) if raw is not None else _DEFAULT_LIMIT
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         return _DEFAULT_LIMIT
     return max(1, min(value, _MAX_LIMIT))
 
@@ -198,7 +198,7 @@ class ReadingViewSet(viewsets.ModelViewSet[Reading]):
             return Response({"detail": "No photo"}, status=status.HTTP_404_NOT_FOUND)
         try:
             handle = default_storage.open(reading.photo, "rb")
-        except (FileNotFoundError, SuspiciousFileOperation):
+        except FileNotFoundError, SuspiciousFileOperation:
             # SuspiciousFileOperation guards against a malformed/traversal key on
             # any legacy row — treat as "no photo" rather than a 500.
             return Response({"detail": "No photo"}, status=status.HTTP_404_NOT_FOUND)

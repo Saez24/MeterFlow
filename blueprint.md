@@ -368,3 +368,15 @@ Deployment (3 Images + Compose), CI/CD (Trivy-Gate), Security-Gate bestanden.
   (Runtime-i18n/`LocaleService` existiert noch nicht → Altbestand: 10 Templates mit `i18n`-Attributen
   offen), Gartenwasser-Regel in **`apps/meters/services.py`** (Service-Layer). Security-Re-Check
   sauber (bandit clean). Backend 60 Tests (meters-Coverage ≥ 96 %), Frontend 83 Vitest, Build grün.
+- (Deps) Backend-Pakete auf latest: lokale `backend/.venv` neu gebaut (alte war von anderem Rechner
+  kopiert, Python 3.13 fehlte hier) mit **Python 3.14**; `requirements.lock` neu aufgelöst für das
+  Docker-Python 3.13 (u.a. Django 6.1.1, DRF 3.18.1, psycopg 3.3.6, gunicorn 26.2.0). Bewusst
+  zurückgehalten durch Upstream-Constraints: mypy 2.3.x (django-stubs), pydantic-core 2.46.5 (pydantic).
+  check/migrations/60 Tests/ruff/black/bandit grün, pip-audit ohne Befund.
+- (Runtime) **Python 3.13 → 3.14** (CLAUDE.md-Vorgabe): `python:3.14-slim` in `Dockerfile.backend`
+  + `Dockerfile.fullstack`, CI `setup-python` 3.14, `pyproject` (`requires-python >=3.14`,
+  black/ruff/mypy-Target 3.14), README. Vorab geprüft: alle Binär-Deps haben cp314-Wheels
+  (cffi, psycopg-binary, pydantic-core, argon2-cffi-bindings), `djangorestframework-camel-case` ist
+  reines Python (sdist). `requirements.lock` für 3.14 aufgelöst (identische Versionen). Black hat 4
+  Dateien auf PEP-758-`except A, B:` umformatiert. 60 Tests/ruff/black/bandit/pip-audit grün.
+  Frontend gegen Angular 22.2.1 erneut verifiziert: 83 Vitest + Build grün.
