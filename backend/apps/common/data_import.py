@@ -27,6 +27,7 @@ from rest_framework.views import APIView
 from apps.accounts.models import User
 from apps.common.auth import request_user
 from apps.meters.models import Meter
+from apps.meters.serializers import AdvancePaymentsField
 from apps.readings.models import Reading
 
 _MAX_METERS = 10000
@@ -54,6 +55,7 @@ class ImportMeterSerializer(serializers.Serializer[dict[str, Any]]):
     linked_water_meter_id = serializers.UUIDField(required=False, allow_null=True)
     tariff_history = serializers.ListField(default=list)
     budget = serializers.DictField(required=False, allow_null=True)
+    advance_payments = AdvancePaymentsField(default=list)
 
 
 class ImportReadingSerializer(serializers.Serializer[dict[str, Any]]):
@@ -149,6 +151,7 @@ def _import_meters(
             linked_water_meter_id=None,
             tariff_history=m.get("tariff_history", []),
             budget=m.get("budget"),
+            advance_payments=m.get("advance_payments", []),
         )
         if original_id:
             id_map[original_id] = db_id

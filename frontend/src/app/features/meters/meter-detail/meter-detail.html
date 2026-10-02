@@ -130,10 +130,12 @@
         <mat-icon class="tab-icons">receipt_long</mat-icon>
         <span class="tab-names">Tarife</span>
       </a>
-      <a class="detail-nav-link" routerLink="costs" routerLinkActive="active">
-        <mat-icon class="tab-icons">price_check</mat-icon>
-        <span class="tab-names">Kostenvorschau</span>
-      </a>
+      @if (showCostPreview()) {
+        <a class="detail-nav-link" routerLink="costs" routerLinkActive="active">
+          <mat-icon class="tab-icons">price_check</mat-icon>
+          <span class="tab-names">Kostenvorschau</span>
+        </a>
+      }
     </nav>
 
     <div class="tab-content">

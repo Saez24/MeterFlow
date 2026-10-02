@@ -274,6 +274,7 @@ export class ApiService {
       notes: (m['notes'] as string) ?? undefined,
       tariffHistory: (m['tariffHistory'] as MeterConfig['tariffHistory']) ?? [],
       budget: (m['budget'] as MeterConfig['budget']) ?? undefined,
+      advancePayments: (m['advancePayments'] as MeterConfig['advancePayments']) ?? [],
     };
   };
 
@@ -313,6 +314,7 @@ export class ApiService {
       'notes',
       'tariffHistory',
       'budget',
+      'advancePayments',
     ];
     for (const key of keys) {
       if (m[key] !== undefined) body[key] = m[key];

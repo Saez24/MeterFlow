@@ -36,6 +36,9 @@ class Meter(OwnedModel):
     )
     tariff_history = models.JSONField(default=list)
     budget = models.JSONField(null=True, blank=True)
+    # Per-year advance payments (Abschläge): [{year, estimated_consumption,
+    # payments: [{month, amount}]}] — shape validated in MeterSerializer.
+    advance_payments = models.JSONField(default=list)
 
     class Meta:
         db_table = "meters"

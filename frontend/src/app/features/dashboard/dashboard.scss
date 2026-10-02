@@ -194,6 +194,36 @@
   }
 }
 
+.summary-card--refund {
+  .summary-icon {
+    background: rgba(52, 199, 89, 0.12);
+    mat-icon {
+      color: #34c759;
+    }
+  }
+  .summary-value {
+    color: #34c759;
+  }
+}
+
+.summary-card--due {
+  .summary-icon {
+    background: rgba(255, 59, 48, 0.1);
+    mat-icon {
+      color: var(--apple-red, #ff3b30);
+    }
+  }
+  .summary-value {
+    color: var(--apple-red, #ff3b30);
+  }
+}
+
+.forecast-detail {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
 .yoy-chip {
   display: inline-flex;
   align-items: center;

@@ -93,6 +93,37 @@
           </div>
         }
       </div>
+      @if (state.advancePaymentForecast(); as forecast) {
+        <div
+          class="summary-card summary-card--forecast"
+          [class.summary-card--refund]="forecast.balance >= 0"
+          [class.summary-card--due]="forecast.balance < 0"
+        >
+          <div class="summary-header">
+            <div class="summary-icon">
+              <mat-icon>{{ forecast.balance >= 0 ? 'savings' : 'request_quote' }}</mat-icon>
+            </div>
+            <span class="summary-label">
+              @if (forecast.balance >= 0) {
+                Geschätzte Erstattung {{ state.selectedYear() }}
+              } @else {
+                Geschätzte Nachzahlung {{ state.selectedYear() }}
+              }
+            </span>
+          </div>
+          <div class="summary-info">
+            <span class="summary-value">{{
+              (forecast.balance < 0 ? -forecast.balance : forecast.balance)
+                | currency: 'EUR' : 'symbol' : '1.2-2'
+            }}</span>
+          </div>
+          <span class="forecast-detail"
+            >Abschläge {{ forecast.totalPayment | currency: 'EUR' : 'symbol' : '1.0-0' }} · Kosten
+            {{ forecast.totalCost | currency: 'EUR' : 'symbol' : '1.0-0' }} · aus
+            {{ forecast.metersIncluded }} von {{ forecast.metersTotal }} Zählern</span
+          >
+        </div>
+      }
       <div class="summary-card summary-card--meters">
         <div class="summary-header">
           <div class="summary-icon">

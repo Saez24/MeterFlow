@@ -8,7 +8,7 @@ import allure
 from rest_framework.response import Response
 
 from tests.api.client import HttpClient
-from tests.models.schemas import MeterCreateRequest
+from tests.models.schemas import MeterCreateRequest, MeterUpdateRequest
 
 
 class MetersAPI:
@@ -32,6 +32,10 @@ class MetersAPI:
     @allure.step("GET /meters/{meter_id}")
     def get(self, meter_id: uuid.UUID) -> Response:
         return self._client.get(f"/meters/{meter_id}/")
+
+    @allure.step("PATCH /meters/{meter_id}")
+    def update(self, meter_id: uuid.UUID, body: MeterUpdateRequest) -> Response:
+        return self._client.patch(f"/meters/{meter_id}/", body)
 
     @allure.step("DELETE /meters/{meter_id}")
     def delete(self, meter_id: uuid.UUID) -> Response:

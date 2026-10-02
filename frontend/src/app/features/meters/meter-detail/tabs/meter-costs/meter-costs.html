@@ -1,3 +1,13 @@
 @if (meter(); as m) {
-  <app-cost-preview [meter]="m"></app-cost-preview>
+  @if (isLinkedGardenWater(m)) {
+    <div class="linked-hint">
+      <mat-icon>link</mat-icon>
+      <span
+        >Die Kosten dieses Gartenwasserzählers werden über den verknüpften Hauptwasserzähler
+        abgerechnet. Eine eigene Kostenvorschau ist daher nicht nötig.</span
+      >
+    </div>
+  } @else {
+    <app-cost-preview [meter]="m"></app-cost-preview>
+  }
 }

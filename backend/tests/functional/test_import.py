@@ -15,6 +15,7 @@ from tests.models.schemas import (
     ImportMeterModel,
     ImportPayloadRequest,
     ImportReadingModel,
+    MeterResponse,
 )
 
 
@@ -55,6 +56,37 @@ class TestImport(BaseTest):
         assert body["metersAdded"] == 1
         assert body["readingsAdded"] == 1
         assert len(self.assert_status(auth_api.meters.list(), 200)) == 1
+
+    @allure.story("Create")
+    @allure.severity(allure.severity_level.NORMAL)
+    def test_import_keeps_advance_payments(
+        self, auth_api: ApiFacade, data: DataGenerator
+    ) -> None:
+        # Arrange
+        payload = _payload(uuid.uuid4())
+        entry = data.advance_payments(count=11)
+        payload.meters[0].advance_payments = [entry]
+        # Act
+        self.assert_status(auth_api.imports.run(payload), 200)
+        # Assert
+        meters = self.assert_status(auth_api.meters.list(), 200)
+        assert MeterResponse.model_validate(meters[0]).advance_payments == [entry]
+
+    @allure.story("Create")
+    @allure.severity(allure.severity_level.NORMAL)
+    def test_import_rejects_invalid_advance_payments(
+        self, auth_api: ApiFacade, data: DataGenerator
+    ) -> None:
+        # Arrange
+        payload = _payload(uuid.uuid4())
+        entry = data.advance_payments(count=2)
+        entry.payments[0].month = 13
+        payload.meters[0].advance_payments = [entry]
+        # Act
+        response = auth_api.imports.run(payload)
+        # Assert
+        self.assert_status(response, 400)
+        assert self.assert_status(auth_api.meters.list(), 200) == []
 
     @allure.story("Linked meters")
     @allure.severity(allure.severity_level.CRITICAL)

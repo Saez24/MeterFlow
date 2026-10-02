@@ -4,6 +4,7 @@ import { ENERGY_META, MeterConfig, ReadingRow, TariffPeriod } from '../models/en
 import { MeterService } from './meter.service';
 import { ReadingService } from './reading.service';
 import { TariffService } from './tariff.service';
+import { sumCostForecast } from '../utils/cost-preview.calc';
 
 @Injectable({ providedIn: 'root' })
 export class DashboardStateService {
@@ -159,6 +160,11 @@ export class DashboardStateService {
 
     return stats.totalCost + baseTotal;
   }
+
+  /** Geschätzte Erstattung (> 0) bzw. Nachzahlung (< 0) aller Zähler im gewählten Jahr. */
+  readonly advancePaymentForecast = computed(() =>
+    sumCostForecast(this.activeMeters(), this.selectedYear()),
+  );
 
   readonly costPreview = computed(() => {
     const year = this.selectedYear();

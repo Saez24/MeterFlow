@@ -8,6 +8,60 @@ from typing import Any, cast
 from rest_framework import serializers
 
 from apps.meters.models import Meter
+from apps.meters.services import is_linked_garden_water
+
+MAX_ADVANCE_PAYMENT_YEARS = 50
+
+
+class AdvancePaymentSerializer(serializers.Serializer[dict[str, Any]]):
+    """One monthly advance payment (Abschlag); ``amount`` null counts as 0 €."""
+
+    month = serializers.IntegerField(min_value=1, max_value=12)
+    amount = serializers.FloatField(
+        min_value=0, max_value=1_000_000, allow_null=True, required=False
+    )
+
+    def validate_amount(self, value: float | None) -> float | None:
+        return None if value is None else round(value, 2)
+
+
+class AdvancePaymentYearSerializer(serializers.Serializer[dict[str, Any]]):
+    """All advance payments of one calendar year plus the estimated consumption."""
+
+    year = serializers.IntegerField(min_value=2000, max_value=2100)
+    estimated_consumption = serializers.FloatField(min_value=0, max_value=1e9)
+    payments = serializers.ListField(
+        child=AdvancePaymentSerializer(), min_length=1, max_length=12
+    )
+
+    def validate_estimated_consumption(self, value: float) -> float:
+        if value <= 0:
+            raise serializers.ValidationError("Muss größer als 0 sein.")
+        return value
+
+    def validate_payments(self, value: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        months = [p["month"] for p in value]
+        if len(months) != len(set(months)):
+            raise serializers.ValidationError("Jeder Monat darf nur einmal vorkommen.")
+        return [
+            {"month": p["month"], "amount": p.get("amount")}
+            for p in sorted(value, key=lambda p: p["month"])
+        ]
+
+
+class AdvancePaymentsField(serializers.ListField):
+    """List of per-year entries: unique years, stored sorted by year."""
+
+    def __init__(self, **kwargs: Any) -> None:
+        kwargs.setdefault("max_length", MAX_ADVANCE_PAYMENT_YEARS)
+        super().__init__(child=AdvancePaymentYearSerializer(), **kwargs)
+
+    def to_internal_value(self, data: Any) -> list[dict[str, Any]]:
+        value: list[dict[str, Any]] = super().to_internal_value(data)
+        years = [entry["year"] for entry in value]
+        if len(years) != len(set(years)):
+            raise serializers.ValidationError("Jedes Jahr darf nur einmal vorkommen.")
+        return sorted(value, key=lambda entry: entry["year"])
 
 
 class MeterSerializer(serializers.ModelSerializer[Meter]):
@@ -18,6 +72,7 @@ class MeterSerializer(serializers.ModelSerializer[Meter]):
         required=False,
         allow_null=True,
     )
+    advance_payments = AdvancePaymentsField(required=False)
 
     class Meta:
         model = Meter
@@ -39,6 +94,7 @@ class MeterSerializer(serializers.ModelSerializer[Meter]):
             "linked_water_meter_id",
             "tariff_history",
             "budget",
+            "advance_payments",
             "created_at",
         ]
         read_only_fields = ["id", "created_at"]
@@ -53,3 +109,22 @@ class MeterSerializer(serializers.ModelSerializer[Meter]):
                 self.fields["linked_water_meter_id"],
             )
             field.queryset = Meter.objects.filter(user=request.user)
+
+    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
+        if attrs.get("advance_payments"):
+            instance = self.instance
+            meter_type = attrs.get("type", instance.type if instance else None)
+            linked = attrs.get(
+                "linked_water_meter",
+                instance.linked_water_meter if instance else None,
+            )
+            if is_linked_garden_water(meter_type, linked):
+                raise serializers.ValidationError(
+                    {
+                        "advance_payments": (
+                            "Ein verknüpfter Gartenwasserzähler hat keine "
+                            "eigenen Abschläge."
+                        )
+                    }
+                )
+        return attrs

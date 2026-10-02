@@ -9,6 +9,8 @@ from decimal import Decimal
 from typing import Any
 
 from tests.models.schemas import (
+    AdvancePaymentModel,
+    AdvancePaymentYearModel,
     Co2FactorUpsertRequest,
     MeterCreateRequest,
     ReadingCreateRequest,
@@ -60,6 +62,24 @@ class DataGenerator:
             meter_number=f"MN-{uuid.uuid4().hex[:6]}",
             tariff_history=tariff,
             budget=budget,
+        )
+
+    @staticmethod
+    def advance_payments(
+        *,
+        year: int = 2026,
+        count: int = 12,
+        amount: float | None = None,
+    ) -> AdvancePaymentYearModel:
+        """``count`` consecutive monthly payments starting in January."""
+        monthly = amount if amount is not None else float(secrets.randbelow(200) + 50)
+        return AdvancePaymentYearModel(
+            year=year,
+            estimated_consumption=float(secrets.randbelow(5000) + 1000),
+            payments=[
+                AdvancePaymentModel(month=month, amount=monthly)
+                for month in range(1, count + 1)
+            ],
         )
 
     @staticmethod

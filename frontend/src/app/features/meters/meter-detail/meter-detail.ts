@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { ENERGY_META, MeterConfig } from '../../../core/models/energy.models';
 import { MeterDetailStateService } from '../../../core/services/meter-detail-state.service';
+import { isLinkedGardenWater } from '../../../core/utils/cost-preview.calc';
 
 @Component({
   selector: 'app-meter-detail',
@@ -20,6 +21,11 @@ export class MeterDetail {
   readonly latestReading = this.state.latestReading;
   readonly activeTariff = this.state.activeTariff;
   readonly lastConsumption = computed(() => this.latestReading()?.consumption ?? null);
+  // Verknüpftes Gartenwasser wird über den Hauptwasserzähler abgerechnet
+  readonly showCostPreview = computed(() => {
+    const m = this.meter();
+    return !!m && !isLinkedGardenWater(m);
+  });
 
   getMeta(type: string) {
     return ENERGY_META[type as keyof typeof ENERGY_META];

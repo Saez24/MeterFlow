@@ -37,6 +37,19 @@ export interface BudgetConfig {
   alertAt: number; // % Schwelle für Warnung (z.B. 80)
 }
 
+// Monatlicher Abschlag; amount null = kein Betrag (zählt als 0 €)
+export interface AdvancePayment {
+  month: number; // 1–12
+  amount: number | null;
+}
+
+// Abschläge + geschätzter Jahresverbrauch eines Kalenderjahres
+export interface AdvancePaymentYear {
+  year: number;
+  estimatedConsumption: number;
+  payments: AdvancePayment[];
+}
+
 export type UnitByEnergyType = {
   [EnergyType.Electricity]: 'kWh';
   [EnergyType.Gas]: 'm³';
@@ -69,6 +82,9 @@ export interface MeterConfig<T extends EnergyType = EnergyType> {
 
   // Tariff
   tariffHistory?: TariffPeriod[];
+
+  // Abschläge je Kalenderjahr (Kostenvorschau)
+  advancePayments?: AdvancePaymentYear[];
 
   // Water-specific
   linkedWaterMeterId?: string; // garden_water -> water meter

@@ -39,6 +39,17 @@ class LoginRequest(CamelModel):
     password: str
 
 
+class AdvancePaymentModel(CamelModel):
+    month: int
+    amount: float | None = None
+
+
+class AdvancePaymentYearModel(CamelModel):
+    year: int
+    estimated_consumption: float
+    payments: list[AdvancePaymentModel]
+
+
 class MeterCreateRequest(CamelModel):
     name: str
     type: str
@@ -54,6 +65,13 @@ class MeterCreateRequest(CamelModel):
     linked_water_meter_id: uuid.UUID | None = None
     tariff_history: list[dict[str, Any]] | None = None
     budget: dict[str, Any] | None = None
+    advance_payments: list[AdvancePaymentYearModel] | None = None
+
+
+class MeterUpdateRequest(CamelModel):
+    name: str | None = None
+    linked_water_meter_id: uuid.UUID | None = None
+    advance_payments: list[AdvancePaymentYearModel] | None = None
 
 
 class ReadingCreateRequest(CamelModel):
@@ -84,6 +102,7 @@ class ImportMeterModel(CamelModel):
     linked_water_meter_id: uuid.UUID | None = None
     tariff_history: list[dict[str, Any]] | None = None
     budget: dict[str, Any] | None = None
+    advance_payments: list[AdvancePaymentYearModel] | None = None
 
 
 class ImportReadingModel(CamelModel):
@@ -123,6 +142,7 @@ class MeterResponse(CamelModel):
     linked_water_meter_id: uuid.UUID | None = None
     tariff_history: list[dict[str, Any]]
     budget: dict[str, Any] | None = None
+    advance_payments: list[AdvancePaymentYearModel] = []
     created_at: datetime
 
 

@@ -353,3 +353,18 @@ Deployment (3 Images + Compose), CI/CD (Trivy-Gate), Security-Gate bestanden.
   `--shadow-*` auf `.card`/Shell, Token-Radien, Frosted-Glass via `--blur`/`--bg-nav`, **Ambient-Glow**
   (`.app-shell::before`), **Pill-Nav-Aktivstate** (`--accent-glow`). Kein Layout-Umbau, Material bleibt.
   Build + 69 Vitest + prettier grün.
+- (Feature/Kostenvorschau) **Monatliche Abschläge pro Kalenderjahr** gespeichert: neues JSON-Feld
+  `meters.advance_payments` (`[{year, estimatedConsumption, payments:[{month, amount|null}]}]`,
+  Migration `0002`), serverseitig validiert (`AdvancePaymentsField`: Monat 1–12, eindeutig, 1–12
+  Abschläge, Betrag ≥ 0, Verbrauch > 0, Jahre eindeutig, max. 50). Verlinktes Gartenwasser → 400.
+  Import übernimmt das Feld. Frontend: Zähler-Tab „Kostenvorschau“ mit Jahresauswahl, Anzahl
+  Abschläge, Monat/Betrag je Zeile, Speichern; Vorschau erscheint automatisch aus dem gespeicherten
+  Stand (`core/utils/cost-preview.calc.ts`, reine Funktion). Dashboard-Card „Geschätzte Erstattung /
+  Nachzahlung“ nach Gesamtkosten (Summe aller Zähler, `sumCostForecast`). Tab für verlinktes
+  Gartenwasser ausgeblendet. Backend 60 Tests, Frontend 81 Vitest, Build grün.
+- (Review/Standards) Abschlags-Feature gegen `.claude/skills/*-standards.md` geprüft und angepasst:
+  Formular auf **Signal Forms** (`form`/`FormField`/`min`/`validate`, statt `FormsModule`),
+  `AdvancePaymentService` mit **`@Service()`**, keine `i18n="@@…"`-Attribute in neuem Code
+  (Runtime-i18n/`LocaleService` existiert noch nicht → Altbestand: 10 Templates mit `i18n`-Attributen
+  offen), Gartenwasser-Regel in **`apps/meters/services.py`** (Service-Layer). Security-Re-Check
+  sauber (bandit clean). Backend 60 Tests (meters-Coverage ≥ 96 %), Frontend 83 Vitest, Build grün.
