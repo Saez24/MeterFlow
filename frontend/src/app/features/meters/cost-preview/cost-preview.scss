@@ -50,7 +50,14 @@
 .payment-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
   gap: 8px;
+}
+
+.payment-month {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
 }
 
 .form-actions {

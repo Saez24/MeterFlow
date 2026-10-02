@@ -30,6 +30,22 @@ function toFormModel(saved: AdvancePaymentYear | null): AdvancePaymentFormModel 
   };
 }
 
+/**
+ * `count` fortlaufende Monate ab `start` (gekappt auf Dezember). Beträge
+ * bleiben in ihrer Reihenfolge erhalten.
+ */
+function consecutiveRows(
+  start: number,
+  count: number,
+  previous: readonly AdvancePayment[],
+): AdvancePayment[] {
+  const length = Math.max(1, Math.min(count, 13 - start));
+  return Array.from({ length }, (_, i) => ({
+    month: start + i,
+    amount: previous[i]?.amount ?? null,
+  }));
+}
+
 function sameRows(a: readonly AdvancePayment[], b: readonly AdvancePayment[]): boolean {
   return (
     a.length === b.length &&
@@ -49,7 +65,7 @@ export class CostPreview {
   readonly meter = input.required<MeterConfig>();
 
   readonly monthNames = MONTH_NAMES_FULL;
-  readonly countOptions = ALL_MONTHS;
+  readonly startOptions = ALL_MONTHS;
 
   readonly selectedYear = signal(new Date().getFullYear());
 
@@ -82,6 +98,9 @@ export class CostPreview {
 
   readonly rows = computed(() => this.model().payments);
   readonly paymentCount = computed(() => this.rows().length);
+  readonly startMonth = computed(() => this.rows()[0]?.month ?? 1);
+  // Abschläge laufen fortlaufend bis höchstens Dezember des gewählten Jahres
+  readonly countOptions = computed(() => ALL_MONTHS.slice(0, 13 - this.startMonth()));
 
   readonly formErrors = computed(() => [
     ...new Set(
@@ -116,28 +135,14 @@ export class CostPreview {
     this.saveError.set(null);
   }
 
+  /** Ändert die Anzahl; die Monate laufen ab dem ersten Abschlag fortlaufend. */
   setPaymentCount(count: number): void {
-    this.updatePayments((rows) => {
-      if (count <= rows.length) return rows.slice(0, count);
-      const used = new Set(rows.map((r) => r.month));
-      const free = ALL_MONTHS.filter((m) => !used.has(m));
-      const added = free.slice(0, count - rows.length).map((month) => ({ month, amount: null }));
-      return [...rows, ...added].sort((a, b) => a.month - b.month);
-    });
+    this.updatePayments((rows) => consecutiveRows(this.startMonth(), count, rows));
   }
 
-  /** Monate, die in Zeile `index` wählbar sind (keine Doppelungen). */
-  availableMonths(index: number): number[] {
-    const taken = new Set(
-      this.rows()
-        .filter((_, i) => i !== index)
-        .map((r) => r.month),
-    );
-    return ALL_MONTHS.filter((m) => !taken.has(m));
-  }
-
-  setMonth(index: number, month: number): void {
-    this.updatePayments((rows) => rows.map((r, i) => (i === index ? { ...r, month } : r)));
+  /** Verschiebt alle Abschläge so, dass sie im gewählten Monat beginnen. */
+  setStartMonth(start: number): void {
+    this.updatePayments((rows) => consecutiveRows(start, rows.length, rows));
   }
 
   async save(event?: Event): Promise<void> {

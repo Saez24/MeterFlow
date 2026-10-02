@@ -32,6 +32,20 @@
     </div>
 
     <div class="df-field preview-field">
+      <label for="cp-start">Erster Abschlag</label>
+      <select
+        id="cp-start"
+        class="df-select"
+        [value]="startMonth()"
+        (change)="setStartMonth(+$any($event.target).value)"
+      >
+        @for (m of startOptions; track m) {
+          <option [value]="m" [selected]="m === startMonth()">{{ monthNames[m - 1] }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="df-field preview-field">
       <label for="cp-count">Anzahl Abschläge</label>
       <select
         id="cp-count"
@@ -39,7 +53,7 @@
         [value]="paymentCount()"
         (change)="setPaymentCount(+$any($event.target).value)"
       >
-        @for (n of countOptions; track n) {
+        @for (n of countOptions(); track n) {
           <option [value]="n" [selected]="n === paymentCount()">{{ n }}</option>
         }
       </select>
@@ -51,25 +65,16 @@
     <div class="payments-grid">
       @for (row of paymentForm.payments; track $index; let i = $index) {
         <div class="payment-row">
-          <select
-            class="df-select payment-month"
-            [attr.aria-label]="'Monat für Abschlag ' + (i + 1)"
-            [value]="row.month().value()"
-            (change)="setMonth(i, +$any($event.target).value)"
-          >
-            @for (m of availableMonths(i); track m) {
-              <option [value]="m" [selected]="m === row.month().value()">
-                {{ monthNames[m - 1] }}
-              </option>
-            }
-          </select>
+          <label class="payment-month" [for]="'cp-amount-' + i">{{
+            monthNames[row.month().value() - 1]
+          }}</label>
           <div class="df-input-wrap payment-amount">
             <input
+              [id]="'cp-amount-' + i"
               class="df-input"
               type="number"
               step="0.01"
               placeholder="0,00"
-              [attr.aria-label]="'Betrag ' + monthNames[row.month().value() - 1]"
               [formField]="row.amount"
             />
             <span class="df-input-suffix">€</span>

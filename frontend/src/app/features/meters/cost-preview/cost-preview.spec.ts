@@ -77,18 +77,58 @@ describe('CostPreview', () => {
     expect(fixture.nativeElement.querySelector('.result-container')).not.toBeNull();
   });
 
-  it('adjusts the rows to the payment count and keeps entered amounts', async () => {
+  it('drops the last month when reducing the payment count', async () => {
     await render(baseMeter);
     component.paymentForm.payments[0].amount().value.set(120);
 
     component.setPaymentCount(11);
-    expect(component.rows().map((r) => r.month)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
 
-    component.setMonth(0, 12);
+    expect(component.rows().map((r) => r.month)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+    expect(component.rows()[0].amount).toBe(120);
+  });
+
+  it('shifts all months when the first month changes', async () => {
+    await render(baseMeter);
+    component.setPaymentCount(11);
+    component.paymentForm.payments[0].amount().value.set(120);
+    component.paymentForm.payments[1].amount().value.set(130);
+
+    component.setStartMonth(2);
+
+    expect(component.rows().map((r) => r.month)).toEqual([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+    expect(
+      component
+        .rows()
+        .slice(0, 2)
+        .map((r) => r.amount),
+    ).toEqual([120, 130]);
+    expect(component.startMonth()).toBe(2);
+  });
+
+  it('caps the payments at December', async () => {
+    await render(baseMeter);
+
+    component.setStartMonth(3);
+
+    expect(component.paymentCount()).toBe(10);
+    expect(component.rows().at(-1)?.month).toBe(12);
+    expect(component.countOptions().at(-1)).toBe(10);
+
     component.setPaymentCount(12);
-    expect(component.rows()[0]).toEqual({ month: 1, amount: null });
-    expect(component.rows().find((r) => r.month === 12)?.amount).toBe(120);
-    expect(component.availableMonths(0)).toEqual([1]);
+    expect(component.paymentCount()).toBe(10);
+  });
+
+  it('shows month names instead of month dropdowns', async () => {
+    await render(baseMeter);
+    component.setStartMonth(2);
+    await fixture.whenStable();
+
+    const labels = [...fixture.nativeElement.querySelectorAll('.payment-month')].map(
+      (el: HTMLElement) => el.textContent?.trim(),
+    );
+    expect(labels[0]).toBe('Februar');
+    expect(labels.at(-1)).toBe('Dezember');
+    expect(fixture.nativeElement.querySelector('select.payment-month')).toBeNull();
   });
 
   it('saves the year via updateMeter', async () => {
