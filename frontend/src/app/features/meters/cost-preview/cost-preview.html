@@ -31,6 +31,20 @@
       />
     </div>
 
+    @if (hasLinkedGardenWater()) {
+      <div class="df-field preview-field">
+        <label for="cp-garden">Davon Gartenwasser ({{ meter().unit }})</label>
+        <input
+          id="cp-garden"
+          class="df-input"
+          type="number"
+          step="any"
+          placeholder="0"
+          [formField]="paymentForm.estimatedGardenConsumption"
+        />
+      </div>
+    }
+
     <div class="df-field preview-field">
       <label for="cp-interval">Zahlungsrhythmus</label>
       <select
@@ -189,6 +203,12 @@
                 period.pricePerUnit | currency: 'EUR' : 'symbol' : '1.4-4'
               }}</span>
             </div>
+            @if (period.wastewaterCost > 0) {
+              <div class="stat">
+                <span class="stat-label">Abwasser</span>
+                <span class="stat-value">{{ period.wastewaterCost | currency: 'EUR' }}</span>
+              </div>
+            }
             <div class="stat">
               <span class="stat-label">Grundgebühr</span>
               <span class="stat-value">{{ period.baseCharge | currency: 'EUR' }}</span>

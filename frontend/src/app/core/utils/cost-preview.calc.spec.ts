@@ -86,6 +86,31 @@ describe('calculateCostPreview', () => {
     expect(res.totalCost).toBeCloseTo(300 + 1100, 6);
   });
 
+  it('adds wastewater for water meters, minus estimated garden water', () => {
+    const water = meter({
+      type: EnergyType.Water,
+      unit: 'm³',
+      tariffHistory: [{ ...tariff('2025-01-01', 2, 5), wastewaterPrice: 3 }],
+    });
+    const plain = entry(2026, 100, [500]);
+
+    // 100 m³ × 2 € + 100 m³ × 3 € + 12 × 5 €
+    expect(calculateCostPreview(water, plain)!.totalCost).toBeCloseTo(560, 6);
+
+    // 20 m³ Gartenwasser gehen nicht ins Abwasser: 200 + 80 × 3 + 60
+    const withGarden = { ...plain, estimatedGardenConsumption: 20 };
+    const res = calculateCostPreview(water, withGarden)!;
+    expect(res.totalCost).toBeCloseTo(500, 6);
+    expect(res.periods[0].wastewaterCost).toBeCloseTo(240, 6);
+  });
+
+  it('charges no wastewater for other meter types', () => {
+    const m = meter({ tariffHistory: [{ ...tariff('2025-01-01', 0.3, 10), wastewaterPrice: 3 }] });
+    const res = calculateCostPreview(m, entry(2026, 3650, [0]))!;
+    expect(res.periods[0].wastewaterCost).toBe(0);
+    expect(res.totalCost).toBeCloseTo(1215, 6);
+  });
+
   it('returns null when no tariff applies in the year', () => {
     const m = meter({ tariffHistory: [tariff('2030-01-01', 0.3, 10)] });
     expect(calculateCostPreview(m, entry(2026, 1000, [100]))).toBeNull();

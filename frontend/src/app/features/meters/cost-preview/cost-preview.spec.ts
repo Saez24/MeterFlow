@@ -162,6 +162,67 @@ describe('CostPreview', () => {
     expect(component.dirty()).toBe(false);
   });
 
+  describe('water meter with linked garden water', () => {
+    const water: MeterConfig = {
+      ...baseMeter,
+      id: 'water-1',
+      type: EnergyType.Water,
+      unit: 'm³',
+      tariffHistory: [
+        {
+          id: 'w1',
+          validFrom: new Date(YEAR - 1, 0, 1),
+          pricePerUnit: 2,
+          baseCharge: 5,
+          wastewaterPrice: 3,
+        },
+      ],
+    };
+    const garden: MeterConfig = {
+      ...baseMeter,
+      id: 'garden-1',
+      type: EnergyType.GardenWater,
+      unit: 'm³',
+      linkedWaterMeterId: 'water-1',
+    };
+
+    async function renderWater(meter: MeterConfig, withGarden: boolean): Promise<void> {
+      TestBed.inject(MeterService).meters.set(withGarden ? [meter, garden] : [meter]);
+      fixture.componentRef.setInput('meter', meter);
+      await fixture.whenStable();
+    }
+
+    it('shows the garden water field only with a linked garden meter', async () => {
+      await renderWater(water, false);
+      expect(fixture.nativeElement.querySelector('#cp-garden')).toBeNull();
+
+      await renderWater(water, true);
+      expect(fixture.nativeElement.querySelector('#cp-garden')).not.toBeNull();
+    });
+
+    it('rejects garden water above the annual consumption', async () => {
+      await renderWater(water, true);
+      component.paymentForm.estimatedConsumption().value.set(100);
+      component.paymentForm.estimatedGardenConsumption().value.set(120);
+
+      expect(component.paymentForm().invalid()).toBe(true);
+    });
+
+    it('saves the garden water and deducts it from the wastewater', async () => {
+      const update = vi.spyOn(api, 'updateMeter');
+      await renderWater(water, true);
+      component.paymentForm.estimatedConsumption().value.set(100);
+      component.paymentForm.estimatedGardenConsumption().value.set(20);
+
+      await component.save();
+      const saved = update.mock.calls[0][1].advancePayments![0];
+      expect(saved.estimatedGardenConsumption).toBe(20);
+
+      await renderWater({ ...water, advancePayments: [saved] }, true);
+      expect(component.result()?.totalCost).toBeCloseTo(500, 6);
+    });
+  });
+
   it('shows month names instead of month dropdowns', async () => {
     await render(baseMeter);
     component.setStartMonth(2);

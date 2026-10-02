@@ -34,6 +34,11 @@ class AdvancePaymentYearSerializer(serializers.Serializer[dict[str, Any]]):
 
     year = serializers.IntegerField(min_value=2000, max_value=2100)
     estimated_consumption = serializers.FloatField(min_value=0, max_value=1e9)
+    # Water only: garden water does not go into the sewer, so it is deducted
+    # from the wastewater (same rule as the dashboard water bill).
+    estimated_garden_consumption = serializers.FloatField(
+        min_value=0, max_value=1e9, required=False, allow_null=True
+    )
     interval = serializers.ChoiceField(choices=ADVANCE_PAYMENT_INTERVALS, default=1)
     payments = serializers.ListField(
         child=AdvancePaymentSerializer(), min_length=1, max_length=12
@@ -54,6 +59,15 @@ class AdvancePaymentYearSerializer(serializers.Serializer[dict[str, Any]]):
         ]
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
+        garden = attrs.get("estimated_garden_consumption")
+        if garden is not None and garden > attrs["estimated_consumption"]:
+            raise serializers.ValidationError(
+                {
+                    "estimated_garden_consumption": (
+                        "Darf nicht größer als der Jahresverbrauch sein."
+                    )
+                }
+            )
         # Payments follow the rhythm: e.g. quarterly from February = 2, 5, 8, 11.
         months = [p["month"] for p in attrs["payments"]]
         interval = attrs["interval"]

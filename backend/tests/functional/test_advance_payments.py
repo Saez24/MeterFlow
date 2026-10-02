@@ -129,6 +129,26 @@ class TestMeterAdvancePayments(BaseTest):
         assert stored.interval == 3
         assert [p.month for p in stored.payments] == [2, 5, 8, 11]
 
+    @allure.story("Save")
+    @allure.severity(allure.severity_level.NORMAL)
+    def test_estimated_garden_consumption_is_stored(
+        self, auth_api: ApiFacade, data: DataGenerator
+    ) -> None:
+        # Arrange
+        meter = self._create_meter(auth_api, data)
+        entry = data.advance_payments(count=4, start=2, interval=3)
+        entry.estimated_garden_consumption = entry.estimated_consumption / 4
+        # Act
+        body = self.assert_status(
+            auth_api.meters.update(
+                meter.id, MeterUpdateRequest(advance_payments=[entry])
+            ),
+            200,
+        )
+        # Assert
+        stored = MeterResponse.model_validate(body).advance_payments
+        assert stored == [entry]
+
     @allure.story("Validation")
     @allure.severity(allure.severity_level.CRITICAL)
     @pytest.mark.parametrize(
@@ -143,6 +163,8 @@ class TestMeterAdvancePayments(BaseTest):
             "duplicate_year",
             "unknown_interval",
             "months_off_rhythm",
+            "negative_garden",
+            "garden_above_consumption",
         ],
     )
     def test_invalid_payload_is_rejected(
@@ -172,6 +194,10 @@ class TestMeterAdvancePayments(BaseTest):
             entry.interval = 2
         elif case == "months_off_rhythm":
             entry.interval = 3
+        elif case == "negative_garden":
+            entry.estimated_garden_consumption = -1
+        elif case == "garden_above_consumption":
+            entry.estimated_garden_consumption = entry.estimated_consumption + 1
         # Act
         response = auth_api.meters.update(
             meter.id, MeterUpdateRequest(advance_payments=entries)

@@ -50,6 +50,8 @@ export type PaymentInterval = 1 | 3;
 export interface AdvancePaymentYear {
   year: number;
   estimatedConsumption: number;
+  // Nur Wasser: Gartenwasser geht nicht ins Abwasser und wird dort abgezogen
+  estimatedGardenConsumption?: number | null;
   interval?: PaymentInterval; // fehlt bei älteren Einträgen = monatlich
   payments: AdvancePayment[];
 }

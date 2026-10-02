@@ -10,6 +10,7 @@ export interface CostPreviewPeriod {
   consumption: number;
   pricePerUnit: number;
   baseCharge: number;
+  wastewaterCost: number; // nur Wasser, sonst 0
   cost: number;
 }
 
@@ -48,6 +49,9 @@ export function calculateCostPreview(
   entry: AdvancePaymentYear,
 ): CostPreviewResult | null {
   const { year, estimatedConsumption: consumption } = entry;
+  // Wasser: Abwasser auf (Verbrauch − Gartenwasser), wie in der Dashboard-Wasserabrechnung
+  const wastewaterVolume =
+    meter.type === 'water' ? Math.max(0, consumption - (entry.estimatedGardenConsumption ?? 0)) : 0;
   const yearStart = new Date(year, 0, 1);
   const yearEnd = new Date(year, 11, 31);
   const daysInYear = Math.round((yearEnd.getTime() - yearStart.getTime()) / DAY_MS) + 1;
@@ -84,6 +88,7 @@ export function calculateCostPreview(
 
     let baseCharge: number;
     let consumptionCost: number;
+    const wastewaterCost = (wastewaterVolume / daysInYear) * days * (tariff.wastewaterPrice ?? 0);
 
     if (meter.type === 'fernwarme') {
       const connectedKw = Math.max(0, meter.connectedLoadKw ?? 10);
@@ -103,7 +108,8 @@ export function calculateCostPreview(
       consumption: periodConsumption,
       pricePerUnit: tariff.pricePerUnit,
       baseCharge,
-      cost: baseCharge + consumptionCost,
+      wastewaterCost,
+      cost: baseCharge + consumptionCost + wastewaterCost,
     });
 
     lastDate = new Date(endDate);

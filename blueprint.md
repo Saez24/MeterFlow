@@ -385,3 +385,9 @@ Deployment (3 Images + Compose), CI/CD (Trivy-Gate), Security-Gate bestanden.
   monatlich/vierteljährlich (z.B. Wasser ab Februar → Feb, Mai, Aug, Nov). `interval` (1|3) wird im
   Jahres-Eintrag mitgespeichert (fehlt = monatlich, keine Migration); Backend prüft, dass die Monate
   zum Rhythmus passen. Backend 65 Tests, Frontend 89 Vitest, Build grün.
+- (Fix/Kostenvorschau) **Abwasser fehlte** bei Wasserzählern: Prognose rechnet jetzt wie die
+  Dashboard-Wasserabrechnung (`stats.service.ts` `waterBillStats`): Frischwasser × Arbeitspreis +
+  (Verbrauch − Gartenwasser) × Abwasserpreis + Grundgebühr. Neues optionales Feld „Davon Gartenwasser“
+  (nur Wasserzähler mit verknüpftem Gartenwasserzähler), pro Jahr als `estimatedGardenConsumption`
+  gespeichert; Backend prüft ≥ 0 und ≤ Jahresverbrauch. Periodenkarte zeigt „Abwasser“; die
+  Dashboard-Card übernimmt es automatisch. Backend 68 Tests, Frontend 94 Vitest, Build grün.
