@@ -65,3 +65,35 @@ class TestOwnership(BaseTest):
         body = self.assert_status(user_b.meters.list(), 200)
         # Assert — user B sees none of user A's meters
         assert body == []
+
+    @allure.story("Isolation")
+    @allure.severity(allure.severity_level.BLOCKER)
+    def test_cannot_link_foreign_water_meter(self, data: DataGenerator) -> None:
+        # Arrange — user A owns a water meter
+        user_a = self._authenticated(data)
+        foreign = MeterResponse.model_validate(
+            self.assert_status(user_a.meters.create(data.meter_request()), 201)
+        )
+        user_b = self._authenticated(data)
+        request = data.meter_request(energy_type="garden_water", unit="m³")
+        request.linked_water_meter_id = foreign.id
+        # Act — user B tries to link their garden meter to it
+        response = user_b.meters.create(request)
+        # Assert — the foreign id does not resolve (existence not disclosed)
+        body = self.assert_status(response, 400)
+        assert "linkedWaterMeterId" in body
+
+    @allure.story("Isolation")
+    @allure.severity(allure.severity_level.NORMAL)
+    def test_can_link_own_water_meter(self, data: DataGenerator) -> None:
+        # Arrange
+        api = self._authenticated(data)
+        water = MeterResponse.model_validate(
+            self.assert_status(api.meters.create(data.meter_request()), 201)
+        )
+        request = data.meter_request(energy_type="garden_water", unit="m³")
+        request.linked_water_meter_id = water.id
+        # Act
+        body = self.assert_status(api.meters.create(request), 201)
+        # Assert
+        assert MeterResponse.model_validate(body).linked_water_meter_id == water.id

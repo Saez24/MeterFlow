@@ -3,8 +3,9 @@ renderer/parser converts at the API boundary."""
 
 from __future__ import annotations
 
-from typing import Any, cast
+from typing import Any
 
+from django.db.models import QuerySet
 from rest_framework import serializers
 
 from apps.meters.models import Meter
@@ -64,11 +65,24 @@ class AdvancePaymentsField(serializers.ListField):
         return sorted(value, key=lambda entry: entry["year"])
 
 
+class OwnMeterField(serializers.PrimaryKeyRelatedField[Meter]):
+    """Primary key of one of the requesting user's meters.
+
+    Scoping in ``get_queryset`` keeps a foreign id from resolving, so linking to
+    another user's meter fails like an unknown id (ownership, contract §1).
+    """
+
+    def get_queryset(self) -> QuerySet[Meter]:
+        request = self.context.get("request")
+        if request is None or not request.user.is_authenticated:
+            return Meter.objects.none()
+        return Meter.objects.filter(user=request.user)
+
+
 class MeterSerializer(serializers.ModelSerializer[Meter]):
-    # Exposed as ``linkedWaterMeterId``; scoped to the user's own meters below.
-    linked_water_meter_id = serializers.PrimaryKeyRelatedField(
+    # Exposed as ``linkedWaterMeterId``; only the user's own meters resolve.
+    linked_water_meter_id = OwnMeterField(
         source="linked_water_meter",
-        queryset=Meter.objects.none(),
         required=False,
         allow_null=True,
     )
@@ -98,17 +112,6 @@ class MeterSerializer(serializers.ModelSerializer[Meter]):
             "created_at",
         ]
         read_only_fields = ["id", "created_at"]
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        request = self.context.get("request")
-        if request is not None and request.user.is_authenticated:
-            # Prevent linking to another user's meter (ownership, contract §1).
-            field = cast(
-                "serializers.PrimaryKeyRelatedField[Meter]",
-                self.fields["linked_water_meter_id"],
-            )
-            field.queryset = Meter.objects.filter(user=request.user)
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
         if attrs.get("advance_payments"):
