@@ -7,6 +7,7 @@ import {
   AdvancePaymentYear,
   MONTH_NAMES_FULL,
   MeterConfig,
+  PaymentInterval,
 } from '../../../core/models/energy.models';
 import { AdvancePaymentService } from '../../../core/services/advance-payment.service';
 import {
@@ -16,32 +17,45 @@ import {
 
 const ALL_MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
 
+const INTERVAL_OPTIONS: readonly { value: PaymentInterval; label: string }[] = [
+  { value: 1, label: 'Monatlich' },
+  { value: 3, label: 'Vierteljährlich' },
+];
+
 interface AdvancePaymentFormModel {
   estimatedConsumption: number | null;
+  interval: PaymentInterval;
   payments: AdvancePayment[];
 }
 
 function toFormModel(saved: AdvancePaymentYear | null): AdvancePaymentFormModel {
   return {
     estimatedConsumption: saved?.estimatedConsumption ?? null,
+    interval: saved?.interval ?? 1,
     payments: saved
       ? saved.payments.map((p) => ({ ...p }))
       : ALL_MONTHS.map((month) => ({ month, amount: null })),
   };
 }
 
+/** Höchstzahl an Abschlägen ab `start` im Rhythmus `interval` bis Dezember. */
+function maxPayments(start: number, interval: PaymentInterval): number {
+  return Math.floor((12 - start) / interval) + 1;
+}
+
 /**
- * `count` fortlaufende Monate ab `start` (gekappt auf Dezember). Beträge
- * bleiben in ihrer Reihenfolge erhalten.
+ * `count` Abschläge ab `start` im Abstand von `interval` Monaten (gekappt
+ * auf Dezember). Beträge bleiben in ihrer Reihenfolge erhalten.
  */
-function consecutiveRows(
+function scheduleRows(
   start: number,
+  interval: PaymentInterval,
   count: number,
   previous: readonly AdvancePayment[],
 ): AdvancePayment[] {
-  const length = Math.max(1, Math.min(count, 13 - start));
+  const length = Math.max(1, Math.min(count, maxPayments(start, interval)));
   return Array.from({ length }, (_, i) => ({
-    month: start + i,
+    month: start + i * interval,
     amount: previous[i]?.amount ?? null,
   }));
 }
@@ -66,6 +80,7 @@ export class CostPreview {
 
   readonly monthNames = MONTH_NAMES_FULL;
   readonly startOptions = ALL_MONTHS;
+  readonly intervalOptions = INTERVAL_OPTIONS;
 
   readonly selectedYear = signal(new Date().getFullYear());
 
@@ -99,8 +114,11 @@ export class CostPreview {
   readonly rows = computed(() => this.model().payments);
   readonly paymentCount = computed(() => this.rows().length);
   readonly startMonth = computed(() => this.rows()[0]?.month ?? 1);
-  // Abschläge laufen fortlaufend bis höchstens Dezember des gewählten Jahres
-  readonly countOptions = computed(() => ALL_MONTHS.slice(0, 13 - this.startMonth()));
+  readonly interval = computed(() => this.model().interval);
+  // Abschläge laufen im gewählten Rhythmus bis höchstens Dezember des Jahres
+  readonly countOptions = computed(() =>
+    ALL_MONTHS.slice(0, maxPayments(this.startMonth(), this.interval())),
+  );
 
   readonly formErrors = computed(() => [
     ...new Set(
@@ -119,6 +137,7 @@ export class CostPreview {
     if (!saved) return true;
     return (
       saved.estimatedConsumption !== current.estimatedConsumption ||
+      (saved.interval ?? 1) !== current.interval ||
       !sameRows(saved.payments, current.payments)
     );
   });
@@ -135,14 +154,20 @@ export class CostPreview {
     this.saveError.set(null);
   }
 
-  /** Ändert die Anzahl; die Monate laufen ab dem ersten Abschlag fortlaufend. */
+  /** Ändert die Anzahl; die Monate folgen ab dem ersten Abschlag dem Rhythmus. */
   setPaymentCount(count: number): void {
-    this.updatePayments((rows) => consecutiveRows(this.startMonth(), count, rows));
+    this.reschedule(this.startMonth(), this.interval(), count);
   }
 
   /** Verschiebt alle Abschläge so, dass sie im gewählten Monat beginnen. */
   setStartMonth(start: number): void {
-    this.updatePayments((rows) => consecutiveRows(start, rows.length, rows));
+    this.reschedule(start, this.interval(), this.paymentCount());
+  }
+
+  /** Wechselt den Rhythmus; die Anzahl springt auf alle Termine bis Dezember. */
+  setInterval(interval: PaymentInterval): void {
+    const start = this.startMonth();
+    this.reschedule(start, interval, maxPayments(start, interval));
   }
 
   async save(event?: Event): Promise<void> {
@@ -153,6 +178,7 @@ export class CostPreview {
     const entry: AdvancePaymentYear = {
       year: this.selectedYear(),
       estimatedConsumption,
+      interval: this.model().interval,
       // Nur die Daten übernehmen — Signal Forms markiert Array-Elemente intern
       payments: payments.map(({ month, amount }) => ({ month, amount })),
     };
@@ -168,7 +194,11 @@ export class CostPreview {
     }
   }
 
-  private updatePayments(fn: (rows: AdvancePayment[]) => AdvancePayment[]): void {
-    this.model.update((m) => ({ ...m, payments: fn(m.payments) }));
+  private reschedule(start: number, interval: PaymentInterval, count: number): void {
+    this.model.update((m) => ({
+      ...m,
+      interval,
+      payments: scheduleRows(start, interval, count, m.payments),
+    }));
   }
 }

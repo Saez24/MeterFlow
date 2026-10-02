@@ -118,6 +118,50 @@ describe('CostPreview', () => {
     expect(component.paymentCount()).toBe(10);
   });
 
+  it('schedules quarterly payments from the first month', async () => {
+    await render(baseMeter);
+
+    component.setStartMonth(2);
+    component.setInterval(3);
+
+    expect(component.rows().map((r) => r.month)).toEqual([2, 5, 8, 11]);
+    expect(component.countOptions()).toEqual([1, 2, 3, 4]);
+
+    component.setStartMonth(3);
+    expect(component.rows().map((r) => r.month)).toEqual([3, 6, 9, 12]);
+
+    component.setPaymentCount(2);
+    expect(component.rows().map((r) => r.month)).toEqual([3, 6]);
+  });
+
+  it('switches back to monthly with all months up to December', async () => {
+    await render(baseMeter);
+    component.setStartMonth(2);
+    component.setInterval(3);
+
+    component.setInterval(1);
+
+    expect(component.rows().map((r) => r.month)).toEqual([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
+  });
+
+  it('saves and restores the quarterly rhythm', async () => {
+    const update = vi.spyOn(api, 'updateMeter');
+    await render(baseMeter);
+    component.paymentForm.estimatedConsumption().value.set(80);
+    component.setStartMonth(2);
+    component.setInterval(3);
+
+    await component.save();
+
+    const saved = update.mock.calls[0][1].advancePayments![0];
+    expect(saved.interval).toBe(3);
+    expect(saved.payments.map((p) => p.month)).toEqual([2, 5, 8, 11]);
+
+    await render({ ...baseMeter, advancePayments: [saved] });
+    expect(component.interval()).toBe(3);
+    expect(component.dirty()).toBe(false);
+  });
+
   it('shows month names instead of month dropdowns', async () => {
     await render(baseMeter);
     component.setStartMonth(2);
@@ -145,6 +189,7 @@ describe('CostPreview', () => {
         {
           year: YEAR,
           estimatedConsumption: 2500,
+          interval: 1,
           payments: [
             { month: 1, amount: 110 },
             { month: 2, amount: null },

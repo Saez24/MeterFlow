@@ -43,10 +43,14 @@ export interface AdvancePayment {
   amount: number | null;
 }
 
+// Zahlungsrhythmus in Monaten: monatlich oder vierteljährlich
+export type PaymentInterval = 1 | 3;
+
 // Abschläge + geschätzter Jahresverbrauch eines Kalenderjahres
 export interface AdvancePaymentYear {
   year: number;
   estimatedConsumption: number;
+  interval?: PaymentInterval; // fehlt bei älteren Einträgen = monatlich
   payments: AdvancePayment[];
 }
 

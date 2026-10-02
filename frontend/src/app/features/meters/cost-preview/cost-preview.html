@@ -32,6 +32,22 @@
     </div>
 
     <div class="df-field preview-field">
+      <label for="cp-interval">Zahlungsrhythmus</label>
+      <select
+        id="cp-interval"
+        class="df-select"
+        [value]="interval()"
+        (change)="setInterval($any(+$any($event.target).value))"
+      >
+        @for (opt of intervalOptions; track opt.value) {
+          <option [value]="opt.value" [selected]="opt.value === interval()">
+            {{ opt.label }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <div class="df-field preview-field">
       <label for="cp-start">Erster Abschlag</label>
       <select
         id="cp-start"

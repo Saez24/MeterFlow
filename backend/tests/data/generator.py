@@ -70,15 +70,18 @@ class DataGenerator:
         year: int = 2026,
         count: int = 12,
         amount: float | None = None,
+        start: int = 1,
+        interval: int = 1,
     ) -> AdvancePaymentYearModel:
-        """``count`` consecutive monthly payments starting in January."""
-        monthly = amount if amount is not None else float(secrets.randbelow(200) + 50)
+        """``count`` payments from month ``start``, every ``interval`` months."""
+        payment = amount if amount is not None else float(secrets.randbelow(200) + 50)
         return AdvancePaymentYearModel(
             year=year,
             estimated_consumption=float(secrets.randbelow(5000) + 1000),
+            interval=interval,
             payments=[
-                AdvancePaymentModel(month=month, amount=monthly)
-                for month in range(1, count + 1)
+                AdvancePaymentModel(month=start + i * interval, amount=payment)
+                for i in range(count)
             ],
         )
 

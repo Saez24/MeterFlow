@@ -380,3 +380,8 @@ Deployment (3 Images + Compose), CI/CD (Trivy-Gate), Security-Gate bestanden.
   reines Python (sdist). `requirements.lock` für 3.14 aufgelöst (identische Versionen). Black hat 4
   Dateien auf PEP-758-`except A, B:` umformatiert. 60 Tests/ruff/black/bandit/pip-audit grün.
   Frontend gegen Angular 22.2.1 erneut verifiziert: 83 Vitest + Build grün.
+- (Feature/Kostenvorschau) Monatsauswahl umgebaut: statt Dropdown pro Zeile ein Feld **„Erster
+  Abschlag“**; die Termine laufen davon fortlaufend bis höchstens Dezember. Neu: **Zahlungsrhythmus**
+  monatlich/vierteljährlich (z.B. Wasser ab Februar → Feb, Mai, Aug, Nov). `interval` (1|3) wird im
+  Jahres-Eintrag mitgespeichert (fehlt = monatlich, keine Migration); Backend prüft, dass die Monate
+  zum Rhythmus passen. Backend 65 Tests, Frontend 89 Vitest, Build grün.

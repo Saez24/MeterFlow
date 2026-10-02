@@ -47,6 +47,7 @@ class AdvancePaymentModel(CamelModel):
 class AdvancePaymentYearModel(CamelModel):
     year: int
     estimated_consumption: float
+    interval: int = 1
     payments: list[AdvancePaymentModel]
 
 

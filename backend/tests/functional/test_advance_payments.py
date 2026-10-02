@@ -109,6 +109,26 @@ class TestMeterAdvancePayments(BaseTest):
         # Assert — stored sorted by year
         assert [e["year"] for e in body["advancePayments"]] == [2026, 2027]
 
+    @allure.story("Save")
+    @allure.severity(allure.severity_level.CRITICAL)
+    def test_quarterly_payments_are_stored(
+        self, auth_api: ApiFacade, data: DataGenerator
+    ) -> None:
+        # Arrange — quarterly from February: Feb, May, Aug, Nov
+        meter = self._create_meter(auth_api, data)
+        entry = data.advance_payments(count=4, start=2, interval=3)
+        # Act
+        body = self.assert_status(
+            auth_api.meters.update(
+                meter.id, MeterUpdateRequest(advance_payments=[entry])
+            ),
+            200,
+        )
+        # Assert
+        stored = MeterResponse.model_validate(body).advance_payments[0]
+        assert stored.interval == 3
+        assert [p.month for p in stored.payments] == [2, 5, 8, 11]
+
     @allure.story("Validation")
     @allure.severity(allure.severity_level.CRITICAL)
     @pytest.mark.parametrize(
@@ -121,6 +141,8 @@ class TestMeterAdvancePayments(BaseTest):
             "no_payments",
             "zero_consumption",
             "duplicate_year",
+            "unknown_interval",
+            "months_off_rhythm",
         ],
     )
     def test_invalid_payload_is_rejected(
@@ -146,6 +168,10 @@ class TestMeterAdvancePayments(BaseTest):
             entry.estimated_consumption = 0
         elif case == "duplicate_year":
             entries.append(data.advance_payments(year=entry.year))
+        elif case == "unknown_interval":
+            entry.interval = 2
+        elif case == "months_off_rhythm":
+            entry.interval = 3
         # Act
         response = auth_api.meters.update(
             meter.id, MeterUpdateRequest(advance_payments=entries)

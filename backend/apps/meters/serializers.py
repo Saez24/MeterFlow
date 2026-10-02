@@ -3,6 +3,7 @@ renderer/parser converts at the API boundary."""
 
 from __future__ import annotations
 
+from itertools import pairwise
 from typing import Any
 
 from django.db.models import QuerySet
@@ -12,6 +13,8 @@ from apps.meters.models import Meter
 from apps.meters.services import is_linked_garden_water
 
 MAX_ADVANCE_PAYMENT_YEARS = 50
+# Payment rhythm in months: monthly or quarterly.
+ADVANCE_PAYMENT_INTERVALS = [(1, "monthly"), (3, "quarterly")]
 
 
 class AdvancePaymentSerializer(serializers.Serializer[dict[str, Any]]):
@@ -31,6 +34,7 @@ class AdvancePaymentYearSerializer(serializers.Serializer[dict[str, Any]]):
 
     year = serializers.IntegerField(min_value=2000, max_value=2100)
     estimated_consumption = serializers.FloatField(min_value=0, max_value=1e9)
+    interval = serializers.ChoiceField(choices=ADVANCE_PAYMENT_INTERVALS, default=1)
     payments = serializers.ListField(
         child=AdvancePaymentSerializer(), min_length=1, max_length=12
     )
@@ -48,6 +52,16 @@ class AdvancePaymentYearSerializer(serializers.Serializer[dict[str, Any]]):
             {"month": p["month"], "amount": p.get("amount")}
             for p in sorted(value, key=lambda p: p["month"])
         ]
+
+    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
+        # Payments follow the rhythm: e.g. quarterly from February = 2, 5, 8, 11.
+        months = [p["month"] for p in attrs["payments"]]
+        interval = attrs["interval"]
+        if any(b - a != interval for a, b in pairwise(months)):
+            raise serializers.ValidationError(
+                {"payments": "Die Monate passen nicht zum Zahlungsrhythmus."}
+            )
+        return attrs
 
 
 class AdvancePaymentsField(serializers.ListField):
