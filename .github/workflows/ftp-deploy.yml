@@ -3,7 +3,7 @@ name: FTP Deployment
 on:
   push:
     branches:
-      - webhosting
+      - supabase
 
 jobs:
   build-and-deploy:
@@ -37,7 +37,7 @@ jobs:
 
       - name: Build Angular app
         id: build
-        run: npm run build -- --configuration supabase
+        run: npm run build -- --configuration production
 
       - name: Deploy over FTP
         uses: SamKirkland/FTP-Deploy-Action@8e83cea8672e3fbcbb9fdafff34debf6ae4c5f65 # v4.3.5
