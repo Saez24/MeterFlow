@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
-  // Dev: Angular serves on :4200 and proxies /api → :8000 (see proxy.conf.json),
-  // so cookies stay same-origin.
-  apiUrl: '/api/v1',
+  // Defaults match `supabase start` (local stack). Replace the key with the
+  // anon key printed by `supabase status`, or point both at your project.
+  supabaseUrl: 'http://localhost:54321',
+  supabaseKey: 'public-anon-key',
 };

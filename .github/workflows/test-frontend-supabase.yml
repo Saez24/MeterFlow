@@ -1,0 +1,54 @@
+# SECURITY (security-standards §11): every `uses:` action is pinned by commit SHA
+# (tag kept as a comment). Bump via Dependabot / pin-github-action.
+# Supabase variant (branch `supabase` only): unit tests use a fake client, so
+# the committed placeholder environment is enough — no secrets needed.
+name: test-frontend-supabase
+
+on:
+  push:
+    branches: [supabase]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/test-frontend-supabase.yml'
+  pull_request:
+    branches: [supabase]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/test-frontend-supabase.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-frontend-supabase-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Prettier (format check)
+        run: npx prettier --check "src/**/*.{ts,scss,html}"
+
+      - name: Build (production)
+        run: npm run build -- --configuration=production
+
+      - name: Unit tests (Vitest)
+        run: npx ng test --watch=false
+
+      - name: npm audit (prod deps, block on high)
+        run: npm audit --omit=dev --audit-level=high

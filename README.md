@@ -1,5 +1,8 @@
 # MeterFlow
 
+> **Branch `supabase`:** gleiches Frontend, Backend = Supabase statt Django. Details, Setup und
+> Merge-Workflow: [SUPABASE.md](SUPABASE.md).
+
 **Self-hosted Verbrauchs- & Kostentracker für Strom, Gas, Wasser & Co.**
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue) ![Angular](https://img.shields.io/badge/Angular-22-dd0031) ![Django](https://img.shields.io/badge/Django-6-092e20)
