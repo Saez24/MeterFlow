@@ -65,8 +65,8 @@ export class NotificationService {
     const body = $localize`:@@notification.reminder.body:Zeit für deinen monatlichen Zählerstand! Jetzt Werte erfassen.`;
     const options: NotificationOptions = {
       body,
-      icon: '/icons/icon-192x192.png',
-      badge: '/icons/icon-96x96.png',
+      icon: '/app-icons/icon-192x192.png',
+      badge: '/app-icons/icon-96x96.png',
       tag: 'monthly-reminder',
     };
 
