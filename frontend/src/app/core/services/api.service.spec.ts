@@ -280,6 +280,8 @@ describe('ApiService (Supabase)', () => {
       });
       const [meters] = fake.callsOf('meters', 'insert')[0] as [Record<string, unknown>[]];
       expect(meters.map((m) => m['id'])).toEqual([gardenId, meterId]);
+      // Only columns the app reads (see METER_COLUMNS) — live DBs may lack others.
+      expect(meters[0]).not.toHaveProperty('archived');
       expect(meters[0]['linked_water_meter_id']).toBeNull();
       expect(meters[0]['unit']).toBe('m³');
       expect(fake.callsOf('meters', 'update')[0][0]).toEqual({ linked_water_meter_id: meterId });

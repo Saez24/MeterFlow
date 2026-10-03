@@ -722,7 +722,6 @@ function parseImportMeter(raw: unknown): {
       icon: requireString(m['icon'], 'icon'),
       color: requireString(m['color'], 'color'),
       active: m['active'] === undefined ? true : Boolean(m['active']),
-      archived: false,
       meter_number: optString(pick(m, 'meterNumber', 'meter_number')),
       provider: optString(m['provider']),
       notes: optString(m['notes']),
