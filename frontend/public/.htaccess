@@ -1,0 +1,25 @@
+# Apache config for the FTP webhosting (branch `supabase`).
+
+# Never serve the FTP-Deploy-Action state file (it lists every deployed file).
+<Files ".ftp-deploy-sync-state.json">
+  Require all denied
+</Files>
+
+# Angular SPA: deep links like /settings are client-side routes. Serve
+# index.html for every path that is not an existing file or directory.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# index.html and the service-worker files must not be cached, otherwise
+# clients keep running an old build after a deploy.
+<IfModule mod_headers.c>
+  <FilesMatch "^(index\.html|ngsw\.json|ngsw-worker\.js|manifest\.webmanifest)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
