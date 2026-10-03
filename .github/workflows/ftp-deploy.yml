@@ -1,13 +1,29 @@
 name: FTP Deployment
 
+# Supabase variant: builds the Angular app in frontend/ and uploads it to the
+# webhosting via FTPS. Runs only for the `supabase` branch.
 on:
   push:
     branches:
       - supabase
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/ftp-deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ftp-deploy
+  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
 
     steps:
       - name: Checkout code
@@ -18,48 +34,57 @@ jobs:
         with:
           node-version: '24'
           cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Unit tests
+        run: npx ng test --watch=false
 
       - name: Generate environment.ts from secrets
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        # JSON.stringify quotes the values safely (no shell/TS injection).
         run: |
-          mkdir -p src/environments
-          cat > src/environments/environment.ts <<EOF
-          export const environment = {
-              supabaseUrl: '${SUPABASE_URL}',
-              supabaseKey: '${SUPABASE_KEY}'
-          };
-          EOF
+          node -e '
+            const { SUPABASE_URL: url, SUPABASE_KEY: key } = process.env;
+            if (!url || !key) { console.error("SUPABASE_URL/SUPABASE_KEY secret missing"); process.exit(1); }
+            const env = { production: true, supabaseUrl: url, supabaseKey: key };
+            require("fs").writeFileSync(
+              "src/environments/environment.ts",
+              "export const environment = " + JSON.stringify(env, null, 2) + ";\n",
+            );
+          '
 
       - name: Build Angular app
         id: build
         run: npm run build -- --configuration production
 
       - name: Deploy over FTP
+        id: deploy
+        continue-on-error: true
         uses: SamKirkland/FTP-Deploy-Action@8e83cea8672e3fbcbb9fdafff34debf6ae4c5f65 # v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
-          local-dir: ./dist/MeterFlow/browser/
+          local-dir: ./frontend/dist/MeterFlow/browser/
           protocol: ftps
           security: loose
           timeout: 60000
 
       - name: Deploy over FTP (retry)
-        if: failure() && steps.build.outcome == 'success'
+        if: steps.deploy.outcome == 'failure'
         uses: SamKirkland/FTP-Deploy-Action@8e83cea8672e3fbcbb9fdafff34debf6ae4c5f65 # v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
-          local-dir: ./dist/MeterFlow/browser/
+          local-dir: ./frontend/dist/MeterFlow/browser/
           protocol: ftps
           security: loose
           timeout: 60000
