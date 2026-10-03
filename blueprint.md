@@ -38,6 +38,11 @@ Es existierten zwei getrennte MeterFlow-Projekte mit zwei Frontends, die doppelt
     case` an der API-Grenze; Model-/Serializer-Felder intern `snake_case`. Der Frontend-Mapper
     entfällt. (API_CONTRACT §12.1)
 11. **Default-Branch = `main`** (nicht `master`) — GitHub-Vorgabe.
+12. **Supabase-Variante als Branch `supabase`** (2026-10-03) — ersetzt das alte Repo
+    `Saez24/MeterFlow`. Gleiches Frontend, nur `api.service.ts` (gleiche öffentliche API) läuft gegen
+    Supabase; Schema in `supabase/migrations/`. Entscheidung 3 („Supabase komplett raus") gilt
+    weiter für `main`. Workflow: `git switch supabase && git merge main`; neue Model-Felder auf
+    `supabase` als **neue Migration + Mapper** nachziehen. Details: `SUPABASE.md` auf dem Branch.
 
 ## 3. Verbindliche Constraints
 
@@ -391,3 +396,9 @@ Deployment (3 Images + Compose), CI/CD (Trivy-Gate), Security-Gate bestanden.
   (nur Wasserzähler mit verknüpftem Gartenwasserzähler), pro Jahr als `estimatedGardenConsumption`
   gespeichert; Backend prüft ≥ 0 und ≤ Jahresverbrauch. Periodenkarte zeigt „Abwasser“; die
   Dashboard-Card übernimmt es automatisch. Backend 68 Tests, Frontend 94 Vitest, Build grün.
+- (Lukas/Pia/Kilian) **Branch `supabase` angelegt** (von `main`): `ApiService` auf supabase-js
+  (Auth, CRUD, CO₂, Storage-Fotos mit signierten URLs, Import mit id-Erhalt, Abschlags-Validierung
+  aus dem Django-Serializer portiert), alte Migrationen übernommen + Delta-Migration
+  (`connected_load_kw`, `advance_payments`, FK-Indizes, Ownership-Trigger, 10-MiB-Fotolimit).
+  `backend/`/`deploy/` bleiben auf dem Branch unverändert liegen (keine modify/delete-Konflikte
+  beim Merge). Build + 102 Vitest grün; Migration mangels lokalem Postgres noch nicht ausgeführt.
