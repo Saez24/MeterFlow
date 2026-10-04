@@ -24,6 +24,11 @@ identisch mit `main`.
 | `frontend/package.json` (+ lock)                          | `@supabase/supabase-js`                                 |
 | `supabase/migrations/`                                    | Schema + RLS + Storage                                  |
 | `.github/workflows/test-frontend-supabase.yml`            | Frontend-CI für diesen Branch                           |
+| `.github/workflows/ftp-deploy.yml`, `frontend/public/.htaccess` | Deploy auf den Webspace                           |
+| `frontend/src/app/core/services/api.service.mock.ts`      | + `isGuest`, `signInAsGuest`                            |
+| `frontend/src/app/core/services/demo-data.ts` (+ spec)    | neu: Demo-Daten für Gäste                               |
+| `frontend/src/app/shared/components/guest-*/`             | neu: Gast-Login-Button + Gast-Banner                    |
+| `auth.html`/`.ts`, `app.html`/`.ts`, `readings-form.html`/`.ts` | **nur** Einbinde-Zeilen für die Gast-Komponenten |
 
 `backend/`, `deploy/` und die Compose-Dateien bleiben **unverändert** liegen. Hier werden sie nicht
 genutzt. Sie zu löschen würde aber bei jedem `git merge main` modify/delete-Konflikte erzeugen.
@@ -40,6 +45,37 @@ Verhalten gegenüber `main`:
 - **Fotos** liegen im privaten Bucket `meter-photos` unter `<userId>/<uuid>.<ext>` (max. 10 MiB,
   JPG/PNG/WebP/HEIC) und werden über signierte URLs (1 h) angezeigt.
 - **Registrierung** mit aktiver E-Mail-Bestätigung zeigt „Bitte bestätige zuerst deine E-Mail".
+
+## Gastzugang (Demo)
+
+Auf der Login-Seite gibt es **„Als Gast testen"**:
+
+- Supabase legt einen **anonymen Account** an (`signInAnonymously`). Der Client importiert dafür
+  frische Demo-Daten (`demo-data.ts`): 5 Zähler, 24 Monate Verlauf, Tarifwechsel, Abschläge.
+- Gäste sehen nur ihre eigenen Daten (RLS). Ein Banner weist auf den Gastmodus hin.
+- **Keine Foto-Uploads** (restriktive Storage-Policy + Prüfung im `ApiService`). Die
+  Zählerstand-Erkennung per Foto funktioniert trotzdem, weil sie lokal im Browser läuft.
+- **Limits:** 20 Zähler / 2.000 Ablesungen pro Gast (Trigger `guest_row_limit`).
+- **Aufräumen:** Der pg_cron-Job `cleanup-guest-users` läuft stündlich um :15 und löscht anonyme
+  Accounts, die älter als 24 h sind. Ihre Zeilen in `meters`/`readings`/`co2_factors` verschwinden
+  per Cascade mit.
+
+Einmalig im Dashboard: Authentication → Sign In / Providers → **Allow anonymous sign-ins**
+aktivieren, dann `supabase/migrations/20261005000000_guest_access.sql` ausführen.
+
+Prüfen:
+
+```sql
+select jobname, schedule, active from cron.job;
+select status, return_message, start_time from cron.job_run_details
+  order by start_time desc limit 5;
+select count(*) from auth.users where is_anonymous;
+```
+
+Bei Merges von `main`: Konflikte in `auth.html`, `app.html` oder `readings-form.html` so auflösen,
+dass die Einbinde-Zeile (`<app-guest-login />`, `<app-guest-banner />`, Gast-Hinweis) erhalten
+bleibt. Der Diff zu `main` in `features/` und `shared/` besteht nur aus diesen Zeilen und den
+neuen `guest-*`-Komponenten.
 
 ## Setup
 
@@ -78,7 +114,7 @@ Konflikte entstehen nur in den Dateien aus der Tabelle oben. Zusätzlich gilt:
    nachziehen oder als DB-Constraint bzw. Trigger abbilden.
 4. Danach: `npx ng build` + `npx ng test --watch=false`.
 
-Gegenprobe, dass Komponenten gleich geblieben sind (muss leer sein):
+Gegenprobe, dass Komponenten gleich geblieben sind (nur Gast-Dateien und Einbinde-Zeilen):
 
 ```bash
 git diff main supabase --stat -- frontend/src/app/features frontend/src/app/shared

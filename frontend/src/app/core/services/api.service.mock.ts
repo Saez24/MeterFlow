@@ -1,4 +1,4 @@
-import { signal } from '@angular/core';
+import { computed, signal } from '@angular/core';
 import { ApiService } from './api.service';
 
 /**
@@ -8,11 +8,13 @@ import { ApiService } from './api.service';
 export function apiServiceMock(): ApiService {
   return {
     currentUser: signal(null),
+    isGuest: computed(() => false),
     connectionStatus: signal('connected'),
     sessionReady: Promise.resolve(),
     getSession: async () => null,
     signIn: async () => ({ error: null }),
     signUp: async () => ({ error: null }),
+    signInAsGuest: async () => ({ error: null }),
     signOut: async () => {},
     getMeters: async () => [],
     addMeter: async (m: unknown) => m,

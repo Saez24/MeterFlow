@@ -35,6 +35,7 @@ export class ReadingsForm {
   public readonly readingService = inject(ReadingService);
   private readonly tariffService = inject(TariffService);
   private readonly apiService = inject(ApiService);
+  protected readonly isGuest = this.apiService.isGuest;
   private readonly ocrService = inject(OcrService);
   private readonly route = inject(ActivatedRoute);
   private readonly snackBar = inject(MatSnackBar);

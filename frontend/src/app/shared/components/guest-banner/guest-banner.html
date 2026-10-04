@@ -1,0 +1,11 @@
+@if (api.isGuest()) {
+  <div class="guest-banner" role="status">
+    <mat-icon>info_outline</mat-icon>
+    <span class="guest-banner-text" i18n="@@guestBanner.text">
+      Gastmodus: Deine Daten werden nach 24 Stunden automatisch gelöscht.
+    </span>
+    <button type="button" class="df-btn df-btn-ghost df-btn--sm" (click)="createAccount()">
+      <span i18n="@@guestBanner.createAccount">Eigenes Konto erstellen</span>
+    </button>
+  </div>
+}

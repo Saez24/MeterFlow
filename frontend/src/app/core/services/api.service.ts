@@ -1,11 +1,14 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { User } from '@supabase/supabase-js';
 import { AdvancePaymentYear, EnergyType, MeterConfig, MeterReading } from '../models/energy.models';
+import { buildDemoData } from './demo-data';
 import { SUPABASE_CLIENT } from './supabase.client';
 
 export interface AppUser {
   id: string;
   email: string;
+  /** Guest account (Supabase anonymous sign-in), deleted after 24 h. */
+  isAnonymous?: boolean;
 }
 
 interface AuthResult {
@@ -92,6 +95,7 @@ export class ApiService {
 
   readonly connectionStatus = signal<'checking' | 'connected' | 'error'>('checking');
   readonly currentUser = signal<AppUser | null>(null);
+  readonly isGuest = computed(() => this.currentUser()?.isAnonymous === true);
 
   /** Resolves once the initial session probe has finished (used by guards). */
   readonly sessionReady: Promise<void>;
@@ -119,7 +123,9 @@ export class ApiService {
   }
 
   private toAppUser(user: User | null): AppUser | null {
-    return user ? { id: user.id, email: user.email ?? '' } : null;
+    return user
+      ? { id: user.id, email: user.email ?? '', isAnonymous: user.is_anonymous === true }
+      : null;
   }
 
   private requireUserId(): string {
@@ -136,6 +142,27 @@ export class ApiService {
     // auth page maps this message to "Bitte bestätige zuerst deine E-Mail".
     if (!data.session) return { error: { message: 'Email not confirmed' } };
     this.currentUser.set(this.toAppUser(data.session.user));
+    this.connectionStatus.set('connected');
+    return { error: null };
+  }
+
+  /**
+   * Demo guest: anonymous Supabase account seeded with demo data. The account
+   * and its rows are deleted 24 h after sign-up by a pg_cron job (migration
+   * 20261005000000_guest_access). Callers reload meters/readings afterwards.
+   */
+  async signInAsGuest(): Promise<AuthResult> {
+    const { data, error } = await this.client.auth.signInAnonymously();
+    if (error) return { error: { message: error.message } };
+    this.currentUser.set(this.toAppUser(data.user));
+    try {
+      await this.importData(buildDemoData(new Date()));
+    } catch (err) {
+      await this.signOut();
+      return {
+        error: { message: err instanceof Error ? err.message : 'Demo-Daten fehlgeschlagen' },
+      };
+    }
     this.connectionStatus.set('connected');
     return { error: null };
   }
@@ -398,6 +425,8 @@ export class ApiService {
   // ── Photos (Supabase Storage, private bucket, path `<userId>/<uuid>.<ext>`) ──
   async uploadPhoto(file: File, readingId?: string): Promise<string> {
     const userId = this.requireUserId();
+    // Also enforced by a restrictive storage policy.
+    if (this.isGuest()) throw new Error('Fotos sind im Gastmodus deaktiviert');
     const ext = (file.name.split('.').pop() ?? '').toLowerCase();
     if (!ALLOWED_PHOTO_TYPES.has(file.type) || !ALLOWED_PHOTO_EXTENSIONS.has(ext)) {
       throw new Error('Unsupported image type');

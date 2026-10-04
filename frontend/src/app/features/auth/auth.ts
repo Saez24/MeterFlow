@@ -6,12 +6,20 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApiService } from '../../core/services/api.service';
+import { GuestLogin } from '../../shared/components/guest-login/guest-login';
 
 type AuthMode = 'login' | 'register';
 
 @Component({
   selector: 'app-auth',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatIconModule, MatSnackBarModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatIconModule,
+    MatSnackBarModule,
+    GuestLogin,
+  ],
   templateUrl: './auth.html',
   styleUrl: './auth.scss',
 })

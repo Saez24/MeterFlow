@@ -167,6 +167,11 @@
       <!-- Foto -->
       <div class="form-section">
         <h3 class="section-title" i18n="@@readingsForm.photo.title">Foto (optional)</h3>
+        @if (isGuest()) {
+          <p class="photo-uploading-hint" i18n="@@readingsForm.photo.guestHint">
+            Im Gastmodus wird das Foto nur zur Zählerstand-Erkennung genutzt und nicht gespeichert.
+          </p>
+        }
 
         @if (hasExistingPhoto() && existingPhotoSignedUrl()) {
           <!-- Bestehendes Foto im Edit-Modus -->

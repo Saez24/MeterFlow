@@ -71,6 +71,7 @@
   }
 
   <main class="main-content" [class.main-content--auth]="isAuthPage()">
+    <app-guest-banner />
     @if (!isAuthPage()) {
       <header class="mobile-header frosted-glass">
         <div class="mobile-logo">

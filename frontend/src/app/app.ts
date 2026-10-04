@@ -6,6 +6,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ThemeService } from './core/services/theme.service';
 import { ApiService } from './core/services/api.service';
 import { NotificationService } from './core/services/notification.service';
+import { GuestBanner } from './shared/components/guest-banner/guest-banner';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
 
@@ -17,7 +18,7 @@ interface NavItem {
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, RouterModule, RouterOutlet, MatIconModule, MatTooltipModule],
+  imports: [CommonModule, RouterModule, RouterOutlet, MatIconModule, MatTooltipModule, GuestBanner],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

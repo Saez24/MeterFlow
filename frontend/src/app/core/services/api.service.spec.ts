@@ -26,6 +26,7 @@ class FakeSupabase {
     getSession: vi.fn(async () => ({ data: { session: null } })),
     onAuthStateChange: vi.fn(),
     signInWithPassword: vi.fn(),
+    signInAnonymously: vi.fn(),
     signUp: vi.fn(),
     signOut: vi.fn(async () => ({ error: null })),
   };
@@ -108,7 +109,7 @@ describe('ApiService (Supabase)', () => {
 
   it('signIn sets currentUser', async () => {
     await signedIn();
-    expect(api.currentUser()).toEqual({ id: 'u1', email: 'a@b.c' });
+    expect(api.currentUser()).toEqual({ id: 'u1', email: 'a@b.c', isAnonymous: false });
   });
 
   it('signIn surfaces the Supabase error message', async () => {
@@ -236,6 +237,61 @@ describe('ApiService (Supabase)', () => {
     expect(path).toMatch(/^u1\/[0-9a-f-]{36}\.jpg$/);
     expect(fake.callsOf('readings', 'update')[0][0]).toEqual({ photo: path });
     expect(fake.storageCalls.at(-1)).toEqual({ method: 'remove', args: [['u1/old.jpg']] });
+  });
+
+  describe('guest access', () => {
+    const guestUser = { id: 'g1', email: undefined, is_anonymous: true };
+
+    it('signInAsGuest signs in anonymously and seeds the demo data', async () => {
+      fake.auth.signInAnonymously.mockResolvedValue({ data: { user: guestUser }, error: null });
+
+      const { error } = await api.signInAsGuest();
+
+      expect(error).toBeNull();
+      expect(api.isGuest()).toBe(true);
+      const [meters] = fake.callsOf('meters', 'insert')[0] as [Record<string, unknown>[]];
+      expect(meters.length).toBeGreaterThan(0);
+      expect(meters.every((m) => m['user_id'] === 'g1')).toBe(true);
+      expect(fake.callsOf('readings', 'insert')).toHaveLength(1);
+    });
+
+    it('signInAsGuest surfaces a disabled anonymous sign-in', async () => {
+      fake.auth.signInAnonymously.mockResolvedValue({
+        data: { user: null },
+        error: { message: 'Anonymous sign-ins are disabled' },
+      });
+
+      const { error } = await api.signInAsGuest();
+
+      expect(error?.message).toBe('Anonymous sign-ins are disabled');
+      expect(api.currentUser()).toBeNull();
+    });
+
+    it('signInAsGuest signs out again when seeding fails', async () => {
+      fake.auth.signInAnonymously.mockResolvedValue({ data: { user: guestUser }, error: null });
+      fake.queue('meters', { data: [], error: null }, { data: null, error: new Error('limit') });
+
+      const { error } = await api.signInAsGuest();
+
+      expect(error?.message).toBe('limit');
+      expect(fake.auth.signOut).toHaveBeenCalled();
+      expect(api.currentUser()).toBeNull();
+    });
+
+    it('uploadPhoto is blocked for guests', async () => {
+      fake.auth.signInAnonymously.mockResolvedValue({ data: { user: guestUser }, error: null });
+      await api.signInAsGuest();
+      fake.storageCalls.length = 0;
+
+      const file = new File(['x'], 'meter.jpg', { type: 'image/jpeg' });
+      await expect(api.uploadPhoto(file, 'r1')).rejects.toThrow('Gastmodus');
+      expect(fake.storageCalls).toHaveLength(0);
+    });
+
+    it('regular accounts are not guests', async () => {
+      await signedIn();
+      expect(api.isGuest()).toBe(false);
+    });
   });
 
   describe('importData', () => {

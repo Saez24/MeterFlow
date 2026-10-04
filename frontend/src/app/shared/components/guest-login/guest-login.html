@@ -1,0 +1,26 @@
+<div class="guest-login">
+  <div class="guest-divider"><span i18n="@@guestLogin.or">oder</span></div>
+
+  <button
+    type="button"
+    class="df-btn df-btn-secondary df-btn--block"
+    [disabled]="loading()"
+    (click)="start()"
+  >
+    @if (loading()) {
+      <span class="loading-spinner"></span>
+      <span i18n="@@guestLogin.loading">Demo wird vorbereitet...</span>
+    } @else {
+      <mat-icon>person_outline</mat-icon>
+      <span i18n="@@guestLogin.button">Als Gast testen</span>
+    }
+  </button>
+
+  <p class="guest-hint" i18n="@@guestLogin.hint">
+    Ohne Anmeldung mit Beispieldaten. Alles wird nach 24 Stunden automatisch gelöscht.
+  </p>
+
+  @if (error()) {
+    <p class="guest-error" role="alert">{{ error() }}</p>
+  }
+</div>
