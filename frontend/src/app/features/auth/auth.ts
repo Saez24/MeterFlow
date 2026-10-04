@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,6 +19,7 @@ type AuthMode = 'login' | 'register';
     MatIconModule,
     MatSnackBarModule,
     GuestLogin,
+    RouterLink,
   ],
   templateUrl: './auth.html',
   styleUrl: './auth.scss',

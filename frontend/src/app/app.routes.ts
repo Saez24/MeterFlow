@@ -14,12 +14,16 @@ import { MeterReadings } from './features/meters/meter-detail/tabs/meter-reading
 import { MeterTariffs } from './features/meters/meter-detail/tabs/meter-tariffs/meter-tariffs';
 import { MeterCosts } from './features/meters/meter-detail/tabs/meter-costs/meter-costs';
 import { CostPreview } from './features/cost-preview/cost-preview';
+import { Impressum } from './features/legal/impressum';
+import { Datenschutz } from './features/legal/datenschutz';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 
   { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
   { path: 'auth', component: Auth },
+  { path: 'impressum', component: Impressum },
+  { path: 'datenschutz', component: Datenschutz },
   {
     path: 'meters',
     canActivate: [authGuard],

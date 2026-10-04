@@ -343,3 +343,24 @@
     text-align: center;
   }
 }
+
+/* ── Legal links (Impressum / Datenschutz) ── */
+.about-legal {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+
+  a {
+    color: var(--text-secondary);
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--apple-blue);
+      text-decoration: underline;
+    }
+  }
+}

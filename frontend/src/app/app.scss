@@ -300,3 +300,24 @@
   width: 100% !important;
   padding: 0 !important;
 }
+
+/* ── Legal links (Impressum / Datenschutz) ── */
+.sidebar__legal {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+
+  a {
+    color: var(--text-secondary);
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--apple-blue);
+      text-decoration: underline;
+    }
+  }
+}

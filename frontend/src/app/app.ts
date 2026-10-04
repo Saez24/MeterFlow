@@ -16,6 +16,11 @@ interface NavItem {
   label: string;
 }
 
+/** Auth and legal pages render without the app shell (sidebar, bottom nav). */
+const STANDALONE_PREFIXES = ['/auth', '/impressum', '/datenschutz'];
+const isStandalonePage = (url: string): boolean =>
+  STANDALONE_PREFIXES.some((prefix) => url.startsWith(prefix));
+
 @Component({
   selector: 'app-root',
   imports: [CommonModule, RouterModule, RouterOutlet, MatIconModule, MatTooltipModule, GuestBanner],
@@ -39,9 +44,9 @@ export class App {
   readonly isAuthPage = toSignal(
     this.router.events.pipe(
       filter((e) => e instanceof NavigationEnd),
-      map((e) => (e as NavigationEnd).urlAfterRedirects.startsWith('/auth')),
+      map((e) => isStandalonePage((e as NavigationEnd).urlAfterRedirects)),
     ),
-    { initialValue: this.router.url.startsWith('/auth') },
+    { initialValue: isStandalonePage(this.router.url) },
   );
 
   readonly navItems: NavItem[] = [

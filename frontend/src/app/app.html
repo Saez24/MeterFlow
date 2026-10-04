@@ -53,6 +53,13 @@
       </div>
 
       <div class="sidebar__footer">
+        @if (!sidebarCollapsed()) {
+          <div class="sidebar__legal">
+            <a routerLink="/impressum" i18n="@@legal.imprint">Impressum</a>
+            <span aria-hidden="true">·</span>
+            <a routerLink="/datenschutz" i18n="@@legal.privacy">Datenschutz</a>
+          </div>
+        }
         <button
           type="button"
           class="logout-btn df-btn df-btn-secondary"

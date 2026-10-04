@@ -185,3 +185,24 @@
     font-size: 1.4rem;
   }
 }
+
+/* ── Legal links (Impressum / Datenschutz) ── */
+.auth-legal {
+  display: flex;
+  gap: 6px;
+  margin-top: 24px;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+
+  a {
+    color: var(--text-secondary);
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--apple-blue);
+      text-decoration: underline;
+    }
+  }
+}

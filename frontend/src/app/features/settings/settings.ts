@@ -8,7 +8,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ThemeService } from '../../core/services/theme.service';
 import { ApiService } from '../../core/services/api.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MeterService } from '../../core/services/meter.service';
 import { ReadingService } from '../../core/services/reading.service';
 import { DataSyncService } from '../../core/services/data-sync.service';
@@ -23,6 +23,7 @@ import { EnergyType, ENERGY_META } from '../../core/models/energy.models';
   selector: 'app-settings',
   imports: [
     CommonModule,
+    RouterLink,
     FormsModule,
     MatIconModule,
     MatCardModule,

@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ApiService } from '../../core/services/api.service';
 import { apiServiceMock } from '../../core/services/api.service.mock';
 import { provideZonelessChangeDetection } from '@angular/core';
+import { provideRouter } from '@angular/router';
 
 import { Auth } from './auth';
 
@@ -15,6 +16,7 @@ describe('Auth', () => {
       providers: [
         { provide: ApiService, useValue: apiServiceMock() },
         provideZonelessChangeDetection(),
+        provideRouter([]),
       ],
     }).compileComponents();
 

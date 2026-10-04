@@ -2,6 +2,8 @@ import {
   ApplicationConfig,
   provideZonelessChangeDetection,
   provideBrowserGlobalErrorListeners,
+  provideAppInitializer,
+  inject,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
@@ -13,6 +15,9 @@ import localeDe from '@angular/common/locales/de';
 import localeEn from '@angular/common/locales/en';
 import { LOCALE_ID, isDevMode } from '@angular/core';
 import { provideServiceWorker } from '@angular/service-worker';
+import { provideUmami } from 'ngx-umami';
+import { umamiConfig } from './config/analytics.config';
+import { PageViewTracker } from './core/services/page-view-tracker';
 
 registerLocaleData(localeDe);
 registerLocaleData(localeEn);
@@ -32,5 +37,7 @@ export const appConfig: ApplicationConfig = {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
     }),
+    provideUmami(umamiConfig),
+    provideAppInitializer(() => inject(PageViewTracker).init()),
   ],
 };
