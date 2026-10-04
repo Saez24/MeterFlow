@@ -27,6 +27,8 @@ export class GuestLogin {
     try {
       const { error } = await this.api.signInAsGuest();
       if (error) {
+        // Supabase reason (e.g. anonymous sign-ins disabled) for diagnosis.
+        console.warn('Guest sign-in failed:', error.message);
         this.error.set(
           $localize`:@@guestLogin.error:Der Gastzugang ist gerade nicht verfügbar. Bitte versuche es später erneut.`,
         );
