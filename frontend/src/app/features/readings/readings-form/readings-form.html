@@ -292,11 +292,15 @@
           </div>
         } @else {
           <!-- Datei-Auswahl -->
-          <label class="photo-upload-label" [class.photo-upload-label--uploading]="isUploading()">
+          <label
+            class="photo-upload-label"
+            [class.photo-upload-label--uploading]="isUploading() || photoConverting()"
+          >
             <input
               type="file"
               accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
               hidden
+              [disabled]="photoConverting()"
               (change)="onPhotoSelected($event)"
               aria-label="Foto hochladen"
               i18n-aria-label="@@readingsForm.photo.inputLabel"
@@ -306,6 +310,11 @@
           </label>
         }
 
+        @if (photoConverting()) {
+          <p class="photo-uploading-hint" i18n="@@readingsForm.photo.converting">
+            HEIC-Foto wird umgewandelt…
+          </p>
+        }
         @if (isUploading()) {
           <p class="photo-uploading-hint" i18n="@@readingsForm.photo.uploading">
             Foto wird hochgeladen…

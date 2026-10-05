@@ -48,6 +48,7 @@ export class ReadingsForm {
   readonly existingPhotoRemoved = signal(false);
   readonly selectedPhotoFile = signal<File | null>(null);
   readonly photoPreviewUrl = signal<string | null>(null);
+  readonly photoConverting = signal(false);
   readonly isUploading = signal(false);
 
   // ── OCR-State ────────────────────────────────────────────────────────
@@ -220,7 +221,7 @@ export class ReadingsForm {
     this.form.patchValue({ meterId: id });
   }
 
-  onPhotoSelected(event: Event): void {
+  async onPhotoSelected(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (!file) return;
@@ -237,10 +238,29 @@ export class ReadingsForm {
       );
       return;
     }
+    // HEIC → JPEG right away: preview, OCR and later display then work in every
+    // browser (only Safari renders HEIC), and the stored photo is a JPEG.
+    let photo = file;
+    this.photoConverting.set(true);
+    try {
+      photo = await this.ocrService.toJpegIfHeic(file);
+    } catch (e) {
+      console.error('HEIC conversion failed:', e);
+      input.value = '';
+      this.snackBar.open(
+        $localize`:@@readingsForm.photo.heicError:HEIC-Foto konnte nicht umgewandelt werden – bitte als JPG auswählen.`,
+        'OK',
+        { duration: 6000 },
+      );
+      return;
+    } finally {
+      this.photoConverting.set(false);
+    }
+
     const prev = this.photoPreviewUrl();
     if (prev) URL.revokeObjectURL(prev);
-    this.selectedPhotoFile.set(file);
-    this.photoPreviewUrl.set(URL.createObjectURL(file));
+    this.selectedPhotoFile.set(photo);
+    this.photoPreviewUrl.set(URL.createObjectURL(photo));
     // Reset previous OCR result when a new photo is selected
     this.ocrResult.set(null);
   }
