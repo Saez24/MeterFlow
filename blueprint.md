@@ -82,6 +82,17 @@ Empfehlung: **Contract-First** — REST-Endpunkt-Liste zuerst fixieren, dann WS2
 
 ## 6. Aktueller Stand
 
+**Stand 2026-10-05 (beide Branches):**
+
+| Thema | `main`/`production` (Django, Docker) | `supabase` (Webspace per FTP) |
+|---|---|---|
+| Foto-Upload, HEIC → JPEG bei Auswahl, Fehler sichtbar | ✅ | ✅ |
+| Zählerstand-Erkennung: Zuschneide-Werkzeug, Abgleich mit Vor-/Folgestand, m³ = 3 Nachkommastellen | ✅ | ✅ |
+| CSP | nginx mit Nonce, `worker-src`/`img-src` + `blob:` | `.htaccess`, ohne Nonce, scharf (vorher Report-Only getestet) |
+| Impressum/Datenschutz in der App | ❌ (nicht vorhanden) | ✅ `/impressum`, `/datenschutz` |
+| Besucherstatistik Umami | ❌ | ✅ (selbst gehostet, IDs in URLs → `:id`) |
+| Favicon/Apple-Touch-Icon (MeterFlow-Logo) | ❌ (noch Angular-Default) | ✅ |
+
 **WS5 (Security-Gate) — bestanden.** ✅ · **WS4 (Deploy)** ✅ · **WS3 (Datenschicht)** ✅ · **WS3b (Design)** 🟢 · **WS2 (Backend)** ✅ · **Contract-First** ✅ · **WS1** ✅
 
 **WS5 — Security-Gate & Doku (Elena/Lukas):**
@@ -270,9 +281,22 @@ Deployment (3 Images + Compose), CI/CD (Trivy-Gate), Security-Gate bestanden.
 **Verbleibend (Deploy-Zeit, brauchen Netz/Docker — nicht in dieser Umgebung machbar):**
 1. GitHub Actions per **SHA pinnen** (§11).
 2. **Realer Docker-Build + `docker compose up`** E2E-Durchklick (Registrierung→Zähler→Ablesung+Foto→
-   Dashboard→CSV/PDF), Images bauen/Trivy-scannen.
+   Dashboard→CSV/PDF), Images bauen/Trivy-scannen. **Dabei mit offener Console prüfen:** HEIC-Foto,
+   Zuschneide-Werkzeug, Zählerstand-Erkennung (die nginx-CSP ist dort von Anfang an scharf).
 3. WS3b: optische Light/Dark-Sichtung pro Feature-Modul im Browser.
 4. Optional: S3/MinIO-Media als CDN-Offload (Foto-Zugriff ist bereits authentifiziert abgesichert).
+5. **Entscheidung offen:** Wird die Docker-Variante (`main`) öffentlich betrieben, braucht sie ebenfalls
+   Impressum/Datenschutz und ggf. Umami (aus `supabase` übernehmbar: `features/legal/`,
+   `config/analytics.config.ts`, `core/services/page-view-tracker.ts`) sowie das eigene Favicon.
+
+**Bekannte technische Schulden (Stand 2026-10-05):**
+- **i18n:** Die neuen Templates (Rechtsseiten-Links, `photo-crop`, Foto-/OCR-Hinweise im Formular)
+  nutzen wie der Altbestand `i18n="@@…"`-Attribute statt des vorgesehenen Runtime-`LocaleService`.
+  Beim Umbau auf `LocaleService` mitnehmen.
+- **Zählerstand-Erkennung bei der ersten Ablesung** eines Zählers: ohne Vorstand kein Plausibilitäts-
+  abgleich, die Kommaposition ist geraten (bei m³ fest 3 Stellen). Idee: Kommaposition aus früheren
+  Ablesungen desselben Zählers übernehmen.
+- Die Rechtsseiten sind nur deutsch (auch bei englischer Oberfläche).
 
 ## 8. Referenz-Quellen (aus den Altprojekten)
 
@@ -402,3 +426,28 @@ Deployment (3 Images + Compose), CI/CD (Trivy-Gate), Security-Gate bestanden.
   (`connected_load_kw`, `advance_payments`, FK-Indizes, Ownership-Trigger, 10-MiB-Fotolimit).
   `backend/`/`deploy/` bleiben auf dem Branch unverändert liegen (keine modify/delete-Konflikte
   beim Merge). Build + 102 Vitest grün; Migration mangels lokalem Postgres noch nicht ausgeführt.
+- (2026-10-04, `supabase`, Lukas/Ole/Elena) **Rechtliches + Besucherstatistik**: Seiten `/impressum`
+  (§ 5 DDG) und `/datenschutz` ohne Login und ohne App-Shell, verlinkt auf Login-Seite, in der Sidebar
+  und in den Einstellungen. Datenschutzerklärung gegen Code und Schema abgeglichen: Konto, Gastzugang
+  (24 h), Zählerdaten, private Fotos, Supabase Frankfurt (eu-central-1), Browser-Speicher, Umami/
+  Cloudflare, ULD Schleswig-Holstein. **Umami** über `ngx-umami` mit `autoTrack: false` und
+  `PageViewTracker` (IDs in URLs → `:id`, nie Konto-zuordenbare IDs). Eigenes Favicon/Apple-Touch-Icon.
+- (2026-10-05, `supabase`, Kilian/Finn) **Fix Umami:** Mit `autoTrack: false` hookt Umami 3 kein
+  `pushState`, `props.url` blieb die Einstiegs-URL. Tracker nimmt die URL jetzt vom Router (+ Test).
+- (2026-10-05, `supabase`, Elena/Niko) **Sicherheits-Header** in `frontend/public/.htaccess`
+  (X-Frame-Options, nosniff, Referrer-, Permissions-Policy; HSTS kommt vom netcup-Proxy). CSP erst als
+  Report-Only ausgerollt, ohne Verstöße getestet, dann scharf geschaltet. Auf dem Webspace gibt es kein
+  Nonce → `inlineCritical: false`, damit der Build kein Inline-Script enthält.
+- (2026-10-05, `supabase` + `main`/`production`, Kilian/Finn) **Drei Altfehler behoben**, beim CSP-Test
+  aufgefallen: `heic-to` falsch aufgerufen (kein default-Export, Options-Objekt; durch `as any`
+  verdeckt) → `heic-to/csp`; `tesseract.js` (CommonJS) im Bundle nur unter `default` („t is not a
+  function“); Foto-Upload-Fehler wurden verschluckt und trotzdem „gespeichert“ gemeldet. Neu: HEIC wird
+  direkt bei der Auswahl in JPEG umgewandelt (Vorschau in allen Browsern, gespeichert wird JPEG).
+  `main`: nginx-CSP `worker-src`/`img-src` um `blob:` ergänzt.
+- (2026-10-05, `supabase` + `main`/`production`, Kilian/Finn) **Zählerstand-Erkennung neu**: Vorher
+  „größte Zahl gewinnt“ (las z. B. „EN 1359:2017“). Jetzt Zuschneide-Werkzeug `shared/components/
+  photo-crop` (Touch/Maus/Tastatur), Canvas-Vorverarbeitung (Graustufen, Kontrast, Invertieren,
+  4 Schwellwerte), `core/services/meter-reading-parser.ts` (Rollen-Lücken, Abgleich mit Vor-/Folgestand,
+  Mehrheitsentscheid; m³ fest 3 Nachkommastellen, jede Stelle einzeln abgestimmt), Alternativ-Werte,
+  „Gelesene Ziffern“. Tests mit echten OCR-Ausgaben eines Gaszählers (02217,589 m³ → 2217,58x).
+  Frontend: `supabase` 141 Vitest, `main` 113 Vitest, Builds grün.
