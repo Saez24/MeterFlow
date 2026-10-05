@@ -18,23 +18,13 @@ export class OcrService {
    * Returns the best numeric candidate, confidence (0-100), and the full raw text.
    */
   async recognizeMeterValue(file: File): Promise<OcrResult> {
-    // Lazy import – WASM bundle only loaded when OCR is first used
-    const { createWorker, PSM } = await import('tesseract.js');
+    // Lazy import – WASM bundle only loaded when OCR is first used.
+    // tesseract.js is CommonJS: in the browser bundle its API only lives on
+    // `default` (named exports are undefined there → "t is not a function").
+    const tesseract = await import('tesseract.js');
+    const { createWorker, PSM } = tesseract.default ?? tesseract;
 
-    // Convert HEIC to supported format if necessary
-    let processedFile = file;
-    if (
-      file.type === 'image/heic' ||
-      file.type === 'image/heif' ||
-      file.name.toLowerCase().endsWith('.heic') ||
-      file.name.toLowerCase().endsWith('.heif')
-    ) {
-      const { default: heicTo } = await import('heic-to');
-      const convertedBlob = await (heicTo as any)(file, { type: 'image/jpeg', quality: 0.8 });
-      processedFile = new File([convertedBlob], file.name.replace(/\.(heic|heif)$/i, '.jpg'), {
-        type: 'image/jpeg',
-      });
-    }
+    const processedFile = await this.toJpegIfHeic(file);
 
     // Self-hosted assets only (no CDN — security-standards §7/§8). The core
     // WASM + worker are copied from node_modules to /tesseract by angular.json;
@@ -62,6 +52,26 @@ export class OcrService {
     const value = this.extractMeterReading(rawText);
 
     return { value, confidence, rawText };
+  }
+
+  /**
+   * HEIC/HEIF (iPhone photos) → JPEG; other files are returned unchanged.
+   * Browsers other than Safari can neither preview nor OCR HEIC, so the form
+   * converts right after selection and stores the JPEG.
+   */
+  async toJpegIfHeic(file: File): Promise<File> {
+    const name = file.name.toLowerCase();
+    const isHeic =
+      file.type === 'image/heic' ||
+      file.type === 'image/heif' ||
+      name.endsWith('.heic') ||
+      name.endsWith('.heif');
+    if (!isHeic) return file;
+    // CSP build: no `new Function`, so no 'unsafe-eval' needed (worker-src still needs blob:).
+    // heic-to has no default export and takes one options object.
+    const { heicTo } = await import('heic-to/csp');
+    const jpeg = await heicTo({ blob: file, type: 'image/jpeg', quality: 0.8 });
+    return new File([jpeg], file.name.replace(/\.(heic|heif)$/i, '.jpg'), { type: 'image/jpeg' });
   }
 
   /**
