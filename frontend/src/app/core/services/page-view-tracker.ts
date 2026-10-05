@@ -18,7 +18,9 @@ export function normalizeTrackedUrl(url: string): string {
 /**
  * Sends one Umami page view per router navigation with a normalized URL.
  * Umami's auto-tracking is off (see analytics.config.ts) because it would send
- * the raw URL including IDs.
+ * the raw URL including IDs. With auto-tracking off, Umami 3 never hooks
+ * pushState, so its payload `url` stays the URL the app was opened with — the
+ * URL therefore comes from the router, not from Umami.
  */
 @Injectable({ providedIn: 'root' })
 export class PageViewTracker {
@@ -28,13 +30,17 @@ export class PageViewTracker {
     if (typeof window === 'undefined') return;
     this.router.events
       .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-      .subscribe(() => this.whenTrackerReady(() => this.trackCurrentPage()));
+      .subscribe((e) => this.whenTrackerReady(() => this.trackPage(e.urlAfterRedirects)));
   }
 
-  private trackCurrentPage(): void {
+  private trackPage(routerUrl: string): void {
     // Callback form: Umami passes its default payload (website, hostname, screen,
     // language, title …) and sends what we return. The object form would drop those.
-    window.umami?.track((props) => ({ ...props, url: normalizeTrackedUrl(props.url ?? '/') }));
+    window.umami?.track((props) => ({
+      ...props,
+      url: normalizeTrackedUrl(routerUrl),
+      referrer: props.referrer ? normalizeTrackedUrl(props.referrer) : props.referrer,
+    }));
   }
 
   private whenTrackerReady(run: () => void): void {
