@@ -1,0 +1,49 @@
+<div class="crop">
+  <p class="crop-hint" i18n="@@photoCrop.hint">
+    Rahmen eng um die Ziffern des Zählwerks ziehen – ohne Typenschild und Seriennummer.
+  </p>
+
+  <div
+    #stage
+    class="crop-stage"
+    (pointermove)="onPointerMove($event)"
+    (pointerup)="onPointerUp($event)"
+    (pointercancel)="onPointerUp($event)"
+  >
+    <img [src]="src()" class="crop-image" alt="" draggable="false" />
+
+    <div
+      class="crop-box"
+      tabindex="0"
+      role="group"
+      aria-label="Ausschnitt für die Texterkennung. Pfeiltasten verschieben, Umschalt und Pfeiltasten ändern die Größe."
+      i18n-aria-label="@@photoCrop.boxAria"
+      [style.left.%]="rect().x * 100"
+      [style.top.%]="rect().y * 100"
+      [style.width.%]="rect().width * 100"
+      [style.height.%]="rect().height * 100"
+      (pointerdown)="onPointerDown($event, 'move')"
+      (keydown)="onKeydown($event)"
+    >
+      <span class="crop-handle crop-handle--nw" (pointerdown)="onPointerDown($event, 'nw')"></span>
+      <span class="crop-handle crop-handle--ne" (pointerdown)="onPointerDown($event, 'ne')"></span>
+      <span class="crop-handle crop-handle--sw" (pointerdown)="onPointerDown($event, 'sw')"></span>
+      <span class="crop-handle crop-handle--se" (pointerdown)="onPointerDown($event, 'se')"></span>
+    </div>
+  </div>
+
+  <div class="crop-actions">
+    <button
+      type="button"
+      class="df-btn df-btn-ghost df-btn--sm"
+      (click)="cancelled.emit()"
+      i18n="@@photoCrop.cancel"
+    >
+      Abbrechen
+    </button>
+    <button type="button" class="df-btn df-btn-primary df-btn--sm" (click)="confirm()">
+      <mat-icon>document_scanner</mat-icon>
+      <span i18n="@@photoCrop.confirm">Ausschnitt erkennen</span>
+    </button>
+  </div>
+</div>

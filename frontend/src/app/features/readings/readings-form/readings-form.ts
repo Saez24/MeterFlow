@@ -11,7 +11,8 @@ import { ReadingService } from '../../../core/services/reading.service';
 import { TariffService } from '../../../core/services/tariff.service';
 import { ApiService } from '../../../core/services/api.service';
 import { GAS_DEFAULTS } from '../../../core/constants/gas.constants';
-import { OcrService, OcrResult } from '../../../core/services/ocr.service';
+import { OcrService, OcrResult, CropRect } from '../../../core/services/ocr.service';
+import { PhotoCrop } from '../../../shared/components/photo-crop/photo-crop';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { maxDecimalPlaces } from '../../../core/validators/decimal-places.validator';
 import { toDateInputValue, parseDateInput } from '../../../core/utils/date-input.util';
@@ -26,6 +27,7 @@ import { toDateInputValue, parseDateInput } from '../../../core/utils/date-input
     MatIconModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
+    PhotoCrop,
   ],
   templateUrl: './readings-form.html',
   styleUrl: './readings-form.scss',
@@ -49,6 +51,8 @@ export class ReadingsForm {
   readonly selectedPhotoFile = signal<File | null>(null);
   readonly photoPreviewUrl = signal<string | null>(null);
   readonly photoConverting = signal(false);
+  /** Frame step before OCR: the user marks the number wheels. */
+  readonly cropping = signal(false);
   readonly isUploading = signal(false);
 
   // ── OCR-State ────────────────────────────────────────────────────────
@@ -263,6 +267,7 @@ export class ReadingsForm {
     this.photoPreviewUrl.set(URL.createObjectURL(photo));
     // Reset previous OCR result when a new photo is selected
     this.ocrResult.set(null);
+    this.cropping.set(false);
   }
 
   clearPhoto(): void {
@@ -271,20 +276,26 @@ export class ReadingsForm {
     this.selectedPhotoFile.set(null);
     this.photoPreviewUrl.set(null);
     this.ocrResult.set(null);
+    this.cropping.set(false);
   }
 
   removeExistingPhoto(): void {
     this.existingPhotoRemoved.set(true);
   }
 
-  async runOcr(): Promise<void> {
+  async runOcr(crop: CropRect): Promise<void> {
+    this.cropping.set(false);
     const file = this.selectedPhotoFile();
     if (!file || this.ocrRunning()) return;
 
     this.ocrRunning.set(true);
     this.ocrResult.set(null);
     try {
-      const result = await this.ocrService.recognizeMeterValue(file);
+      // Previous/next reading of this meter decide which digits are plausible.
+      const result = await this.ocrService.recognizeMeterValue(file, {
+        crop,
+        bounds: { min: this.minValue(), max: this.maxValue() },
+      });
       this.ocrResult.set(result);
     } catch (e) {
       console.error('OCR failed:', e);
@@ -298,10 +309,10 @@ export class ReadingsForm {
     }
   }
 
-  applyOcrValue(): void {
-    const result = this.ocrResult();
-    if (result?.value == null) return;
-    this.form.patchValue({ value: result.value });
+  applyOcrValue(value?: number): void {
+    const chosen = value ?? this.ocrResult()?.value;
+    if (chosen == null) return;
+    this.form.patchValue({ value: chosen });
     this.formSignal.set(this.form.getRawValue());
     this.ocrResult.set(null);
   }

@@ -458,3 +458,14 @@
   padding: 0 14px;
   font-size: 0.875rem;
 }
+
+/* ── OCR: alternative values (one tap to apply) ── */
+.ocr-alternatives {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
