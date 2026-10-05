@@ -53,6 +53,32 @@ describe('pickMeterReading', () => {
     expect(result.value).toBe(2217.58);
   });
 
+  describe('with a fixed number of decimals (m³ meters: 3)', () => {
+    it('always returns three decimals instead of guessing the comma', () => {
+      const result = pickMeterReading(CROPPED_PASSES, { min: 2190.4, decimals: 3 });
+      expect(result.value).toBe(2217.588);
+    });
+
+    it('decides every decimal by its own majority', () => {
+      const result = pickMeterReading(['02217589', '02217559', '02217589'], {
+        min: 2190.4,
+        decimals: 3,
+      });
+      expect(result.value).toBe(2217.589);
+    });
+
+    it('does not shift the comma when a pass lost a wheel', () => {
+      // "0221758" (one digit missing) would be 221.758 with 3 decimals → below min, ignored.
+      const result = pickMeterReading(['0221758', '02217589'], { min: 2190.4, decimals: 3 });
+      expect(result.value).toBe(2217.589);
+    });
+
+    it('falls back to guessing when no pass kept all decimal wheels', () => {
+      const result = pickMeterReading(['22175'], { min: 2190.4, decimals: 3 });
+      expect(result.value).toBe(2217.5);
+    });
+  });
+
   it('returns null when nothing was read', () => {
     expect(pickMeterReading(['', '  '], { min: 100 })).toEqual({ value: null, alternatives: [] });
   });

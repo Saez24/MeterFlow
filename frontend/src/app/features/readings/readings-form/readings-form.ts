@@ -221,6 +221,10 @@ export class ReadingsForm {
     return this.nextReading()?.value ?? null;
   });
 
+  /** m³ counters (gas, water) have three red decimal wheels; others vary. */
+  readonly ocrDecimals = computed(() => (this.selectedMeter()?.unit === 'm³' ? 3 : undefined));
+  readonly ocrNumberFormat = computed(() => (this.ocrDecimals() === 3 ? '1.3-3' : '1.0-3'));
+
   selectMeter(id: string): void {
     this.form.patchValue({ meterId: id });
   }
@@ -294,7 +298,7 @@ export class ReadingsForm {
       // Previous/next reading of this meter decide which digits are plausible.
       const result = await this.ocrService.recognizeMeterValue(file, {
         crop,
-        bounds: { min: this.minValue(), max: this.maxValue() },
+        bounds: { min: this.minValue(), max: this.maxValue(), decimals: this.ocrDecimals() },
       });
       this.ocrResult.set(result);
     } catch (e) {
