@@ -91,7 +91,7 @@ Empfehlung: **Contract-First** — REST-Endpunkt-Liste zuerst fixieren, dann WS2
 | CSP | nginx mit Nonce, `worker-src`/`img-src` + `blob:` | `.htaccess`, ohne Nonce, scharf (vorher Report-Only getestet) |
 | Impressum/Datenschutz in der App | ❌ (nicht vorhanden) | ✅ `/impressum`, `/datenschutz` |
 | Besucherstatistik Umami | ❌ | ✅ (selbst gehostet, IDs in URLs → `:id`) |
-| Favicon/Apple-Touch-Icon (MeterFlow-Logo) | ❌ (noch Angular-Default) | ✅ |
+| Favicon/Apple-Touch-Icon (MeterFlow-Logo) | ✅ | ✅ |
 
 **WS5 (Security-Gate) — bestanden.** ✅ · **WS4 (Deploy)** ✅ · **WS3 (Datenschicht)** ✅ · **WS3b (Design)** 🟢 · **WS2 (Backend)** ✅ · **Contract-First** ✅ · **WS1** ✅
 
@@ -287,7 +287,8 @@ Deployment (3 Images + Compose), CI/CD (Trivy-Gate), Security-Gate bestanden.
 4. Optional: S3/MinIO-Media als CDN-Offload (Foto-Zugriff ist bereits authentifiziert abgesichert).
 5. **Entscheidung offen:** Wird die Docker-Variante (`main`) öffentlich betrieben, braucht sie ebenfalls
    Impressum/Datenschutz und ggf. Umami (aus `supabase` übernehmbar: `features/legal/`,
-   `config/analytics.config.ts`, `core/services/page-view-tracker.ts`) sowie das eigene Favicon.
+   `config/analytics.config.ts`, `core/services/page-view-tracker.ts`). Stand 2026-10-05: wird
+   **nicht öffentlich** betrieben → bleibt ohne Rechtsseiten/Umami.
 
 **Bekannte technische Schulden (Stand 2026-10-05):**
 - **i18n:** Die neuen Templates (Rechtsseiten-Links, `photo-crop`, Foto-/OCR-Hinweise im Formular)
@@ -451,3 +452,8 @@ Deployment (3 Images + Compose), CI/CD (Trivy-Gate), Security-Gate bestanden.
   Mehrheitsentscheid; m³ fest 3 Nachkommastellen, jede Stelle einzeln abgestimmt), Alternativ-Werte,
   „Gelesene Ziffern“. Tests mit echten OCR-Ausgaben eines Gaszählers (02217,589 m³ → 2217,58x).
   Frontend: `supabase` 141 Vitest, `main` 113 Vitest, Builds grün.
+- (2026-10-05, `main`/`production`, Kilian/Niko) **Favicon/Apple-Touch-Icon** aus `supabase` übernommen.
+  **`build-and-push.yml` mit Pfad-Filter**: Docker-Build nur noch bei Änderungen an `frontend/`,
+  `backend/`, `deploy/` oder am Workflow selbst; Doku/README/Blueprint lösen keinen Build mehr aus
+  (Tags `v*` und manueller Start bauen weiterhin). `ftp-deploy.yml` (`supabase`) war bereits auf
+  `frontend/**` gefiltert.
