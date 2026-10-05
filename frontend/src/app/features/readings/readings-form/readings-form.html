@@ -186,6 +186,13 @@
               <mat-icon>delete_outline</mat-icon> Foto entfernen
             </button>
           </div>
+        } @else if (photoPreviewUrl() && cropping()) {
+          <!-- Ausschnitt für die Texterkennung wählen -->
+          <app-photo-crop
+            [src]="photoPreviewUrl()!"
+            (confirmed)="runOcr($event)"
+            (cancelled)="cropping.set(false)"
+          />
         } @else if (photoPreviewUrl()) {
           <!-- Neu gewähltes Foto -->
           <div class="photo-preview">
@@ -201,7 +208,7 @@
                 class="ocr-btn df-btn df-btn-secondary df-btn--sm"
                 [class.ocr-btn--running]="ocrRunning()"
                 [disabled]="ocrRunning()"
-                (click)="runOcr()"
+                (click)="cropping.set(true)"
                 i18n-aria-label="@@readingsForm.ocr.btnAria"
                 aria-label="Zählerstand aus Foto erkennen"
               >
@@ -233,7 +240,7 @@
                         >Erkannter Wert</span
                       >
                       <span class="ocr-result-value">{{
-                        result.value | number: '1.0-3' : 'de'
+                        result.value | number: ocrNumberFormat() : 'de'
                       }}</span>
                       <span class="ocr-result-confidence">
                         <span i18n="@@readingsForm.ocr.confidence">Konfidenz</span>:
@@ -260,6 +267,24 @@
                       </button>
                     </div>
                   </div>
+                  <details class="ocr-raw">
+                    <summary i18n="@@readingsForm.ocr.raw">Gelesene Ziffern</summary>
+                    <code>{{ result.rawText || '–' }}</code>
+                  </details>
+                  @if (result.alternatives.length) {
+                    <div class="ocr-alternatives">
+                      <span i18n="@@readingsForm.ocr.alternatives">Oder:</span>
+                      @for (alt of result.alternatives; track alt) {
+                        <button
+                          type="button"
+                          class="df-btn df-btn-ghost df-btn--sm"
+                          (click)="applyOcrValue(alt)"
+                        >
+                          {{ alt | number: ocrNumberFormat() : 'de' }}
+                        </button>
+                      }
+                    </div>
+                  }
                 } @else {
                   <div class="ocr-result-main">
                     <mat-icon class="ocr-result-icon ocr-result-icon--warn">search_off</mat-icon>
@@ -268,7 +293,7 @@
                         >Kein Zählerstand erkannt</span
                       >
                       <span class="ocr-result-confidence" i18n="@@readingsForm.ocr.noValueHint"
-                        >Bitte Wert manuell eingeben</span
+                        >Rahmen enger um die Ziffern ziehen oder Wert manuell eingeben</span
                       >
                     </div>
                     <button

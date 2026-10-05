@@ -458,3 +458,28 @@
   padding: 0 14px;
   font-size: 0.875rem;
 }
+
+/* ── OCR: alternative values (one tap to apply) ── */
+.ocr-alternatives {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* ── OCR: raw digits per pass (helps to judge the frame) ── */
+.ocr-raw {
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+
+  code {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--mono, monospace);
+    overflow-wrap: anywhere;
+  }
+}

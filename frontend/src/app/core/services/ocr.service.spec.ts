@@ -13,10 +13,9 @@ describe('OcrService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should extract meter reading from text', () => {
-    // Access private method for testing
-    const extractMethod = (service as any).extractMeterReading.bind(service);
-    const result = extractMethod('12345.678');
-    expect(result).toBe(12345.678);
+  // Reading the digits is covered by meter-reading-parser.spec.ts.
+  it('leaves non-HEIC photos unchanged', async () => {
+    const jpeg = new File([new Uint8Array([0xff, 0xd8])], 'zaehler.jpg', { type: 'image/jpeg' });
+    expect(await service.toJpegIfHeic(jpeg)).toBe(jpeg);
   });
 });
