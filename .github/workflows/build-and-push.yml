@@ -9,7 +9,14 @@ name: build-and-push
 on:
   push:
     branches: [production]
-    tags: ['v*']
+    tags: ['v*'] # tag pushes ignore the path filter and always build
+    # Only changes that end up in an image trigger a build — docs, README and
+    # blueprint.md do not.
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+      - 'deploy/**'
+      - '.github/workflows/build-and-push.yml'
   workflow_dispatch:
 
 permissions:
