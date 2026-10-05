@@ -29,9 +29,10 @@ export class OcrService {
       file.name.toLowerCase().endsWith('.heic') ||
       file.name.toLowerCase().endsWith('.heif')
     ) {
-      // CSP build: no `new Function`, so no 'unsafe-eval' needed (worker-src still needs blob:)
-      const { default: heicTo } = await import('heic-to/csp');
-      const convertedBlob = await (heicTo as any)(file, { type: 'image/jpeg', quality: 0.8 });
+      // CSP build: no `new Function`, so no 'unsafe-eval' needed (worker-src still needs blob:).
+      // heic-to has no default export and takes one options object.
+      const { heicTo } = await import('heic-to/csp');
+      const convertedBlob = await heicTo({ blob: file, type: 'image/jpeg', quality: 0.8 });
       processedFile = new File([convertedBlob], file.name.replace(/\.(heic|heif)$/i, '.jpg'), {
         type: 'image/jpeg',
       });

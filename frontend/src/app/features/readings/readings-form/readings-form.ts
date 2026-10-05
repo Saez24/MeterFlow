@@ -266,7 +266,8 @@ export class ReadingsForm {
     try {
       const result = await this.ocrService.recognizeMeterValue(file);
       this.ocrResult.set(result);
-    } catch {
+    } catch (e) {
+      console.error('OCR failed:', e);
       this.snackBar.open(
         $localize`:@@readingsForm.ocr.error:Texterkennung fehlgeschlagen – bitte Wert manuell eingeben`,
         'OK',
@@ -348,12 +349,14 @@ export class ReadingsForm {
         readingId = saved.id;
       }
 
+      let photoError: string | null = null;
       if (this.selectedPhotoFile()) {
         this.isUploading.set(true);
         try {
           await this.apiService.uploadPhoto(this.selectedPhotoFile()!, readingId);
         } catch (e) {
           console.error('Photo upload failed:', e);
+          photoError = errorMessage(e);
         } finally {
           this.isUploading.set(false);
         }
@@ -365,9 +368,20 @@ export class ReadingsForm {
         }
       }
 
-      this.snackBar.open($localize`:@@readingsForm.saved:Ablesung gespeichert`, 'OK', {
-        duration: 3000,
-      });
+      if (photoError) {
+        // The reading itself is saved — say that the photo is not, instead of
+        // silently reporting success. No retry here: saving again would create
+        // a duplicate reading.
+        this.snackBar.open(
+          $localize`:@@readingsForm.photo.uploadError:Ablesung gespeichert, Foto aber nicht: ${photoError}:reason:`,
+          'OK',
+          { duration: 8000, panelClass: 'error-snackbar' },
+        );
+      } else {
+        this.snackBar.open($localize`:@@readingsForm.saved:Ablesung gespeichert`, 'OK', {
+          duration: 3000,
+        });
+      }
       this.readingService.goBack();
     } catch (error) {
       console.error('Error saving reading:', error);
@@ -383,4 +397,11 @@ export class ReadingsForm {
       this.isSaving.set(false);
     }
   }
+}
+
+/** Readable reason from Supabase/JS errors for user-facing messages. */
+function errorMessage(e: unknown): string {
+  if (e instanceof Error && e.message) return e.message;
+  if (typeof e === 'object' && e !== null && 'message' in e) return String(e.message);
+  return String(e);
 }
