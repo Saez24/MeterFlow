@@ -301,6 +301,68 @@ Deployment (3 Images + Compose), CI/CD (Trivy-Gate), Security-Gate bestanden.
   Ablesungen desselben Zählers übernehmen.
 - Die Rechtsseiten sind nur deutsch (auch bei englischer Oberfläche).
 
+### Audit 2026-11-02 – offene Findings
+
+Audit durch Max, Elena, Kai, Finn, Robin, nur gelesen; **kein kritischer Fund**. Elena verweigert die
+Deploy-Freigabe, bis H1–H3 erledigt sind. Die Funde sind **nicht am Code gegengeprüft**. Grenzen: Finn ohne
+Test-/Build-Lauf, Elena ohne `.env`-Zugriff und ohne gitleaks/trivy/pip-audit, Kai ohne Testlauf.
+**Regel:** pro Fix ein kleiner Commit je Bereich (Frontend/Backend/CI getrennt), Regressionstest zuerst,
+Elena prüft nach Sicherheitsfixes erneut.
+
+**HOCH**
+- [ ] H1 – Rate-Limits `key="ip"` greifen auf Proxy-IP, alle Nutzer teilen ein Limit (`accounts/views.py:47,82,121,149`; `common/data_import.py:223`; `deploy/nginx.*`: `limit_req` ohne realip; `audit.py` nimmt nur einen XFF-Hop) – Niko/Dario/Elena
+- [ ] H2 – Logout widerruft Refresh-Token nicht, Cookie-Path `/api/v1/auth/refresh` wird nicht an `/logout` gesendet (`accounts/views.py:163`, `cookies.py`) – Dario
+- [ ] H3 – Compose-Defaults: repo-bekannter `DJANGO_SECRET_KEY` passiert Prod-Guard, `JWT_SIGNING_KEY` fällt darauf zurück (`docker-compose.fullstack.yml:13`, `docker-compose.yml:15`, `prod.py`, `base.py:147`); `docker-compose.yml` setzt `DJANGO_ENV=development`, Image erzwingt aber `config.settings.prod` → SSL-Redirect/Secure-Cookies über HTTP – Niko
+- [ ] H4 – Admin speichert Passwörter im Klartext, `UserAdmin` erbt von `ModelAdmin` (`accounts/admin.py:9`) – Dario
+- [ ] H5 – Inaktive User können sich einloggen und Tokens erneuern, `is_active` fehlt in Login und `rotate_refresh_token` (`accounts/views.py:95`, `tokens.py`) – Dario
+- [ ] H6 – Ungültige `meter_id` führt zu HTTP 500 statt 400 (`readings/views.py:65,83-89,147-151`) – Dario
+- [ ] H7 – Datum um einen Tag verschoben in UTC+: `isoDate` nutzt `toISOString` (`api.service.ts:26,145,155`; `date-input.util.ts:13`); Backend-Verarbeitung nicht geprüft – Kilian/Finn
+- [ ] H8 – Registrierung läuft bei abweichenden Passwörtern weiter, `return` fehlt (`features/auth/auth.ts:49-55`) – Kilian
+- [ ] H9 – Datenimport mit N+1 Queries, bis >100.000 Queries bei 50.000 Readings (`common/data_import.py:125-201`) – Dario/Malte
+- [ ] H10 – Kosten-/Statistiklogik doppelt in Frontend und Backend, Backend-Endpoints `stats/*` ungenutzt; Entscheidung nötig, welche Seite Quelle ist (`stats/urls.py`, `stats.service.ts`, `dashboard-state.service.ts`, `reading.service.ts`) – Max (Entscheidung)
+- [ ] H11 – Geschäftslogik in Views statt Service-Layer, `common` importiert Domain-Apps (`readings/views.py:77-248`, `common/data_import.py`) – Dario
+- [ ] H12 – Keine `config/settings/test.py`, Tests laufen gegen `.env`-Datenbank (`pyproject.toml`, `tests/conftest.py`) – Robin
+- [ ] H13 – Ownership/IDOR- und Auth-Negativtests fehlen (Readings, CO2, Stats, Import, manipulierte/abgelaufene Tokens, deaktivierte User, Cookie-Flags gegen Prod-Werte, Logout-dann-Refresh) – Robin
+- [ ] H14 – Berechnungen Fernwärme/Wasser ungetestet; Gartenwasser-Parameter in `compute_reading` toter Code (`readings/services.py:64-135`) – Robin/Dario
+- [ ] H15 – CI ohne Coverage-Schwelle, Image-Build/Push unabhängig von Tests (`test-backend.yml:56`, `build-and-push.yml:9`) – Niko
+- [ ] H16 – Frontend: 11 Component-Specs nur „should create“ (Dashboard/Auth rendern nicht), zentrale Services und `auth.guard` ohne Spec (`reading.service`, `dashboard-state`, `csv-import`, `tariff`, `date-input.util` …) – Finn
+
+**MITTEL**
+- [ ] M1 – Frontend-CVEs: `npm audit` 1 critical/1 high (dompurify via jspdf, zod via @angular/forms), `test-frontend.yml` schlägt an – Niko/Kilian
+- [ ] M2 – gitleaks fehlt in allen Workflows – Niko
+- [ ] M3 – `build-and-push.yml`: `packages: write` global statt `permissions: {}`; `:latest` via `workflow_dispatch` von jedem Branch; veralteter Kommentar Zeile 4-6 – Niko
+- [ ] M4 – pip-audit prüft offene Ranges, Image nutzt `requirements.lock`; Trivy `ignore-unfixed` – Niko
+- [ ] M5 – Container als root (`Dockerfile.fullstack`, `supervisord.conf`, `entrypoint.sh`, `Dockerfile.frontend`), keine Compose-Härtung – Niko
+- [ ] M6 – Audit-Trail unvollständig: Import ohne Eintrag, Updates ohne old/new, AuditLog nur im Admin read-only, keine Retention – Dario/Malte
+- [ ] M7 – `recalculate` kappt bei >10.000 Readings die ältesten (Sortierung `-date`), nicht atomar, ohne Audit (`readings/views.py:156`) – Dario
+- [ ] M8 – Reading-Update/-Delete/Einfügen rechnet abgeleitete Werte nicht neu (`readings/views.py:125-142`) – Dario
+- [ ] M9 – `tariff_history`/`budget` unvalidiertes JSON → 500 bei Fehlformat; `Meter.type`/`energy_type` freie Strings; Beträge teils FloatField – Malte/Dario
+- [ ] M10 – Refresh-Rotation nicht atomar (kein `select_for_update`); abgelaufene Refresh-Tokens nie bereinigt, kein Index `expires_at` (`tokens.py`, `models.py`) – Dario/Malte
+- [ ] M11 – Login per Timing unterscheidbar, E-Mail case-sensitiv, Register 409 verrät Konten; `AUTH_PASSWORD_VALIDATORS` nie aufgerufen (`accounts/views.py`, `serializers.py`) – Dario
+- [ ] M12 – Foto-Upload: keine Magic-Byte-Prüfung, EXIF bleibt, altes Foto wird vor Speichern gelöscht, Waisen im Storage bei Löschen (`readings/views.py:134,205-248`) – Dario/Elena
+- [ ] M13 – Pagination/Filter eigenbau, Cursor nur `date__lt` verliert Einträge bei gleichem Datum, ungültige Eingaben still ignoriert; `date__year` nicht indexfreundlich; kein UniqueConstraint (meter,date) – Dario/Malte
+- [ ] M14 – CO2-Faktor ignoriert `valid_from` (`co2/services.py:20`) – Dario
+- [ ] M15 – `_RATE_LIMITED` geteiltes Response-Singleton (`accounts/views.py:35`) – Kai
+- [ ] M16 – Migrationen bei jedem Container-Start, Race bei mehreren Replikas; `/health` nur Liveness; CI ohne Postgres und ohne `makemigrations --check` / `check --deploy` – Niko
+- [ ] M17 – Frontend alle Routen eager, kein Lazy Loading; Chart.js-Registrierung nur in `reports.ts` (bricht mit Lazy Loading); `meter-chart.ts` MutationObserver/Timeouts ohne Cleanup – Kilian
+- [ ] M18 – `readings-form.ts`: `isSaving` bleibt nach Early-Return hängen (Zeile 345-350), Komponente zu groß (441+362 Zeilen), Fehler still verschluckt/`console.error` – Kilian
+- [ ] M19 – OCR: Worker pro Aufruf, `ngsw-config` deckt `/tesseract` und `/tessdata` nicht ab (Offline), Preprocessing im Main-Thread – Kilian/Finn
+- [ ] M20 – Frontend-Standardabweichungen: `$localize`/`i18n@@` statt Runtime-i18n (bekannte Schuld, Entscheidung Max/Jelena), `FormsModule` statt Signal Forms, `*ngIf`, `CommonModule`, OnPush fehlt in ~22 Dateien (Angular-22-Default gegen context7 prüfen), Interceptor mit Modulzustand, doppelte CostPreview-Komponenten (eine vermutlich tot) – Kilian/Max
+- [ ] M21 – Weitere Testlücken: Foto-Upload, Stats-Randfälle, Import-Randfälle, health/ConfigView/audit-XFF, keine Unit-Tests, schwache Assertions, Allure nicht hochgeladen – Robin
+
+**NIEDRIG** (je Gruppe eine Zeile)
+- [ ] L1 – Basisimages ohne Digest, keine `dependabot.yml` – Niko
+- [ ] L2 – HSTS kürzer als Standard; innerer nginx überschreibt `X-Forwarded-Proto`; `/admin/` in Modus B ungeschützt – Niko/Elena
+- [ ] L3 – `wsgi`/`asgi`/`manage.py` Default `development`; `ConfigView` hartkodiert postgresql/0.1.0; pydantic-settings ungenutzt – Dario
+- [ ] L4 – Import 403 statt 404; `source_url` ohne URL-Validierung; `date.today()` statt `timezone.localdate()` (`stats/views.py:51,101`) – Dario
+- [ ] L5 – Redundante `db_index` auf FKs; wenige Logger – Malte/Dario
+- [ ] L6 – Interne IP + `changeme` in Git-Historie/`README:173-174` (echtes DB-Passwort ≠ `changeme` prüfen) – Elena
+- [ ] L7 – 3× `any`, Foto-Modal nicht barrierefrei, tote Supabase-Stubs (`deletePhoto`/`getSignedPhotoUrl`) – Kilian/Isabel
+- [ ] L8 – `conftest` mutiert `settings` global, nicht eingesetzte pytest-Marker – Robin
+
+**Empfohlene Reihenfolge:** H1–H3 (Deploy-Blocker), dann H7/H8 mit Regressionstest, H10-Entscheidung vor
+weiterer Kosten-/Stats-Arbeit, H12/H13 zur Absicherung, M1/M2 für die CI-Gates.
+
 ## 8. Referenz-Quellen (aus den Altprojekten)
 
 - Domäne/Models: `../MeterFlow-Fullstack/backend/src/meterflow/models/`
