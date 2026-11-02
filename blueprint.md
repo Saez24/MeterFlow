@@ -371,3 +371,131 @@ weiterer Kosten-/Stats-Arbeit, H12/H13 zur Absicherung, M1/M2 für die CI-Gates.
 - REST-Client + Cookie-Interceptor: `../MeterFlow-Fullstack/frontend/src/app/core/{services/api.service.ts,interceptors/credentials.interceptor.ts}`
 - DB-Schema-Kontrakt (UI-Quelle): `../MeterFlow/supabase/migrations/*.sql`
 - Design-Tokens + Theme: `../DataForge/src/styles.scss`, `../DataForge/src/app/core/services/app-state.service.ts`
+
+## 9. Future Release – Android-App (Flutter) und neues Release-Modell
+
+> **Status: geplant, nicht begonnen** (Stand 2026-11-02). Start erst, wenn die Findings aus „Audit
+> 2026-11-02" umgesetzt sind (Voraussetzungen siehe 9.6). Vorbild ist **Finoro** (`../Finoro`:
+> `mobile/`, `docs/releases.md`, `.github/workflows/{mobile,backend,frontend}.yml`). Abweichungen von
+> Finoro sind unten ausdrücklich markiert. Entwurf von Teamlead, noch nicht von Max/Elena geprüft.
+
+### 9.1 Ziel
+
+- **Android-App** mit Flutter in `mobile/` (selbes Repo).
+- **Datenhaltung lokal auf dem Smartphone** (SQLite), Standardmodus ohne Konto und ohne Server.
+- **Google-Drive-Backup** der lokalen Daten (manuell, optional automatisch).
+- **Server-Modus** wie bei Finoro: Die App kann stattdessen gegen das Django-Backend arbeiten.
+- **Kein Fullstack-Image mehr.** Ausgeliefert werden nur noch: **PWA** (statisch), **Backend** (Unraid-Container),
+  **App** (signierte APKs).
+
+### 9.2 Release-Modell
+
+| Bereich | Version steht in | Tag | Ergebnis |
+|---|---|---|---|
+| **App-Release** (PWA + Android gemeinsam) | `frontend/package.json` + `appVersion` in der Frontend-Config **und** `mobile/pubspec.yaml` — alle drei identisch | `app-vX.Y.Z` | PWA-Build (`meterflow-web-X.Y.Z.zip` + `.sha256`) und APKs (`meterflow-X.Y.Z-arm64-v8a.apk`, `…-armeabi-v7a.apk`, `SHA256SUMS`) |
+| **Backend** (eigene Nummer) | `backend/pyproject.toml` | `backend-vX.Y.Z` | Image `ghcr.io/saez24/meterflow-backend:X.Y.Z`, `:X.Y`, `:latest` |
+
+- **Abweichung von Finoro:** Dort haben Web und App getrennte Tags/Versionen (`frontend-v*`, `mobile-v*`).
+  Hier **ein** Tag `app-v*` für PWA und App, weil beide dieselbe Versionsnummer tragen sollen. Ein Workflow
+  baut beides und bricht ab, wenn die drei Versionsstellen nicht übereinstimmen oder die Build-Nummer der App
+  nicht passt (`Major·10000 + Minor·100 + Patch`, wie Finoro).
+- Backend-Workflow wie Finoro: `:latest` nur aus `backend-v*`-Tag, getaggter Commit muss in `main` liegen,
+  Tag-Format ohne Vorabversion. Wochenlauf mit pip-audit/trivy.
+- **Kompatibilität:** `GET /api/version/` (öffentlich) liefert `api_version` und `min_client` (hier **ein**
+  Wert für PWA und App, weil gleiche Version). `min_client` wird nur als Hinweis angezeigt, der Server lehnt
+  alte Clients nicht ab (wie Finoro). Regel zum Erhöhen in `docs/` dokumentieren.
+- Tag-Notiz (`git tag -a … -m`) ist die öffentliche Release-Notiz; Commit-Texte erscheinen dort nie.
+- Release-Signatur: APK mit eigenem Release-Schlüssel, Secrets im GitHub-Environment `releases`
+  (`METERFLOW_KEYSTORE_BASE64`, `…_PASSWORD`, `…_KEY_ALIAS`, `…_KEY_PASSWORD`), SHA-256 des Zertifikats im
+  Workflow geprüft. Update-Hinweis in der App über GitHub-Releases (höchstens einmal am Tag).
+- Der Schlüssel liegt **außerhalb des Repos** und wird zusätzlich an einem zweiten Ort gesichert.
+
+### 9.3 Fullstack-Abbau (Niko/Max)
+
+- Entfällt: `deploy/Dockerfile.fullstack`, `docker-compose.fullstack.yml`, `deploy/nginx.fullstack.conf`,
+  `deploy/supervisord.conf`, `deploy/entrypoint.sh`, Deploy-Modus **C**, Fullstack-Teil in
+  `build-and-push.yml`. Danach gelten nur **A** (PWA auf eigenem Webserver) und **B** (Backend allein).
+- Das hebt den Eintrag „Container als root" (M5) für das Fullstack-Image auf; bei Backend-Image weiter offen.
+- Das Backend wird eigenständig deploybar (Unraid-Template wie Finoro), CORS-Allowlist für die PWA-Origin.
+- **Cookie-Falle prüfen:** Die Web-Auth nutzt `HttpOnly; SameSite=Strict`-Cookies. Liegt die PWA auf einer
+  anderen *Site* als das Backend, werden die Cookies nicht mitgeschickt. PWA und API müssen unter derselben
+  registrierbaren Domain laufen (z. B. `meter.example.de` und `api.example.de`) — in der Installationsdoku
+  festhalten, `SameSite` nicht aufweichen.
+
+### 9.4 App-Architektur (Spiegel von Finoro)
+
+- **Stack:** Flutter (aktuelle stable), Riverpod 3 + Freezed, `drift` + `sqlite3` für die lokale DB,
+  `flutter_secure_storage` (Tokens, Server-URL), `local_auth` (Biometrie-Sperre), `share_plus`/`file_picker`
+  (Export/Import), `http`, `decimal` (exakte Rechnung). Aufbau `lib/core/{database,security,server,utils,widgets}`
+  und `lib/features/{auth,meters,readings,costs,co2,stats,settings,update}`.
+- **Abhängigkeiten ohne Versions-Pins/Caps** (Memory-Regel „no version pinning"). Offen: Finoro pinnt Flutter im
+  CI per Tag und nutzt `--enforce-lockfile`; hier mindestens `pubspec.lock` einchecken, Flutter-Version im CI
+  bewusst nachziehen — Abweichung von der Pin-Regel mit dem Nutzer klären (siehe 9.7).
+- **Zwei Datenmodi, nie gleichzeitig:** *Lokal* (Standard) und *Server*. Kein bidirektionaler Sync in v1.
+  Moduswechsel = Export/Import (lokal→Server über den Import-Endpunkt, Server→lokal über den Export), mit
+  Rückfrage und Hinweis, dass die jeweils andere Seite nicht verändert wird.
+- **Fachlogik in Dart nachbauen** (Verbrauch, Kosten inkl. Tarifhistorie, Fernwärme/Wasser, CO₂ mit `valid_from`,
+  Statistik). Absicherung wie Finoro Schritt 7: **gemeinsame Golden-Testfälle** (JSON), die sowohl Backend
+  (pytest) als auch App (Dart) gegen dieselben Erwartungswerte laufen lassen. Setzt die Entscheidung zu **H10**
+  (welche Seite ist Quelle für Kosten/Stats) und die Tests aus **H14** voraus.
+- **Fotos** (Zählerfoto): im App-Dateibereich, Pfad in der DB; Kamera/Galerie, Zuschneiden. **OCR** der
+  Zählerstände auf dem Gerät (z. B. ML Kit Text Recognition statt Tesseract-WASM) — Paket und Datenschutz
+  (Modell-Download durch Google Play Services?) vorher mit context7/Doku prüfen, Vorgabe „kein CDN" für die PWA
+  gilt dort nicht 1:1.
+- **Export/Import:** CSV (und PDF-Bericht) kompatibel zu Web; Import-Format = Backend-Format.
+- **Server-Modus:** Auth für Nicht-Browser-Clients (Access-/Refresh-Token im Body, Ablage in
+  `flutter_secure_storage`, Rotation wie Web) als **zusätzlicher** Pfad im Backend; Cookie-Pfad für die PWA
+  bleibt unverändert. Kompatibilitätshinweis über `/api/version/`.
+- **Design:** Apple-clean, passend zur PWA (Isabel/Svenja), Light/Dark, Barrierefreiheit.
+- `android:allowBackup="false"` und `dataExtractionRules` (kein Cloud-Backup/Geräte-Umzug durch Android) wie
+  bei Finoro — das Drive-Backup ist eine **eigene, ausdrückliche** Funktion der App.
+
+### 9.5 Google-Drive-Backup
+
+- **Scope `drive.appdata`** (versteckter App-Ordner, kein Zugriff auf andere Drive-Dateien). Anmeldung über
+  Google Sign-In (Credential Manager); OAuth-Client in der Google Cloud Console, gebunden an Paketname und
+  **SHA-1 des Release-Schlüssels** (sonst kein Login in signierten APKs). Aktuelle Scope-/Verifizierungsregeln
+  vor Start gegen die Google-Doku prüfen.
+- **Inhalt:** konsistenter DB-Snapshot (`VACUUM INTO`) + Fotos, als ein Archiv mit Schema-Version und App-Version.
+  **Nie** enthalten: Server-URL, Tokens, Biometrie-Einstellungen.
+- **Verschlüsselung clientseitig** mit Passphrase (AES-GCM, Schlüsselableitung mit Argon2id/PBKDF2) —
+  Pflicht oder optional: Entscheidung offen (9.7). Passphrase wird nie gespeichert; ohne sie keine Wiederherstellung
+  (deutlich warnen).
+- **Ablauf:** „Jetzt sichern", optional automatisch (WorkManager, z. B. wöchentlich, nur WLAN), letzte N
+  Sicherungen behalten, „Wiederherstellen" mit Versions-/Schema-Prüfung und Rückfrage (überschreibt lokale Daten).
+- **Im Server-Modus** ist das Drive-Backup ausgeblendet (Daten liegen auf dem Server).
+- Datenschutztext der App ergänzen (Google-Anmeldung, was hochgeladen wird). Elena prüft Token-Handling.
+
+### 9.6 Phasen und Zuständigkeit
+
+0. **Voraussetzungen (erledigt sein müssen):** Audit-Findings H1–H16 — besonders **H2/H5** (Logout/Refresh,
+   inaktive User; Basis für Token-Auth), **H9** (Import-Performance; Moduswechsel lokal→Server), **H10**
+   (Rechen-Quelle), **H12–H14** (Test-Basis, Berechnungstests), **H15** (CI-Gates), **M12** (Foto-Upload).
+1. **Release-Modell + Fullstack-Abbau:** neue Workflows `app.yml`, `backend.yml`, Versionen angleichen,
+   `/api/version/`, Doku `docs/releases.md`, `CLAUDE.md` (Layout-Zeile Mobile, Routing Viktor/Svenja/Anton). — Niko/Max/Lukas
+2. **Backend-Ergänzungen:** Token-Auth für Mobile, `/api/version/`, Export-/Import-Feinschliff, Tests. — Dario/Malte/Robin
+3. **App-Gerüst:** Projekt, Theme, drift-Schema + Migrationen, App-Sperre, Navigation. — Viktor/Anton/Svenja
+4. **Lokaler Modus:** Zähler, Ablesungen + Foto/OCR, Kosten/CO₂/Statistik (Golden-Tests), Export/Import. — Anton/Svenja
+5. **Server-Modus + Moduswechsel.** — Anton/Viktor
+6. **Drive-Backup** inkl. Verschlüsselung. — Anton/Elena
+7. **Release-Pipeline, Signatur, Update-Hinweis, Sicherheits-Gate (Elena), Test auf echtem Gerät**, erstes Release
+   `app-v1.0.0`. — Niko/Finn/Elena/Lukas
+
+Regeln: ein Bereich pro Commit (Backend / Frontend / Mobile / CI getrennt), Blueprint nach jedem Schritt.
+
+### 9.7 Offene Entscheidungen
+
+- [ ] **Öffentliches Release-Repo** für APK-/Web-Releases und Update-Hinweise (Finoro: `Saez24/Finoro-App`)
+      — neues `Saez24/MeterFlow-App` anlegen? Hängt an der Entscheidung aus §7 (Projekt nicht öffentlich
+      betrieben); Alternative: Releases im privaten Repo, Update-Prüfung dann nur mit Token (nicht empfohlen).
+- [ ] **Branches:** Finoro trennt `frontend`/`backend`/`mobile` und cherry-picked auf `main` zum Taggen.
+      Empfehlung hier: **keine Bereichs-Branches**, alles auf `main`, Tags direkt dort (weniger Aufwand,
+      `production`/`supabase` bleiben unberührt).
+- [ ] **PWA-Auslieferung:** nur Release-ZIP (wie Finoro) oder weiter ein schlankes nginx-Frontend-Image?
+      Empfehlung: ZIP + optional das bestehende `Dockerfile.frontend` behalten.
+- [ ] **Hat die PWA einen lokalen Modus?** Annahme: **nein**, PWA bleibt Server-only; lokale Daten nur in der App.
+- [ ] **Backup-Verschlüsselung:** Pflicht (Empfehlung) oder optional?
+- [ ] **Startversion:** PWA 0.0.0 und Backend 0.1.0 heute — beide mit dem ersten Release auf 1.0.0?
+- [ ] **Flutter-Version/Lockfile** vs. Memory-Regel „keine Versions-Pins" (siehe 9.4).
+- [ ] **iOS:** außerhalb des Umfangs (nur Android), Plattformordner nicht versionieren wie bei Finoro?
+- [ ] **OCR auf dem Gerät:** Paket/Datenschutz-Prüfung (9.4).
